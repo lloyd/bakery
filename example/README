@@ -1,0 +1,9 @@
+This is an example project that uses the bakery to build a statically
+linked binary that can reformat JSON using the yajl library.
+  
+Theoretically you should be able to:
+
+1. run build_externals to attain source of and build a static version
+   of yajl for your platform
+2. run make (or the win32 equiv) to build the json_reformatter binary
+
