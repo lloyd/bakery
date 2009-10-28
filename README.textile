@@ -36,7 +36,10 @@ Starting a new project?  Let's see, you'll need ICU, some XML parsing, the faste
 # at the time someone checkouts out the repo, they should run the "bakery" build script.
 
 h2. Guiding Principles 
+
+We have to start somewhere.  But nothing is forever.
  
 # We cook for linux, MacOSX and Win32
 # We use ruby and are proud of it:  Building software sucks, and being able to sprinkle a little high level language on the problem from time to time is just fine.
 # NO 3rd party binaries, NO third party source in tree.  The bakery is *recipies only*.
+# in general we build *static libraries*.  The thought is that because we're taking a size hit by shunning libraries present on the system, we can leverage the static linker to get some of that cost back.
