@@ -1,0 +1,12 @@
+This document will grow.
+
+* Recipes live under ports/
+
+* They are hierarchicaly organized and follow the BSD ports structure:
+  * 2 level hierarchy
+  * all lowercase names
+  * the same logical groups as BSD, no needless invention 
+
+* For now follow the example of what already exists, in the future there
+  will be awesome documentation for "porters" (bakers?)
+
