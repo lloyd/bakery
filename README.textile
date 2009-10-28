@@ -1,0 +1,65 @@
+h2. Welcome to the Bakery
+
+bq. There is nothing new under the sun.
+
+That being so, a large part of what we do in writing software is
+leverage other peoples libraries (you down wit OPL?).  If you are
+someone who maintains or contributes to a software product that
+uses "3rd party" or "external" open source software, then
+_welcome to the bakery_!
+
+The bakery is not new, it's simply the application of an existing
+Good Idea (The BSD Ports system), to a new problem: using 3rd party
+source from a software project.
+
+h2. The Problem
+
+When developing end user software there's massive benefit to using 
+existing 3rd party open source software.  Would you write an XML parser
+from scratch?  Are you nuts?  But, building open source software is 
+hard.  Not all software is as simple as:
+
+bc. ./configure --prefix="myinstalldir" && make && make install
+
+Further, building software on windows *always* sucks.  NMake?  Visual
+studio?  Makefiles and msys?  This is all madness that we all suffer
+independently.  What too many of us end up doing is:
+
+* *Checking Binaries Into Revision Control* - Great!  now how did you do that?  How can someone else regenerate that magic binary?  Debug it?
+* *Using system supplied libraires* - Rad!  Now apple can slip a <strike>bugfix</strike> bug under your ass.  Your test matrix just became infinite.  
+
+So the solution?  Where possible and reasonable, for end user
+software, it benefits you AND your users to build and ship the
+libraries you depend on.  It also benefits your users for you to be
+diligent in updating the libraries you use where stability or security
+is afforded.
+
+Now setting up an automatic build system for it, building it, 
+patching it, regularly upgrading it?  All pains in the arse.  This is
+where the bakery comes in.  A centralize repository of ports for 
+various external software.  
+
+h2. Usage Overview
+
+h3. Adding Recipies
+
+Use some software that's not currently in the bakery?  fork it, write
+a recipie, and send a pull request.  Done.
+
+h3. Placing Orders
+
+Starting a new project?  Let's see, you'll need ICU, some XML parsing,
+the fastest JSON parser on the planet (YAJL), and Some Other Stuff.
+Using the bakery is simple:
+
+# git submodule OR copy the bakery into your source tree
+# write an "order", a configuration file saying which ports to build
+# at the time someone checkouts out the repo, they should run the "bakery" build script.
+
+h2. Guiding Principles 
+ 
+# We cook for linux, MacOSX and Win32
+# We use ruby and are proud of it:  Building software sucks, and being able to sprinkle a little high level language on the problem from time to time is just fine.
+# NO 3rd party binaries, NO third party source in tree.  The bakery is *recipies only*.
+
+ 
