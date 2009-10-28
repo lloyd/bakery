@@ -23,7 +23,7 @@ Now setting up an automatic build system for it, building it,  patching it, regu
 
 h2. Usage Overview
 
-h3. Adding Recipies
+h3. Adding Recipes
 
 Use some software that's not currently in the bakery?  fork it, write a recipie, and send a pull request.  Done.
 
@@ -39,4 +39,4 @@ h2. Guiding Principles
  
 # We cook for linux, MacOSX and Win32
 # We use ruby and are proud of it:  Building software sucks, and being able to sprinkle a little high level language on the problem from time to time is just fine.
-# NO 3rd party binaries, NO third party source in tree.  The bakery is *recipies only*.
+# NO 3rd party binaries, NO third party source in tree.  The bakery is *recipes only*.
