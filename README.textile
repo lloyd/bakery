@@ -15,7 +15,7 @@ bc. ./configure --prefix="myinstalldir" && make && make install
 Further, building software on windows *always* sucks.  NMake?  Visual studio?  Makefiles and msys?  This is all madness that we all suffer independently.  What too many of us end up doing is:
 
 * *Checking Binaries Into Revision Control* - Great!  now how did you do that?  How can someone else regenerate that magic binary?  Debug it?
-* *Using system supplied libraires* - Rad!  Now apple can slip a <strike>bugfix</strike> bug under your ass.  Your test matrix just became infinite.  
+* *Using system supplied libraires* - Rad!  Now apple can slip a [-bugfix-] bug under your ass.  Your test matrix just became infinite.  
 
 So the solution?  Where possible and reasonable, for end user software, it benefits you AND your users to build and ship the libraries you depend on.  It also benefits your users for you to be diligent in updating the libraries you use where stability or security is afforded.
 
