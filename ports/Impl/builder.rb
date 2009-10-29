@@ -49,6 +49,7 @@ class Builder
     #let's determine the platform
     if CONFIG['arch'] =~ /mswin/
       @platform = :Windows
+      @sevenZCmd = File.expand_path(File.join(@port_dir, "WinTools", "7z.exe"))
     elsif CONFIG['arch'] =~ /darwin/
       @platform = :MacOSX
     elsif CONFIG['arch'] =~ /linux/
@@ -139,9 +140,9 @@ class Builder
       puts "      unpacking #{path}..."
       if path =~ /.tar./
         if @platform == :Windows
-          system("#{$sevenZCmd} x #{path}")
+          system("#{@sevenZCmd} x #{path}")
           tarPath = path[0, path.rindex('.')]
-          system("#{$sevenZCmd} x #{tarPath}")
+          system("#{@sevenZCmd} x #{tarPath}")
           FileUtils.rm_f(tarPath)
         else
           if File.extname(path) == ".bz2"
@@ -154,13 +155,13 @@ class Builder
         end
       elsif path =~ /.tgz/
         if @platform == :Windows
-          system("#{$sevenZCmd} x #{path}")
+          system("#{@sevenZCmd} x #{path}")
         else
           system("tar xzf #{path}")
         end
       elsif path =~ /.zip/
         if @platform == :Windows
-          system("#{$sevenZCmd} x #{path}")
+          system("#{@sevenZCmd} x #{path}")
         else
           system("tar xzf #{path}")
         end
