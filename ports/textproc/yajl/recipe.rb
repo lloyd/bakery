@@ -2,9 +2,10 @@
   :url => 'http://cloud.github.com/downloads/lloyd/yajl/yajl-1.0.4.tar.gz',
   :md5 => '3d7897500f1acaa78d3d2e2f9cafd5f1',
   :configure => lambda { |c|
-    # XXX: on windows we must specify a generator!
     btstr = c[:build_type].to_s.capitalize
     cmakeGen = nil
+    # on windows we must specify a generator, we'll get that from the
+    # passed in configuration
     cmakeGen = "-G \"#{c[:cmake_generator]}\"" if c[:cmake_generator]
     cmLine = "cmake -DCMAKE_BUILD_TYPE=\"#{btstr}\" " +
                    "-DCMAKE_INSTALL_PREFIX=\"#{c[:output_dir]}\" " +
