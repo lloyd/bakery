@@ -1,9 +1,9 @@
 INCLUDE = -Iext/include
-LINK = -Lext/lib
+LINK = -Lext/lib/release
 NAME = json_reformatter
 
 ${NAME}: main.c
-	gcc -g -o $@ ${INCLUDE} ${LINK} -lyajl $<
+	gcc -g -o $@ ${INCLUDE} ${LINK} -lyajl_s $<
 
 .PHONY: clean
 clean:
