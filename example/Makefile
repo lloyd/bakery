@@ -7,4 +7,5 @@ ${NAME}: main.c
 
 .PHONY: clean
 clean:
-	rm -rf ${NAME} *~
+	rm -rf ${NAME} *~ *.dSYM
+
