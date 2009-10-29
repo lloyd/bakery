@@ -5,9 +5,7 @@ require 'pp'
 
 $order = {
   :output_dir => File.join(File.dirname(__FILE__), "ext"),
-  :packages => [
-    "yajl"
-  ],
+  :packages => [ "yajl", "libarchive" ],
   :verbose => true
 }
 
