@@ -12,7 +12,7 @@ class Builder
     end
   end
 
-  def initialize pkg, verbose
+  def initialize pkg, verbose, output_dir
     @pkg = pkg
     @verbose = verbose
 
@@ -40,16 +40,35 @@ class Builder
     @workdir_path = File.join(@port_dir, "work", @pkg)
     FileUtils.mkdir_p(@workdir_path)
 
+    @output_dir = output_dir ? output_dir : File.join(@port_dir, "dist")
+    FileUtils.mkdir_p(@output_dir)    
+
     tarball = File.basename(URI.parse(@recipe[:url]).path)
     @tarball = File.expand_path(File.join(@distfiles_path, tarball))
-  end
 
+    #let's determine the platform
+    if CONFIG['arch'] =~ /mswin/
+      @platform = :Windows
+    elsif CONFIG['arch'] =~ /darwin/
+      @platform = :MacOSX
+    elsif CONFIG['arch'] =~ /linux/
+      @platform = :Linux
+    end
+    
+    #build up the configuration object that will be passed into build functions
+    @conf = {
+      :platform => @platform,
+      :output_dir => @output_dir
+    }
+
+  end
+  
   def needsBuild
     true
   end
 
   def clean
-    puts "      removing previous build artifacts..."
+    puts "      removing previous build artifacts (#{@workdir_path})..."
     FileUtils.rm_f(@workdir_path)
     FileUtils.mkdir_p(@workdir_path)
   end
@@ -70,7 +89,7 @@ class Builder
 
     if !checkMD5
       puts "      #{url}"
-      perms = $platform == "Windows" ? "wb" : "w"
+      perms = @platform == :Windows ? "wb" : "w"
       totalSize = 0
       lastPercent = 0
       interval = 5
@@ -113,11 +132,13 @@ class Builder
   end
 
   def unpack
-    Dir.chdir(@workdir_path) do
+    srcPath = File.join(@workdir_path, "src")
+    FileUtils.mkdir_p srcPath
+    Dir.chdir(srcPath) do
       path = @tarball
       puts "      unpacking #{path}..."
       if path =~ /.tar./
-        if $platform == "Windows"
+        if @platform == :Windows
           system("#{$sevenZCmd} x #{path}")
           tarPath = path[0, path.rindex('.')]
           system("#{$sevenZCmd} x #{tarPath}")
@@ -128,42 +149,77 @@ class Builder
           elsif File.extname(path) == ".gz"
             system("tar xzf #{path}")
           else
-            puts "unrecognized format for #{path}"
-            exit -1
+            throw "unrecognized format for #{path}"
           end
         end
       elsif path =~ /.tgz/
-        if $platform == "Windows"
+        if @platform == :Windows
           system("#{$sevenZCmd} x #{path}")
         else
           system("tar xzf #{path}")
         end
       elsif path =~ /.zip/
-        if $platform == "Windows"
+        if @platform == :Windows
           system("#{$sevenZCmd} x #{path}")
         else
           system("tar xzf #{path}")
         end
       else
-        puts "unrecognized format for #{path}"
-        exit -1
+        throw "unrecognized format for #{path}"
       end
     end
+
+    # now we have what we need to determine the unpack dirname
+    Dir.glob(File.join(srcPath, "*")).each { |d|
+      @unpack_dir = d if File.directory? d
+    }
+    puts "      unpacked to #{@unpack_dir}"
+
+    @conf[:src_dir] = @unpack_dir 
   end
 
   def patch
+    # XXX: implement me
   end
 
-  def pre_build
+  def pre_build buildType
+    # make the build directory and set up our conf
+    @conf[:build_type] = buildType
+    @build_dir = File.join(@workdir_path, "build_" + buildType)
+    FileUtils.mkdir_p(@build_dir)    
+    @conf[:build_dir] = @build_dir
   end
 
-  def build buildType
+  def invokeLambda step, obj, sym
+    if obj && obj.has_key?(sym)
+      if obj[sym].kind_of?(Hash)
+        invokeLambda(step, obj[sym], @platform)
+      elsif obj[sym].kind_of?(String)
+        Dir.chdir(@build_dir) { system(obj[sym]) }
+      elsif obj[sym].kind_of?(Proc)
+        Dir.chdir(@build_dir) { obj[sym].call @conf }
+      else
+        throw "invalid recipe file (handling #{sym})"
+      end
+    else 
+      puts "      WARNING: #{step} step not supplied!"
+    end
   end
 
-  def install buildType
+  def configure
+    invokeLambda(:configure, @recipe, :configure)
+  end
+
+  def build
+    invokeLambda(:build, @recipe, :build)
+  end
+
+  def install
+    invokeLambda(:install, @recipe, :install)
   end
 
   def post_install
+    invokeLambda(:post_install, @recipe, :post_install)
   end
 
   def dist_clean

@@ -6,10 +6,11 @@ class Bakery
 
   def initialize order
     throw "improper order passed to Bakery.new!" if !order
-    @build_types = ['debug', 'release']
+    @build_types = [ :debug, :release ]
     @verbose = (order && order[:verbose])
     @output_dir = File.join(File.dirname(__FILE__), "dist")
     @output_dir = order[:output_dir] if (order && order[:output_dir])
+    @output_dir = File.expand_path(@output_dir)
     throw "now packages specified in order" if !order[:packages]
     @packages = order[:packages]
   end
@@ -18,7 +19,7 @@ class Bakery
     puts "building #{@packages.length} packages:" if @verbose
     @packages.each { |p|
       puts "--- building #{p} ---" if @verbose      
-      b = Builder.new(p, @verbose)
+      b = Builder.new(p, @verbose, @output_dir)
       if !b.needsBuild
         puts "    skipping #{p}, already built!" if @verbose              
         next
@@ -32,10 +33,14 @@ class Bakery
       puts "    patching #{p}" if @verbose      
       b.patch
       @build_types.each { |bt|
+        puts "    pre_bulid step for #{p} (#{bt})" if @verbose      
+        b.pre_build bt
+        puts "    configuring #{p} (#{bt})" if @verbose      
+        b.configure
         puts "    building #{p} (#{bt})" if @verbose      
-        b.build bt
+        b.build
         puts "    installing #{p} (#{bt})" if @verbose      
-        b.install bt
+        b.install
       }
       puts "    running post_install for #{p}" if @verbose      
       b.post_install
