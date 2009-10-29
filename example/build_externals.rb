@@ -1,12 +1,14 @@
 #!/usr/bin/env ruby
 
-require "../bakery"
+require "../ports/bakery"
+require 'pp'
 
 $order = {
   :output_dir => File.join(File.dirname(__FILE__), "ext"),
-  :software => [
-    { :name => "yajl", :version => "1.0.7" }
-  ]
+  :packages => [
+    "yajl"
+  ],
+  :verbose => true
 }
 
 b = Bakery.new $order
