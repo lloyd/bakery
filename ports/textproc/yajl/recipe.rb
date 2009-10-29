@@ -14,21 +14,26 @@
     system(cmLine)
   },
   :build => {
-    :Windows => lambda { |buildType|
-      puts "now building --> #{buildType}"
+    :Windows => lambda { |c|
+      buildStr = c[:build_type].to_s.capitalize
+      system("devenv YetAnotherJSONParser.sln /Build #{buildStr}")
     },
     :MacOSX => "make", 
     :Linux => "make"
   },
   :install => lambda { |c|
-    system("make install")
     if c[:platform] != :Windows
+      system("make install")
       # now let's move output to the appropriate place
       # i.e. move from lib/libfoo.a to lib/debug/foo.a
       libdir = File.join(c[:output_dir], "lib", c[:build_type].to_s)
       FileUtils.mkdir_p(libdir)
       Dir.glob(File.join(c[:output_dir], "lib", "*")).each { |f|
         FileUtils.mv(f, libdir) if !File.directory? f
+      }
+    else
+      Dir.glob(File.join(c[:build_dir], "yajl-1.0.4", "*")).each { |d|
+        FileUtils.cp_r(d , c[:output_dir])
       }
     end
   }
