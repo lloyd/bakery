@@ -12,7 +12,7 @@ class Builder
     end
   end
 
-  def initialize pkg, verbose, output_dir
+  def initialize pkg, verbose, output_dir, cmake_gen
     @pkg = pkg
     @verbose = verbose
 
@@ -50,18 +50,21 @@ class Builder
     if CONFIG['arch'] =~ /mswin/
       @platform = :Windows
       @sevenZCmd = File.expand_path(File.join(@port_dir, "WinTools", "7z.exe"))
+      @cmake_generator = "Visual Studio 9 2008"
     elsif CONFIG['arch'] =~ /darwin/
       @platform = :MacOSX
     elsif CONFIG['arch'] =~ /linux/
       @platform = :Linux
     end
+
+    @cmake_generator = cmake_gen if cmake_gen
     
     #build up the configuration object that will be passed into build functions
     @conf = {
       :platform => @platform,
-      :output_dir => @output_dir
+      :output_dir => @output_dir,
+      :cmake_generator => @cmake_generator
     }
-
   end
   
   def needsBuild
@@ -141,7 +144,8 @@ class Builder
       if path =~ /.tar./
         if @platform == :Windows
           system("#{@sevenZCmd} x #{path}")
-          tarPath = path[0, path.rindex('.')]
+          tarPath = File.basename(path, ".*")
+          puts "#{@sevenZCmd} x #{tarPath}"
           system("#{@sevenZCmd} x #{tarPath}")
           FileUtils.rm_f(tarPath)
         else

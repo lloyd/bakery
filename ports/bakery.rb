@@ -13,13 +13,14 @@ class Bakery
     @output_dir = File.expand_path(@output_dir)
     throw "now packages specified in order" if !order[:packages]
     @packages = order[:packages]
+    @cmake_generator = (order && order[:cmake_generator])
   end
   
   def build
     puts "building #{@packages.length} packages:" if @verbose
     @packages.each { |p|
       puts "--- building #{p} ---" if @verbose      
-      b = Builder.new(p, @verbose, @output_dir)
+      b = Builder.new(p, @verbose, @output_dir, @cmake_generator)
       if !b.needsBuild
         puts "    skipping #{p}, already built!" if @verbose              
         next

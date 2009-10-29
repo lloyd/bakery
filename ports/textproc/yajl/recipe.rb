@@ -4,9 +4,13 @@
   :configure => lambda { |c|
     # XXX: on windows we must specify a generator!
     btstr = c[:build_type].to_s.capitalize
+    cmakeGen = nil
+    cmakeGen = "-G \"#{c[:cmake_generator]}\"" if c[:cmake_generator]
     cmLine = "cmake -DCMAKE_BUILD_TYPE=\"#{btstr}\" " +
                    "-DCMAKE_INSTALL_PREFIX=\"#{c[:output_dir]}\" " +
+                   "#{cmakeGen} " +
                    " \"#{c[:src_dir]}\"" 
+    puts cmLine
     system(cmLine)
   },
   :build => {
