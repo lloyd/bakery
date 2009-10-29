@@ -1,6 +1,6 @@
 {
-  :url => 'http://cloud.github.com/downloads/lloyd/yajl/yajl-1.0.6.tar.gz',
-  :md5 => '61611ea115d1a68ce25b36e6144de06d',
+  :url => 'http://cloud.github.com/downloads/lloyd/yajl/yajl-1.0.7.tar.gz',
+  :md5 => 'a4436163408fe9b8c9545ca028ef1b4f',
   :configure => lambda { |c|
     btstr = c[:build_type].to_s.capitalize
     cmakeGen = nil
@@ -33,7 +33,7 @@
         FileUtils.mv(f, libdir) if !File.directory? f
       }
     else
-      Dir.glob(File.join(c[:build_dir], "yajl-1.0.6", "*")).each { |d|
+      Dir.glob(File.join(c[:build_dir], "yajl-1.0.7", "*")).each { |d|
         FileUtils.cp_r(d , c[:output_dir])
       }
     end
