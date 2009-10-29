@@ -19,7 +19,7 @@ Further, building software on windows *always* sucks.  NMake?  Visual studio?  M
 
 So the solution?  Where possible and reasonable, for end user software, it benefits you AND your users to build and ship the libraries you depend on.  It also benefits your users for you to be diligent in updating the libraries you use where stability or security is afforded.
 
-Now setting up an automatic build system for it, building it,  patching it, regularly upgrading it?  All pains in the arse.  This is where the bakery comes in.  A centralize repository of ports for various external software.  
+Now setting up an automatic build system for it, building it,  patching it, regularly upgrading it?  All pains in the arse.  This is where the bakery comes in.  A centralized repository of ports for various external software.  
 
 h2. Usage Overview
 
