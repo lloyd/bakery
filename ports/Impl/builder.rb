@@ -185,7 +185,7 @@ class Builder
   def pre_build buildType
     # make the build directory and set up our conf
     @conf[:build_type] = buildType
-    @build_dir = File.join(@workdir_path, "build_" + buildType)
+    @build_dir = File.join(@workdir_path, "build_" + buildType.to_s)
     FileUtils.mkdir_p(@build_dir)    
     @conf[:build_dir] = @build_dir
   end

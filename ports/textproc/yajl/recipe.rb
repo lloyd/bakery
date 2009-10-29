@@ -3,7 +3,7 @@
   :md5 => '3d7897500f1acaa78d3d2e2f9cafd5f1',
   :configure => lambda { |c|
     # XXX: on windows we must specify a generator!
-    btstr = c[:build_type].capitalize
+    btstr = c[:build_type].to_s.capitalize
     cmLine = "cmake -DCMAKE_BUILD_TYPE=\"#{btstr}\" " +
                    "-DCMAKE_INSTALL_PREFIX=\"#{c[:output_dir]}\" " +
                    " \"#{c[:src_dir]}\"" 
