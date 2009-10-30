@@ -232,6 +232,15 @@ class Builder
   end
 
   def invokeLambda step, obj, sym
+    # support arrays as keys in recipes for user conveneince, i.e.:
+    #  [:Linux, :MacOSX] => "make"
+    # essentially what we do is iterate through all recipe
+    if obj && !obj.has_key?(sym)
+      obj.each { |k,v|
+        sym = k if (k.kind_of?(Array) && k.include?(sym))
+      }
+    end      
+
     if obj && obj.has_key?(sym)
       if obj[sym].kind_of?(Hash)
         invokeLambda(step, obj[sym], @platform)

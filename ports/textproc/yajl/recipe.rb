@@ -11,7 +11,6 @@
                    "-DCMAKE_INSTALL_PREFIX=\"#{c[:output_dir]}\" " +
                    "#{cmakeGen} " +
                    " \"#{c[:src_dir]}\"" 
-    puts cmLine
     system(cmLine)
   },
   :build => {
@@ -19,11 +18,18 @@
       buildStr = c[:build_type].to_s.capitalize
       system("devenv YetAnotherJSONParser.sln /Build #{buildStr}")
     },
-    :MacOSX => "make", 
-    :Linux => "make"
+    [ :MacOSX, :Linux ] => "make" 
   },
-  :install => lambda { |c|
-    if c[:platform] != :Windows
+  :install => {
+    :Windows => lambda { |c|
+      Dir.glob(File.join(c[:build_dir], "yajl-1.0.7", "*")).each { |d|
+        FileUtils.cp_r(d , c[:output_dir])
+      }
+    },
+    [ :Linux, :MacOSX ] => "make install"
+  },
+  :post_install => {
+    [ :Linux, :MacOSX ] => lambda { |c|
       system("make install")
       # now let's move output to the appropriate place
       # i.e. move from lib/libfoo.a to lib/debug/foo.a
@@ -32,10 +38,6 @@
       Dir.glob(File.join(c[:output_dir], "lib", "*")).each { |f|
         FileUtils.mv(f, libdir) if !File.directory? f
       }
-    else
-      Dir.glob(File.join(c[:build_dir], "yajl-1.0.7", "*")).each { |d|
-        FileUtils.cp_r(d , c[:output_dir])
-      }
-    end
+    }
   }
 }
