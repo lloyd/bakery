@@ -42,9 +42,9 @@ class Bakery
         b.build
         puts "    installing #{p} (#{bt})" if @verbose      
         b.install
+        puts "    running post_install for #{p} (#{bt})" if @verbose      
+        b.post_install
       }
-      puts "    running post_install for #{p}" if @verbose      
-      b.post_install
       puts "    cleaning up #{p}" if @verbose      
       b.dist_clean
     }
