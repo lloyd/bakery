@@ -1,0 +1,13 @@
+1. run configure/build in their own process, this will solve the problem
+   of environment pollution.
+
+2. complete libarchive build on two plats
+
+3. patch phase
+
+4. all output should be redirected.  Does #1 help with this?
+
+5. clean phase
+
+6. improve driver.rb as a bakers tool
+
