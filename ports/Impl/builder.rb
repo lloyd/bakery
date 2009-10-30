@@ -47,9 +47,11 @@ class Builder
     @tarball = File.expand_path(File.join(@distfiles_path, tarball))
 
     #let's determine the platform
+    @patch_cmd = "patch"
     if CONFIG['arch'] =~ /mswin/
       @platform = :Windows
       @sevenZCmd = File.expand_path(File.join(@port_dir, "WinTools", "7z.exe"))
+      @patch_cmd = File.expand_path(File.join(@port_dir, "WinTools", "patch.exe"))
       @cmake_generator = "Visual Studio 9 2008"
     elsif CONFIG['arch'] =~ /darwin/
       @platform = :MacOSX
@@ -180,12 +182,39 @@ class Builder
       @unpack_dir = d if File.directory? d
     }
     puts "      unpacked to #{@unpack_dir}"
-    
-    @conf[:src_dir] = @unpack_dir 
+
+    @src_dir = File.expand_path(@unpack_dir)
+    @conf[:src_dir] = @src_dir
   end
 
   def patch
-    # XXX: implement me
+    patch_log = File.join(@workdir_path, "patch.log")
+    FileUtils.rm_f(patch_log)
+    portDir = File.dirname(@recipe_path)
+    
+    # first we'll find patches!
+    patches = Array.new
+    [ @platform, :All ].each do |p|
+      patches += Dir.glob(File.join(portDir, "*_#{p.to_s}.patch"))
+    end
+    patches.sort!
+    puts "      Found #{patches.length} patch(es)!"
+    patches.each do |p|
+      p = File.expand_path(p)
+      puts "      Applying #{File.basename(p, ".patch")}"
+      __redirectOutput(patch_log, true) do
+        puts "output redirected"
+        # now let's apply p  
+        Dir.chdir(@src_dir) {
+          puts "inside src_dir"
+          pline = "#{@patch_cmd} -p1 < #{p}"
+          puts "executing patch cmd: #{pline}" 
+          system(pline)
+        }
+      end
+    end
+
+    # XXX: implement me    
   end
 
   def pre_build buildType
@@ -196,8 +225,8 @@ class Builder
     @conf[:build_dir] = @build_dir
   end
 
-  def __redirectOutput fName 
-    File.open(fName, "w") { |f|    
+  def __redirectOutput fName, append = false
+    File.open(fName, (append ? "a" : "w")) { |f|    
       # redirect stderr and stdout
       old_stdout = $stdout.dup
       old_stderr = $stderr.dup
