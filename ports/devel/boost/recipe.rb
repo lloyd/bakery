@@ -65,6 +65,34 @@
     }
   },
   :install => lambda { |c|
+    puts "copying headers..."
+    hdr_dir = File.join(c[:output_dir], "include")
+    FileUtils.rm_rf(File.join(hdr_dir, "boost"))
+    FileUtils.mkdir_p(hdr_dir)
+    FileUtils.cp_r(File.join(c[:src_dir], "boost"),
+                   hdr_dir, :verbose => $verbose)
+
+    # copy static libs
+    buildType = c[:build_type].to_s
+    puts "copying #{buildType} libraries..."
+
+    libSuffix = ((c[:platform] == :Windows) ? "lib" : "a")
+    lib_dir = File.join(c[:output_dir], "lib", buildType)
+    FileUtils.mkdir_p(lib_dir)
     
+    Dir.glob("**/#{buildType}/**/libboost*.#{libSuffix}").each do |l|
+      FileUtils.cp(l, lib_dir, :verbose => $verbose)
+      
+      # Make symlinks to libs on non-windows systems.
+      # The autolink stuff on windows eliminates the need for this
+      if c[:platform] != :Windows
+        longName = File.basename(l)
+        shortName = longName[0, longName.index('-')] + "." + libSuffix
+        puts "making symlink for #{shortName}..."
+        Dir.chdir(lib_dir) do
+          FileUtils.ln_sf(longName, shortName, :verbose => $verbose)
+        end
+      end
+    end
   }
 }
