@@ -11,4 +11,3 @@ $order = {
 
 b = Bakery.new $order
 b.build
-

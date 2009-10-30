@@ -11,10 +11,12 @@
       ENV['CFLAGS'] = ENV['CFLAGS'].to_s + " -g -O0"
     end
 
-    configCmd = "./configure --without-lzmadec --without-bz2lib"
+    configCmd = File.join(c[:src_dir], "configure")    
+    configCmd += " --without-lzmadec --without-bz2lib"
     configCmd += " --without-zlib --disable-shared --disable-bsdcpio"
     configCmd += " --disable-bsdtar --enable-static --prefix=#{c[:output_dir]}"
     system(configCmd)
+    puts "config cmd: #{configCmd}"
   },
   :build => {
     :Windows => lambda { |c|
