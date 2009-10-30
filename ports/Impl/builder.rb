@@ -200,9 +200,15 @@ class Builder
       if obj[sym].kind_of?(Hash)
         invokeLambda(step, obj[sym], @platform)
       elsif obj[sym].kind_of?(String)
-        Dir.chdir(@build_dir) { system(obj[sym]) }
+        fork do
+          Dir.chdir(@build_dir) { system(obj[sym]) }
+        end
+        Process.wait
       elsif obj[sym].kind_of?(Proc)
-        Dir.chdir(@build_dir) { obj[sym].call @conf }
+        fork do
+          Dir.chdir(@build_dir) { obj[sym].call @conf }
+        end
+        Process.wait
       else
         throw "invalid recipe file (handling #{sym})"
       end
