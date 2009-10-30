@@ -73,7 +73,7 @@ class Builder
 
   def clean
     puts "      removing previous build artifacts (#{@workdir_path})..."
-    FileUtils.rm_f(@workdir_path)
+    FileUtils.rm_rf(@workdir_path)
     FileUtils.mkdir_p(@workdir_path)
   end
 
@@ -85,7 +85,7 @@ class Builder
                          File.open(@tarball, "rb") { |f| f.read })
       match = (calculated_md5 == @recipe[:md5])
     end
-    return match
+    match
   end
 
   def fetch
@@ -139,38 +139,39 @@ class Builder
     srcPath = File.join(@workdir_path, "src")
     FileUtils.mkdir_p srcPath
     Dir.chdir(srcPath) do
-      path = @tarball
-      puts "      unpacking #{path}..."
-      if path =~ /.tar./
-        if @platform == :Windows
-          system("#{@sevenZCmd} x #{path}")
-          tarPath = File.basename(path, ".*")
-          puts "#{@sevenZCmd} x #{tarPath}"
-          system("#{@sevenZCmd} x #{tarPath}")
-          FileUtils.rm_f(tarPath)
-        else
-          if File.extname(path) == ".bz2"
-            system("bzcat #{path} | tar xf -")
-          elsif File.extname(path) == ".gz"
-            system("tar xzf #{path}")
+      __redirectOutput(File.join(@workdir_path, "unpack.log")) do
+        path = @tarball
+        puts "      unpacking #{path}..."
+        if path =~ /.tar./
+          if @platform == :Windows
+            system("#{@sevenZCmd} x #{path}")
+            tarPath = File.basename(path, ".*")
+            system("#{@sevenZCmd} x #{tarPath}")
+            FileUtils.rm_f(tarPath)
           else
-            throw "unrecognized format for #{path}"
+            if File.extname(path) == ".bz2"
+              system("bzcat #{path} | tar xf -")
+            elsif File.extname(path) == ".gz"
+              system("tar xzf #{path}")
+            else
+              throw "unrecognized format for #{path}"
+            end
           end
-        end
-      elsif path =~ /.tgz/
-        if @platform == :Windows
-          system("#{@sevenZCmd} x #{path}")
+        elsif path =~ /.tgz/
+          if @platform == :Windows
+            system("#{@sevenZCmd} x #{path}")
+          else
+            system("tar xzf #{path}")
+          end
+        elsif path =~ /.zip/
+          if @platform == :Windows
+            system("#{@sevenZCmd} x #{path}")
+          else
+            system("tar xzf #{path}")
+          end
         else
-          system("tar xzf #{path}")
+          throw "unrecognized format for #{path}"
         end
-      elsif path =~ /.zip/
-        if @platform == :Windows
-          system("#{@sevenZCmd} x #{path}")
-        else
-          system("tar xzf #{path}")
-        end
-      else
-        throw "unrecognized format for #{path}"
       end
     end
 
@@ -179,7 +180,7 @@ class Builder
       @unpack_dir = d if File.directory? d
     }
     puts "      unpacked to #{@unpack_dir}"
-
+    
     @conf[:src_dir] = @unpack_dir 
   end
 
@@ -195,19 +196,39 @@ class Builder
     @conf[:build_dir] = @build_dir
   end
 
-  def runBuildPhase phase
+  def __redirectOutput fName 
+    File.open(fName, "w") { |f|    
+      # redirect stderr and stdout
+      old_stdout = $stdout.dup
+      old_stderr = $stderr.dup
+      $stdout.reopen(f)
+      $stderr.reopen(f)
+      yield
+      $stdout.reopen(old_stdout)
+      $stderr.reopen(old_stderr)
+    }
+  end
+
+  def runBuildPhase2 phase
+    # execute in the build dir
+    Dir.chdir(@build_dir) {
+      __redirectOutput("#{phase}.log") { yield }
+    }
+  end
+
+  # the ampersand syntax effectively relays our callers block/closure
+  # to runBuildPhaseTwo
+  def runBuildPhase phase, &b
+    # fork doesn't exist on windows, but likewise on windows it's less
+    # common to actually use the environment, so there's less of a need
+    # for the isolation that forking provides us.  If the fork raises
+    # NotImplementedError we'll just fallback to non-forking mode
     fork do
-      # execute in the build dir
-      Dir.chdir(@build_dir) {
-        # redirect stderr and stdout
-        File.open("#{phase}.log", "w") { |f|
-          $stdout.reopen(f)
-          $stderr.reopen(f)
-          yield
-        }
-      }
+      runBuildPhase2 phase, &b 
     end
     Process.wait
+  rescue NotImplementedError
+    runBuildPhase2 phase, &b    
   end
 
   def invokeLambda step, obj, sym
@@ -216,8 +237,7 @@ class Builder
         invokeLambda(step, obj[sym], @platform)
       elsif obj[sym].kind_of?(String)
         runBuildPhase(step.to_s) {
-          puts "NOW RUNNING: #{obj[sym]}"
-          exec(obj[sym])
+          system(obj[sym])
         }
       elsif obj[sym].kind_of?(Proc)
         runBuildPhase(step.to_s) { obj[sym].call @conf }
