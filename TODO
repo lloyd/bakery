@@ -2,9 +2,6 @@
 
 2. patch phase
 
-3. all output should be redirected.  Does #1 help with this?
+3. clean phase
 
-4. clean phase
-
-5. improve driver.rb as a bakers tool
-
+4. improve driver.rb as a bakers tool

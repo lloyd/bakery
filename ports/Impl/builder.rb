@@ -195,20 +195,32 @@ class Builder
     @conf[:build_dir] = @build_dir
   end
 
+  def runBuildPhase phase
+    fork do
+      # execute in the build dir
+      Dir.chdir(@build_dir) {
+        # redirect stderr and stdout
+        File.open("#{phase}.log", "w") { |f|
+          $stdout.reopen(f)
+          $stderr.reopen(f)
+          yield
+        }
+      }
+    end
+    Process.wait
+  end
+
   def invokeLambda step, obj, sym
     if obj && obj.has_key?(sym)
       if obj[sym].kind_of?(Hash)
         invokeLambda(step, obj[sym], @platform)
       elsif obj[sym].kind_of?(String)
-        fork do
-          Dir.chdir(@build_dir) { system(obj[sym]) }
-        end
-        Process.wait
+        runBuildPhase(step.to_s) {
+          puts "NOW RUNNING: #{obj[sym]}"
+          exec(obj[sym])
+        }
       elsif obj[sym].kind_of?(Proc)
-        fork do
-          Dir.chdir(@build_dir) { obj[sym].call @conf }
-        end
-        Process.wait
+        runBuildPhase(step.to_s) { obj[sym].call @conf }
       else
         throw "invalid recipe file (handling #{sym})"
       end
