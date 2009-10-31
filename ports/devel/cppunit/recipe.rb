@@ -18,12 +18,16 @@
         configCmd += " LDFLAGS=\"#{$darwinCompatLinkFlags}\""
       end
       system(configCmd)
-    },
-    :Windows => lambda { |c|
     }
   },
   :build => {
-    [ :Linux, :MacOSX ] => "make"
+    [ :Linux, :MacOSX ] => "make",
+    :Windows => lambda { |c|
+      Dir.chdir(File.join(c[:src_dir], "src")) { 
+        buildType = c[:build_type].to_s
+        system("devenv CppUnitLibraries.sln /build \"#{buildType} static\"")
+      }
+    }
   },
   :install => {
     [ :Linux, :MacOSX ] => lambda { |c|
@@ -35,6 +39,27 @@
       Dir.glob(File.join(c[:output_dir], "lib", "*cppunit*")).each { |f|
         FileUtils.mv(f, lib_dir, :verbose => true)
       }
+    },
+    :Windows => lambda { |c|
+      # install static lib
+      puts "installing #{c[:build_type].to_s} static library..."
+      libTrailer = (c[:build_type] == :debug) ? "d" : ""
+
+      lib_dir = File.join(c[:output_dir], "lib", c[:build_type].to_s)
+      FileUtils.mkdir_p(lib_dir)
+
+      FileUtils.cp(File.join(c[:build_dir], "lib", "cppunit#{libTrailer}.lib"),
+                   File.join(lib_dir, "cppunit.lib"),
+                   :verbose => $verbose)
+
+      # install headers
+      puts "installing headers..."
+      hdr_dir = File.join(c[:output_dir], "include")
+      FileUtils.mkdir_p(hdr_dir)
+
+      FileUtils.rm_rf(hdr_dir, "cppunit")
+      FileUtils.cp_r(File.join(c[:src_dir], "include", "cppunit"),
+                     hdr_dir, :verbose => $verbose)
     }
   }
 }
