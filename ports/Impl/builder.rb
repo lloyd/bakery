@@ -5,6 +5,15 @@ require 'open-uri'
 require 'digest/md5'
 include Config
 
+alias actual_system system
+
+def system *args
+  puts "system(\"#{args.join('", "')}\")"
+  rv = actual_system(*args)
+  raise "system invocation failed (#{args.join(' ')})" if !rv
+  raise "system call returned non success: #{$?}" if $? != 0
+end
+
 class Builder
   def __checkSym map, sym
     if !map || !map.has_key?(sym)

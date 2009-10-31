@@ -1,14 +1,14 @@
-
 {
   :url => "http://downloads.sourceforge.net/boost/boost_1_39_0.tar.bz2",
   :md5 => "a17281fd88c48e0d866e1a12deecbcc0",
   :configure => lambda { |c|
     # for the configure step we'll build bjam
-    bjamSrcPath = File.join(c[:src_dir],"tools", "jam", "src")
+    bjamSrcPath = File.join(c[:src_dir], "tools", "jam", "src")
     Dir.chdir(bjamSrcPath) do
       puts "building bjam..."
       if c[:platform] == :Windows
-        system(".\\build.bat")
+        bjbb = File.join(bjamSrcPath, "build.bat")
+        system(bjbb)
       else 
         system("./build.sh")
       end
