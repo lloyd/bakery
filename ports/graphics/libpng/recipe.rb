@@ -10,10 +10,40 @@
       cfgOpts = "--enable-static --disable-shared --prefix=\"#{c[:output_dir]}\""
       puts "#{cfgScript} #{cfgOpts}"
       system("#{cfgScript} #{cfgOpts}")
-    }    
+    },
+    :Windows => lambda { |c| 
+      if c[:build_type] == :debug
+        # patched jpegsrc includes a substitution target in libpng.vcproj
+        # we'll sub that now with the path to zlib headers
+        
+        vcpPath = File.join(c[:src_dir], "projects",
+                            "visualc71", "libpng.vcproj")
+
+        raise "can't find libpng.vcproj (#{vcpPath})" if !File.readable?(vcpPath)
+
+        # read the whole thing
+        contents = File.read(vcpPath)
+
+        # sub in the proper path
+        libDir = File.join(File.dirname(File.join(c[:output_inc_dir])), "zlib")
+        realPath = File.expand_path(libDir).gsub(/\//,"\\")
+        puts "replacing ZLIB_INCLUDE_PATH with '#{realPath}'"
+        contents.gsub!(/ZLIB_INCLUDE_PATH/, realPath)
+        
+        # write the whole thing
+        File.open(vcpPath, "w") { |f| f.write contents }
+      end
+    }
   },
   :build => {
-    [ :Linux, :MacOSX ] => "make"
+    [ :Linux, :MacOSX ] => "make",
+    :Windows => lambda { |c|
+      Dir.chdir(File.join(c[:src_dir], "projects", "visualc71")) do
+        bt = c[:build_type].to_s.capitalize
+        system("devenv libpng.sln /build \"LIB #{bt}\" /project libpng")
+      end
+      
+    }
   },
   :install => {
     [ :Linux, :MacOSX ] => lambda { |c|
@@ -33,6 +63,17 @@
       Dir.glob(File.join(c[:output_dir], "lib", "libpng*a")).each { |l|
         FileUtils.mv(l, c[:output_lib_dir], :verbose => true)
       }
+    },
+    :Windows => lambda { |c|
+      bt = c[:build_type].to_s.capitalize
+      suffix = bt == "Debug" ? "d" : ""
+      FileUtils.install(File.join(c[:src_dir], 
+                                  "projects",
+                                  "visualc71",
+                                  "Win32_LIB_#{bt}",
+                                  "libpng#{suffix}.lib"),
+                        File.join(c[:output_lib_dir], "libpng_s.lib"),
+                        :verbose => true)
     }
   }
 }
