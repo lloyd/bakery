@@ -28,18 +28,13 @@
       # XXX: consider installing to build dir then copying into output?
       # (less cruft)
       # rename static lib (append _s and move to buildtype dir)
-      lib_dir = File.join(c[:output_dir], "lib", c[:build_type].to_s)
-      puts "creating '#{lib_dir}'"
-      FileUtils.mkdir_p(lib_dir)
       FileUtils.mv(File.join(c[:output_dir], "lib", "libedit.a"),
-                   File.join(lib_dir, "libedit_s.a"),
+                   File.join(c[:output_lib_dir], "libedit_s.a"),
                    :verbose => true)
 
       # mv headers
-      # XXX: shall we tuck headers under a libedit directory?
-#      FileUtils.cp("#{buildDir}/lib/libedit.a",
-#                   "#{$libInstallDir}/#{buildType}/libedit_s.a",
-#                   :verbose => $verbose)
+      FileUtils.mv(File.join(c[:output_dir], "include", "histedit.h"),
+                   c[:output_inc_dir], :verbose => $verbose)
     }
   }
 }

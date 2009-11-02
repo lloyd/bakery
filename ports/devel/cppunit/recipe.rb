@@ -34,10 +34,8 @@
       system("make install")
 
       # now move built libraries down into a build type specific dir
-      lib_dir = File.join(c[:output_dir], "lib", c[:build_type].to_s)
-      FileUtils.mkdir_p(lib_dir)
       Dir.glob(File.join(c[:output_dir], "lib", "*cppunit*")).each { |f|
-        FileUtils.mv(f, lib_dir, :verbose => true)
+        FileUtils.mv(f, c[:output_lib_dir], :verbose => true)
       }
     },
     :Windows => lambda { |c|
@@ -45,21 +43,15 @@
       puts "installing #{c[:build_type].to_s} static library..."
       libTrailer = (c[:build_type] == :debug) ? "d" : ""
 
-      lib_dir = File.join(c[:output_dir], "lib", c[:build_type].to_s)
-      FileUtils.mkdir_p(lib_dir)
-
       FileUtils.cp(File.join(c[:build_dir], "lib", "cppunit#{libTrailer}.lib"),
-                   File.join(lib_dir, "cppunit.lib"),
-                   :verbose => $verbose)
+                   File.join(c[:output_lib_dir], "cppunit.lib"),
+                   :verbose => true)
 
       # install headers
       puts "installing headers..."
-      hdr_dir = File.join(c[:output_dir], "include")
-      FileUtils.mkdir_p(hdr_dir)
-
-      FileUtils.rm_rf(hdr_dir, "cppunit")
-      FileUtils.cp_r(File.join(c[:src_dir], "include", "cppunit"),
-                     hdr_dir, :verbose => $verbose)
+      Dir.glob(File.join(File.join(c[:src_dir], "include", "cppunit", "*"))).each { |h| 
+        FileUtils.cp_r(h, c[:output_inc_dir], :verbose => true)
+      }
     }
   }
 }

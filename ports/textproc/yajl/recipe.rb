@@ -31,12 +31,11 @@
   :post_install => {
     [ :Linux, :MacOSX ] => lambda { |c|
       system("make install")
+
       # now let's move output to the appropriate place
       # i.e. move from lib/libfoo.a to lib/debug/foo.a
-      libdir = File.join(c[:output_dir], "lib", c[:build_type].to_s)
-      FileUtils.mkdir_p(libdir)
       Dir.glob(File.join(c[:output_dir], "lib", "*")).each { |f|
-        FileUtils.mv(f, libdir) if !File.directory? f
+        FileUtils.mv(f, c[:output_lib_dir]) if !File.directory? f
       }
     }
   }

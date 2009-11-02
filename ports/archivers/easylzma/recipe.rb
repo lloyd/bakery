@@ -22,16 +22,10 @@
     # set up vars and dirs
     pkg = "easylzma-0.0.7"
     bt_str = c[:build_type].to_s
-    hdr_dir = File.join(c[:output_dir], "include", "easylzma")
-    lib_dir = File.join(c[:output_dir], "lib", bt_str)
-    bin_dir = File.join(c[:output_dir], "bin")
-    FileUtils.mkdir_p(hdr_dir)
-    FileUtils.mkdir_p(lib_dir)
-    FileUtils.mkdir_p(bin_dir)
 
     # copy in headers
     Dir.glob(File.join(c[:build_dir], pkg, "include", "easylzma","*.h")).each { |f|
-      FileUtils.cp_r(f, hdr_dir)
+      FileUtils.cp_r(f, c[:output_inc_dir])
     }
 
     # copy in lib
@@ -39,11 +33,12 @@
     if c[:platform] == :Windows
       lib = File.join(c[:build_dir], pkg, "lib", bt_str, "easylzma_s.lib")
     end
-    FileUtils.cp(lib, lib_dir, { :verbose => true, :preserve=>true })
+    FileUtils.cp(lib, c[:output_lib_dir], :verbose => true)
 
     # copy in bins (why not?)
     Dir.glob(File.join(c[:build_dir], pkg, "bin", "*")) do |b|
-      FileUtils.cp(b, bin_dir, { :verbose => true, :preserve=>true })
+      FileUtils.cp(b, c[:output_bin_dir],
+                   { :verbose => true, :preserve=>true })
     end
   }
 }

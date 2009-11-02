@@ -34,23 +34,17 @@
   },
   :install => {
     :Windows => lambda { |c|
-      # set up directories
-      hdr_dir = File.join(c[:output_dir], "include", "libarchive") 
-      lib_dir = File.join(c[:output_dir], "lib", c[:build_type].to_s)
-      FileUtils.mkdir_p(hdr_dir)
-      FileUtils.mkdir_p(lib_dir)
-
       puts "Installing libs..."
       debug_str = (c[:build_type] == :debug) ? "-d" : ""
       src = File.join(c[:src_dir], "lib", "libarchive-vc90-mt#{debug_str}.lib")
-      dst = File.join(lib_dir, "archive_s.lib")
+      dst = File.join(c[:output_lib_dir], "archive_s.lib")
       puts "copying from #{src} to #{dst}"
       FileUtils.cp(src, dst, :verbose => true)
 
       puts "Installing headers..."
       [ "archive.h", "archive_entry.h" ].each do |h|
-        FileUtils.cp(File.join(c[:src_dir], "libarchive", h), hdr_dir,
-                     :verbose => true)
+        FileUtils.cp(File.join(c[:src_dir], "libarchive", h),
+                     c[:output_inc_dir], :verbose => true)
       end
     },
     [:Linux, :MacOSX] => "make install"
