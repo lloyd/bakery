@@ -198,7 +198,7 @@ class Builder
             tarPath = File.basename(path, ".*")
             system("#{@sevenZCmd} x #{tarPath}")
             FileUtils.rm_f(tarPath)
-o          else
+          else
             if File.extname(path) == ".bz2"
               system("tar xvjf #{path}")
             elsif File.extname(path) == ".gz"
