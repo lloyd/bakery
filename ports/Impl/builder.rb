@@ -55,7 +55,11 @@ class Builder
     tarball = File.basename(URI.parse(@recipe[:url]).path)
     @tarball = File.expand_path(File.join(@distfiles_path, tarball))
 
-    #let's determine the platform
+    # initialize OS specific compile/link flags to the empty string
+    @os_compile_flags = ""
+    @os_link_flags = ""
+
+    # let's determine the platform
     @patch_cmd = "patch"
     if CONFIG['arch'] =~ /mswin/
       @platform = :Windows
@@ -64,6 +68,28 @@ class Builder
       @cmake_generator = "Visual Studio 9 2008"
     elsif CONFIG['arch'] =~ /darwin/
       @platform = :MacOSX
+
+      # Compiler/linker flags needed for 10.4 compatibility.  The surrounding
+      # spaces are important, don't be tempted to remove them.
+      #
+      # 10.4 compatibility is painful, see 
+      # http://developer.apple.com/releasenotes/Darwin/SymbolVariantsRelNotes/index
+      # In general, we must get these flags to the compiler and linker to tell it
+      # what sdk to use.  In addition, source which defines any of the preprocessor
+      # symbols mentioned in the above article will be problematic.
+      #
+      @os_compile_flags = " -isysroot /Developer/SDKs/MacOSX10.4u.sdk "
+      @os_compile_flags += " -mmacosx-version-min=10.4 "
+      @os_link_flags = @os_compile_flags
+      @os_compile_flags += " -arch i386 "
+      if CONFIG['arch'] !~ /darwin8/
+        # this flag only exists on 10.5 and later
+        @os_link_flags += " -syslibroot,/Developer/SDKs/MacOSX10.4u.sdk "
+      end
+
+      # globally update CC/CXX env vars
+      ENV['CC'] = 'gcc-4.0'
+      ENV['CXX'] = 'g++-4.0'
     elsif CONFIG['arch'] =~ /linux/
       @platform = :Linux
     end
@@ -74,7 +100,9 @@ class Builder
     @conf = {
       :platform => @platform,
       :output_dir => @output_dir,
-      :cmake_generator => @cmake_generator
+      :cmake_generator => @cmake_generator,
+      :os_compile_flags => @os_compile_flags,
+      :os_link_flags => @os_link_flags
     }
   end
   
