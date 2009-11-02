@@ -189,9 +189,9 @@ class Builder
             FileUtils.rm_f(tarPath)
           else
             if File.extname(path) == ".bz2"
-              system("bzcat #{path} | tar xf -")
+              system("tar xvjf #{path}")
             elsif File.extname(path) == ".gz"
-              system("tar xzf #{path}")
+              system("tar xvzf #{path}")
             else
               throw "unrecognized format for #{path}"
             end
@@ -200,13 +200,13 @@ class Builder
           if @platform == :Windows
             system("#{@sevenZCmd} x #{path}")
           else
-            system("tar xzf #{path}")
+            system("tar xvzf #{path}")
           end
         elsif path =~ /.zip/
           if @platform == :Windows
             system("#{@sevenZCmd} x #{path}")
           else
-            system("tar xzf #{path}")
+            system("tar xvzf #{path}")
           end
         else
           throw "unrecognized format for #{path}"
