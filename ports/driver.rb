@@ -8,6 +8,9 @@ require File.join(File.dirname(__FILE__), 'bakery')
 
 if ARGV.length < 1
   puts "usage: driver.rb <command> [arguments]"
+  puts "commands: "
+  puts "   build <portname>   -- build a specific port"
+  puts "   list               -- list all ports"
   exit 1
 end
 
@@ -20,6 +23,15 @@ when 'build'
   myorder = { :packages => [ ARGV[1] ], :verbose => true }
   b = Bakery.new(myorder) 
   b.build
+when 'list'
+  allPorts = Array.new
+  Dir.chdir(File.dirname(__FILE__)) {
+    Dir.glob(File.join("**", "recipe.rb")).each { |p| 
+      allPorts.push(File.dirname(p))
+    }                                                  
+  }                                                  
+  puts "#{allPorts.length} ports available:"
+  allPorts.sort.each { |p| puts "  #{p}" }
 else
   STDERR.puts "unrecognized command: #{ARGV[1]}"
   exit 1
