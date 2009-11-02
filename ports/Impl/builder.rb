@@ -324,7 +324,9 @@ class Builder
     end      
 
     if obj && obj.has_key?(sym)
-      if obj[sym].kind_of?(Hash)
+      if obj[sym] == nil
+        puts "      (not required on this platform)"
+      elsif obj[sym].kind_of?(Hash)
         invokeLambda(step, obj[sym], @platform)
       elsif obj[sym].kind_of?(String)
         runBuildPhase(step.to_s) {
