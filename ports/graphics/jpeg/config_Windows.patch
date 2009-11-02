@@ -1,0 +1,26 @@
+--- jpeg-6b\jmorecfg.h.orig	1997-08-09 16:58:56.000000000 -0700
++++ jpeg-6b\jmorecfg.h	2008-09-17 15:12:00.216625000 -0700
+@@ -158,8 +158,12 @@
+ /* INT32 must hold at least signed 32-bit values. */
+ 
+ #ifndef XMD_H			/* X11/xmd.h correctly defines INT32 */
++#ifdef WIN32
++typedef signed int INT32;
++#else
+ typedef long INT32;
+ #endif
++#endif
+ 
+ /* Datatype used for image dimensions.  The JPEG standard only supports
+  * images up to 64K*64K due to 16-bit fields in SOF markers.  Therefore
+@@ -212,8 +216,10 @@
+ #ifdef NEED_FAR_POINTERS
+ #define FAR  far
+ #else
++#ifndef FAR
+ #define FAR
+ #endif
++#endif
+ 
+ 
+ /*
