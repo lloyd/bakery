@@ -52,6 +52,12 @@ class Builder
     @output_dir = output_dir ? output_dir : File.join(@port_dir, "dist")
     FileUtils.mkdir_p(@output_dir)    
 
+    # now let's ensure the include dir exists
+    @output_inc_dir = File.join(@output_dir, "include", @pkg)
+    FileUtils.mkdir_p(@output_inc_dir)    
+
+    # lib dir will be updated at _pre_build_ time (once per build type)
+
     tarball = File.basename(URI.parse(@recipe[:url]).path)
     @tarball = File.expand_path(File.join(@distfiles_path, tarball))
 
@@ -100,6 +106,7 @@ class Builder
     @conf = {
       :platform => @platform,
       :output_dir => @output_dir,
+      :output_inc_dir => @output_inc_dir,
       :cmake_generator => @cmake_generator,
       :os_compile_flags => @os_compile_flags,
       :os_link_flags => @os_link_flags
@@ -187,7 +194,7 @@ class Builder
             tarPath = File.basename(path, ".*")
             system("#{@sevenZCmd} x #{tarPath}")
             FileUtils.rm_f(tarPath)
-          else
+o          else
             if File.extname(path) == ".bz2"
               system("tar xvjf #{path}")
             elsif File.extname(path) == ".gz"
@@ -260,6 +267,11 @@ class Builder
     @build_dir = File.join(@workdir_path, "build_" + buildType.to_s)
     FileUtils.mkdir_p(@build_dir)    
     @conf[:build_dir] = @build_dir
+
+    # update lib dir
+    @output_lib_dir = File.join(@output_dir, "lib", buildType.to_s)
+    FileUtils.mkdir_p(@output_lib_dir)
+    @conf[:output_lib_dir] = @output_lib_dir
   end
 
   def __redirectOutput fName, append = false

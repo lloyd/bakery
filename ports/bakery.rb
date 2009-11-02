@@ -34,7 +34,7 @@ class Bakery
       puts "    patching #{p}" if @verbose      
       b.patch
       @build_types.each { |bt|
-        puts "    pre_bulid step for #{p} (#{bt})" if @verbose      
+        puts "    pre_build step for #{p} (#{bt})" if @verbose      
         b.pre_build bt
         puts "    configuring #{p} (#{bt})" if @verbose      
         b.configure
