@@ -31,7 +31,7 @@
       lib_dir = File.join(c[:output_dir], "lib", c[:build_type].to_s)
       puts "creating '#{lib_dir}'"
       FileUtils.mkdir_p(lib_dir)
-      FileUtils.cp(File.join(c[:output_dir], "lib", "libedit.a"),
+      FileUtils.mv(File.join(c[:output_dir], "lib", "libedit.a"),
                    File.join(lib_dir, "libedit_s.a"),
                    :verbose => true)
 
