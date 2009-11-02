@@ -65,6 +65,7 @@
       }
     },
     :Windows => lambda { |c|
+      puts "installing lib"
       bt = c[:build_type].to_s.capitalize
       suffix = bt == "Debug" ? "d" : ""
       FileUtils.install(File.join(c[:src_dir], 
@@ -74,6 +75,12 @@
                                   "libpng#{suffix}.lib"),
                         File.join(c[:output_lib_dir], "libpng_s.lib"),
                         :verbose => true)
+
+      puts "installing headers"
+      ["png.h", "pngconf.h"].each do |f|
+        FileUtils.install(File.join(c[:src_dir], f), c[:output_inc_dir],
+                          :verbose => true)
+      end
     }
   }
 }
