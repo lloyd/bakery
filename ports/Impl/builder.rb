@@ -56,6 +56,9 @@ class Builder
     @output_inc_dir = File.join(@output_dir, "include", @pkg)
     FileUtils.mkdir_p(@output_inc_dir)    
 
+    @output_bin_dir = File.join(@output_dir, "bin")
+    FileUtils.mkdir_p(@output_bin_dir)    
+
     # lib dir will be updated at _pre_build_ time (once per build type)
 
     tarball = File.basename(URI.parse(@recipe[:url]).path)
@@ -107,6 +110,7 @@ class Builder
       :platform => @platform,
       :output_dir => @output_dir,
       :output_inc_dir => @output_inc_dir,
+      :output_bin_dir => @output_bin_dir,
       :cmake_generator => @cmake_generator,
       :os_compile_flags => @os_compile_flags,
       :os_link_flags => @os_link_flags
