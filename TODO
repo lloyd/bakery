@@ -1,2 +1,11 @@
 1. clean phase
 2. improve driver.rb as a bakers tool
+3. error handling:  build should be aborted if an exception is raised
+   during any build phase
+4. dependencies.  Concretely, libpng must depend on zlib, GraphicsMagick
+   on jpeg, zlib, and libpng
+5. rebuild guards and "reciepts" mechanisms
+6. non-build type specific pre and post targets for patching and header
+   installation respectively.
+
+
