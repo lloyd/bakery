@@ -294,8 +294,11 @@ class Builder
         }
       end
     end
+  end
 
-    # XXX: implement me    
+  def post_patch
+    @build_dir = @src_dir # yes martha, that's a hack
+    invokeLambda(:post_patch, @recipe, :post_patch)
   end
 
   def pre_build buildType

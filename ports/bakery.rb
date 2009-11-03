@@ -33,6 +33,8 @@ class Bakery
       b.unpack
       puts "    patching #{p}" if @verbose      
       b.patch
+      puts "    post-patch #{p}" if @verbose      
+      b.post_patch
       @build_types.each { |bt|
         puts "    pre_build step for #{p} (#{bt})" if @verbose      
         b.pre_build bt
