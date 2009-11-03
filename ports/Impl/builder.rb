@@ -122,9 +122,9 @@ class Builder
     @libdir_before = __libdir_contents
 
     # where shall our manifest live?
-    @reciepts_dir = File.join(@output_dir, "receipts")
-    FileUtils.mkdir_p(@reciepts_dir)
-    @reciept_path = File.join(@reciepts_dir, "#{@pkg}.yaml")
+    @receipts_dir = File.join(@output_dir, "receipts")
+    FileUtils.mkdir_p(@receipts_dir)
+    @receipt_path = File.join(@receipts_dir, "#{@pkg}.yaml")
   end
 
   def __libdir_contents
@@ -137,7 +137,27 @@ class Builder
   end
   
   def needsBuild
-    true
+    return true if !File.exist?(@receipt_path)
+
+    # first we'll compare the build time (manifest mtime) with the recipe time,
+    # if the latter is sooner than the former, we're out of date.
+    build_time = File.new(@receipt_path).mtime
+
+    recipe_time = nil
+    Dir.glob(File.join(File.dirname(@recipe_path), "**", "*")).each{ |f|
+      next if !File.file? f
+      if recipe_time == nil
+        recipe_time = File.new(f).mtime        
+      elsif File.new(f).mtime > recipe_time
+        recipe_time = File.new(f).mtime
+      end
+    }
+
+    return true if recipe_time > build_time
+  end
+
+  def check
+
   end
 
   def clean
@@ -421,6 +441,6 @@ class Builder
         sigs[h] = md5
     } }
 
-    File.open(@reciept_path, "w") { |r| YAML.dump(sigs.sort, r) }
+    File.open(@receipt_path, "w") { |r| YAML.dump(sigs.sort, r) }
   end
 end
