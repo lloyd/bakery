@@ -1,3 +1,5 @@
+require 'yaml'
+require 'set'
 require 'uri'
 require 'rbconfig'
 require 'fileutils'
@@ -115,6 +117,23 @@ class Builder
       :os_compile_flags => @os_compile_flags,
       :os_link_flags => @os_link_flags
     }
+
+    # for purposes of reciepts, let's take a snapshot of the lib directory
+    @libdir_before = __libdir_contents
+
+    # where shall our manifest live?
+    @reciepts_dir = File.join(@output_dir, "receipts")
+    FileUtils.mkdir_p(@reciepts_dir)
+    @reciept_path = File.join(@reciepts_dir, "#{@pkg}.yaml")
+  end
+
+  def __libdir_contents
+    lib_dir = File.join(@output_dir, "lib")
+    if File.directory? lib_dir
+      Set.new(Dir.chdir(lib_dir){ Dir.glob("**/*").reject { |f| File.directory?(f) } })
+    else
+      Set.new
+    end
   end
   
   def needsBuild
@@ -127,12 +146,26 @@ class Builder
     FileUtils.mkdir_p(@workdir_path)
   end
 
+  def __fastMD5 file
+    d = Digest::MD5.new
+    chunk = nil
+    md5 = nil
+    begin
+      File.open(file, "rb") { |f|
+        while (chunk = f.sysread(4096))
+          d.update(chunk)
+        end
+      }
+    rescue EOFError
+      d.to_s
+    end
+  end
+
   def checkMD5 
     match = false
     if File.readable? @tarball
       # now let's check the md5 sum
-      calculated_md5 = Digest::MD5.hexdigest(
-                         File.open(@tarball, "rb") { |f| f.read })
+      calculated_md5 = __fastMD5 @tarball
       match = (calculated_md5 == @recipe[:md5])
     end
     match
@@ -368,5 +401,23 @@ class Builder
   end
 
   def dist_clean
+  end
+
+  def write_reciept
+    sigs = Hash.new
+    __libdir_contents.subtract(@libdir_before).each { |l|
+      l = File.join("lib", l)
+      md5 = __fastMD5(File.join(@output_dir, l))
+      sigs[l] = md5
+    }
+
+    Dir.chdir(@output_inc_dir) { Dir.glob("**/*").each { |h|
+        next if File.directory? h
+        h = File.join("include", @pkg, h)
+        md5 = __fastMD5(File.join(@output_dir, h))
+        sigs[h] = md5
+    } }
+
+    File.open(@reciept_path, "w") { |r| YAML.dump(sigs.sort, r) }
   end
 end

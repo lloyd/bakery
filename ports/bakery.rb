@@ -47,6 +47,8 @@ class Bakery
       }
       puts "    cleaning up #{p}" if @verbose      
       b.dist_clean
+      puts "    Writing reciept for #{p}" if @verbose      
+      b.write_reciept
     }
   end
 end
