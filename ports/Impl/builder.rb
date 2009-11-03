@@ -285,9 +285,12 @@ class Builder
       old_stderr = $stderr.dup
       $stdout.reopen(f)
       $stderr.reopen(f)
-      yield
-      $stdout.reopen(old_stdout)
-      $stderr.reopen(old_stderr)
+      begin
+        yield
+      ensure
+        $stdout.reopen(old_stdout)
+        $stderr.reopen(old_stderr)
+      end
     }
   end
 
@@ -306,13 +309,19 @@ class Builder
     # for the isolation that forking provides us.  If the fork raises
     # NotImplementedError we'll just fallback to non-forking mode
     fork do
-      runBuildPhase2 phase, &b 
+      begin
+        runBuildPhase2 phase, &b 
+      rescue => e
+        STDERR.puts "CAUGHT EXCEPTION during #{phase.to_s} phase: #{e.to_s}"
+        exit 1
+      end
     end
     Process.wait
+    raise "build failed" if $?.exitstatus != 0
   rescue NotImplementedError
     runBuildPhase2 phase, &b    
   end
-
+    
   def invokeLambda step, obj, sym
     # support arrays as keys in recipes for user conveneince, i.e.:
     #  [:Linux, :MacOSX] => "make"
