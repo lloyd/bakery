@@ -25,7 +25,7 @@
       bjamPath = Dir.glob("#{bjamSrcPath}/bin.*/**/bjam*")[0]
 
       toolset=""
-      if c[:platform] == :Darwin
+      if c[:platform] == :MacOSX
         toolset="darwin"
         # add a user-config.jam for Darwin to allow 10.4 compatibility
         uconfig = File.new("user-config.jam", "w")
