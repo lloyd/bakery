@@ -42,7 +42,7 @@
     :Windows => lambda { |c| 
       puts "install lib..."
       FileUtils.install(File.join(c[:src_dir], "libjpeg.lib"),
-                        File.join(c[:output_lib_dir], "jpeg.lib"),
+                        File.join(c[:output_lib_dir], "jpeg_s.lib"),
                         :verbose => true)
 
       if c[:build_type] == :release
