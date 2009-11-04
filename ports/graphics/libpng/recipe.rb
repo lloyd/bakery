@@ -61,7 +61,9 @@
 
       # move library into place
       Dir.glob(File.join(c[:output_dir], "lib", "libpng*a")).each { |l|
-        FileUtils.mv(l, c[:output_lib_dir], :verbose => true)
+        tgt = File.join(c[:output_lib_dir],
+                        File.basename(l).sub(/\.a$/, "_s.a"))
+        FileUtils.mv(l, tgt, :verbose => true)
       }
     },
     :Windows => lambda { |c|
