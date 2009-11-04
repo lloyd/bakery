@@ -42,7 +42,6 @@
         bt = c[:build_type].to_s.capitalize
         system("devenv libpng.sln /build \"LIB #{bt}\" /project libpng")
       end
-      
     }
   },
   :install => {
