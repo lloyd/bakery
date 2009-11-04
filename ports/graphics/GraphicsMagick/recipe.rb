@@ -72,6 +72,7 @@
       }
     },
     :Windows => lambda { |c|
+      puts "installing #{c[:build_type].to_s} static libraries..."
       bt = (c[:build_type] == :debug) ? "DB" : "RL"
       {
         "_coders_"  => "GraphicsMagickCoders_s.lib",
@@ -85,6 +86,26 @@
                      File.join(c[:output_lib_dir], v),
                      :verbose => true)
       }
+
+      if (c[:build_type] == :release) 
+        puts "installing headers..."
+        [ "wand", "magick" ].each { |d|
+          tgt = File.join(c[:output_inc_dir], d)
+          FileUtils.mkdir_p(tgt)
+          Dir.glob(File.join(c[:src_dir], d, "*.h")).each { |h|
+            FileUtils.cp(h, tgt, :verbose => true)
+          }
+        }
+
+        # now let's install Magick++ headers which live in a different place
+        tgt = File.join(c[:output_inc_dir], "Magick++")
+        FileUtils.mkdir_p(tgt)
+        Dir.glob(File.join(c[:src_dir], "Magick++", "lib", "Magick++", "*.h")).each { |h|
+          FileUtils.cp(h, tgt, :verbose => true)
+        }
+        FileUtils.cp(File.join(c[:src_dir], "Magick++", "lib", "Magick++.h"),
+                     tgt, :verbose => true)
+      end
     }
   }
 }
