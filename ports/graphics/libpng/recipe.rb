@@ -74,7 +74,7 @@
                                   "visualc71",
                                   "Win32_LIB_#{bt}",
                                   "libpng#{suffix}.lib"),
-                        File.join(c[:output_lib_dir], "libpng_s.lib"),
+                        File.join(c[:output_lib_dir], "png_s.lib"),
                         :verbose => true)
 
       puts "installing headers"
