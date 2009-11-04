@@ -118,9 +118,6 @@ class Builder
       :os_link_flags => @os_link_flags
     }
 
-    # for purposes of reciepts, let's take a snapshot of the lib directory
-    @libdir_before = __libdir_contents
-
     # where shall our manifest live?
     @receipts_dir = File.join(@output_dir, "receipts")
     FileUtils.mkdir_p(@receipts_dir)
@@ -164,6 +161,24 @@ class Builder
     puts "      removing previous build artifacts (#{@workdir_path})..."
     FileUtils.rm_rf(@workdir_path)
     FileUtils.mkdir_p(@workdir_path)
+
+    # now remove installed artifacts if needed
+    if File.exist?(@receipt_path)
+      puts "      removing previous build output..."
+      r = File.open( @receipt_path ) { |yf| YAML::load( yf ) }
+      r.each { |p,md5|
+        FileUtils.rm_f(File.join(@output_dir, p), :verbose => true )
+      }
+      FileUtils.rm_f( @receipt_path )
+
+      # for good measure, let's remove and re-create the header directory
+      # (handles nested directories)
+      FileUtils.rm_rf( @output_inc_dir )
+      FileUtils.mkdir_p( @output_inc_dir )      
+    end
+
+    # for purposes of reciepts, let's take a snapshot of the lib directory
+    @libdir_before = __libdir_contents
   end
 
   def __fastMD5 file
