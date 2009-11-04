@@ -52,7 +52,13 @@
     }
   },
   :build => {
-    [ :Linux, :MacOSX ] => "make"
+    [ :Linux, :MacOSX ] => "make",
+    :Windows => lambda { |c|
+      Dir.chdir(File.join(c[:src_dir])) do
+        bt = c[:build_type].to_s.capitalize
+        system("devenv VisualMagick\\VisualStaticMT.sln /build #{bt}")
+      end
+    }
   },
   :install => {
     [ :Linux, :MacOSX ] => lambda { |c|
@@ -62,6 +68,21 @@
       Dir.glob(File.join(c[:output_dir], "lib", "libGraphics*")).each { |l|
         newFname = File.basename(l).sub(/\.a$/, "_s.a")
         FileUtils.mv(l, File.join(c[:output_lib_dir], newFname),
+                     :verbose => true)
+      }
+    },
+    :Windows => lambda { |c|
+      bt = (c[:build_type] == :debug) ? "DB" : "RL"
+      {
+        "_coders_"  => "GraphicsMagickCoders_s.lib",
+        "_filters_" => "GraphicsMagickFilters_s.lib",
+        "_Magick++_" => "GraphicsMagick++_s.lib",
+        "_wand_" => "GraphicsMagickWand_s.lib",
+        "_magick_" => "GraphicsMagick_s.lib"
+      }.each { |k,v|
+        fname = "CORE_#{bt}#{k}.lib"
+        FileUtils.cp(File.join(c[:src_dir], "VisualMagick", "lib", fname),
+                     File.join(c[:output_lib_dir], v),
                      :verbose => true)
       }
     }
