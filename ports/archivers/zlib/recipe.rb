@@ -3,9 +3,12 @@
   :md5 => "debc62758716a169df9f62e6ab2bc634",
   :configure => {
     [ :Linux, :MacOSX ] => lambda { |c|
+      ENV['CFLAGS'] = "#{c[:os_compile_flags]} #{ENV['CFLAGS']}"
+      ENV['CFLAGS'] += ' -g -O0 ' if c[:build_type] == :debug
+      ENV['LDFLAGS'] = "#{c[:os_link_flags]} #{ENV['LDFLAGS']}"
+
       # zlib doesn't like out of source builds
       Dir.chdir(c[:src_dir]) {
-        ENV['CFLAGS'] = "-g -O0 #{ENV['CFLAGS']}" if (c[:build_type] == :debug)
         system("./configure")
       }
     },
