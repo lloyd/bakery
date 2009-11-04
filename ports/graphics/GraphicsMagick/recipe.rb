@@ -104,7 +104,7 @@
           FileUtils.cp(h, tgt, :verbose => true)
         }
         FileUtils.cp(File.join(c[:src_dir], "Magick++", "lib", "Magick++.h"),
-                     tgt, :verbose => true)
+                     c[:output_inc_dir], :verbose => true)
       end
     }
   }
