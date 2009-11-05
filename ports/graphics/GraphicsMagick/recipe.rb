@@ -33,10 +33,11 @@
   },
   :configure => {
     [ :Linux, :MacOSX ] => lambda { |c|
+      zlib_hdrs = File.join(c[:output_dir], "include", "zlib")
       jpg_hdrs = File.join(c[:output_dir], "include", "jpeg")
       png_hdrs = File.join(c[:output_dir], "include", "libpng")
       bt = c[:build_type].to_s
-      ENV['CFLAGS'] = "-I#{jpg_hdrs} -I#{png_hdrs} #{ENV['CFLAGS']}" 
+      ENV['CFLAGS'] = "-I#{zlib_hdrs} -I#{jpg_hdrs} -I#{png_hdrs} #{ENV['CFLAGS']}" 
       ENV['CFLAGS'] += " #{c[:os_compile_flags]}"
       if c[:build_type] == :debug
         ENV['CFLAGS'] += " -g -O0"
