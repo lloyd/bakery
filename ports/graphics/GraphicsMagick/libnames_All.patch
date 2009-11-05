@@ -1,0 +1,167 @@
+diff -ur GraphicsMagick-1.3.7.orig/configure GraphicsMagick-1.3.7/configure
+--- GraphicsMagick-1.3.7.orig/configure	2009-11-04 18:17:47.000000000 -0700
++++ GraphicsMagick-1.3.7/configure	2009-11-04 18:20:18.000000000 -0700
+@@ -22008,13 +22008,13 @@
+ fi
+ 
+ 
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for compress in -lz" >&5
+-$as_echo_n "checking for compress in -lz... " >&6; }
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for compress in -lzlib_s" >&5
++$as_echo_n "checking for compress in -lzlib_s... " >&6; }
+ if test "${ac_cv_lib_z_compress+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lz  $LIBS"
++LIBS="-lzlib_s  $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -22050,13 +22050,13 @@
+   failed=`expr $failed + 1`
+ fi
+ 
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for uncompress in -lz" >&5
+-$as_echo_n "checking for uncompress in -lz... " >&6; }
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for uncompress in -lzlib_s" >&5
++$as_echo_n "checking for uncompress in -lzlib_s... " >&6; }
+ if test "${ac_cv_lib_z_uncompress+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lz  $LIBS"
++LIBS="-lzlib_s  $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -22092,13 +22092,13 @@
+   failed=`expr $failed + 1`
+ fi
+ 
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for deflate in -lz" >&5
+-$as_echo_n "checking for deflate in -lz... " >&6; }
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for deflate in -lzlib_s" >&5
++$as_echo_n "checking for deflate in -lzlib_s... " >&6; }
+ if test "${ac_cv_lib_z_deflate+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lz  $LIBS"
++LIBS="-lzlib_s  $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -22134,13 +22134,13 @@
+   failed=`expr $failed + 1`
+ fi
+ 
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for inflate in -lz" >&5
+-$as_echo_n "checking for inflate in -lz... " >&6; }
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for inflate in -lzlib_s" >&5
++$as_echo_n "checking for inflate in -lzlib_s... " >&6; }
+ if test "${ac_cv_lib_z_inflate+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lz  $LIBS"
++LIBS="-lzlib_s  $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -22176,13 +22176,13 @@
+   failed=`expr $failed + 1`
+ fi
+ 
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gzseek in -lz" >&5
+-$as_echo_n "checking for gzseek in -lz... " >&6; }
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gzseek in -lzlib_s" >&5
++$as_echo_n "checking for gzseek in -lzlib_s... " >&6; }
+ if test "${ac_cv_lib_z_gzseek+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lz  $LIBS"
++LIBS="-lzlib_s  $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -22218,13 +22218,13 @@
+   failed=`expr $failed + 1`
+ fi
+ 
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gztell in -lz" >&5
+-$as_echo_n "checking for gztell in -lz... " >&6; }
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gztell in -lzlib_s" >&5
++$as_echo_n "checking for gztell in -lzlib_s... " >&6; }
+ if test "${ac_cv_lib_z_gztell+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lz  $LIBS"
++LIBS="-lzlib_s  $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -22270,7 +22270,7 @@
+ $as_echo "no -- some components failed test" >&6; }
+       have_zlib='no (failed tests)'
+     else
+-      LIB_ZLIB='-lz'
++      LIB_ZLIB='-lzlib_s'
+       LIBS="$LIB_ZLIB $LIBS"
+ 
+ $as_echo "#define HasZLIB 1" >>confdefs.h
+@@ -23834,13 +23834,13 @@
+ fi
+ 
+ 
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for png_get_io_ptr in -lpng" >&5
+-$as_echo_n "checking for png_get_io_ptr in -lpng... " >&6; }
++    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for png_get_io_ptr in -lpng_s" >&5
++$as_echo_n "checking for png_get_io_ptr in -lpng_s... " >&6; }
+ if test "${ac_cv_lib_png_png_get_io_ptr+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lpng  $LIBS"
++LIBS="-lpng_s  $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -23886,7 +23886,7 @@
+ $as_echo "no -- some components failed test" >&6; }
+ 	have_png='no (failed tests)'
+     else
+-	LIB_PNG='-lpng'
++	LIB_PNG='-lpng_s'
+ 	LIBS="$LIB_PNG $LIBS"
+ 
+ $as_echo "#define HasPNG 1" >>confdefs.h
+@@ -23955,13 +23955,13 @@
+ fi
+ 
+ 
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for jpeg_read_header in -ljpeg" >&5
+-$as_echo_n "checking for jpeg_read_header in -ljpeg... " >&6; }
++    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for jpeg_read_header in -ljpeg_s" >&5
++$as_echo_n "checking for jpeg_read_header in -ljpeg_s... " >&6; }
+ if test "${ac_cv_lib_jpeg_jpeg_read_header+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-ljpeg  $LIBS"
++LIBS="-ljpeg_s  $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -24050,7 +24050,7 @@
+ $as_echo "no -- some components failed test" >&6; }
+         have_jpeg='no (failed tests)'
+     else
+-	LIB_JPEG='-ljpeg'
++	LIB_JPEG='-ljpeg_s'
+ 	LIBS="$LIB_JPEG $LIBS"
+ 
+ $as_echo "#define HasJPEG 1" >>confdefs.h
+Only in GraphicsMagick-1.3.7: configure~
