@@ -60,8 +60,9 @@
 
       # move library into place
       Dir.glob(File.join(c[:output_dir], "lib", "libpng*a")).each { |l|
-        tgt = File.join(c[:output_lib_dir],
-                        File.basename(l).sub(/\.a$/, "_s.a"))
+        tgtBasename = File.basename(l)
+        tgtBasename.sub!(/\.a$/, "_s.a") if tgtBasename == "libpng.a"
+        tgt = File.join(c[:output_lib_dir], tgtBasename)
         FileUtils.mv(l, tgt, :verbose => true)
       }
     },
