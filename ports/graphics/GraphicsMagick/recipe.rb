@@ -46,7 +46,7 @@
       cfgOpts = "--enable-static --disable-shared --without-bzlib " +
                 "--without-dps --without-jp2 --without-lcms --without-tiff " +
                 "--without-trio --without-ttf --without-xml --without-x " +
-                "--disable-openmp --prefix=#{c[:output_dir]}" 
+                "--disable-openmp --disable-installed --prefix=#{c[:output_dir]}" 
       cfgScript = File.join(c[:src_dir], "configure")
       puts("LDFLAGS=\"#{ENV['LDFLAGS']}\" #{cfgScript} #{cfgOpts}")      
       system("LDFLAGS=\"#{ENV['LDFLAGS']}\" #{cfgScript} #{cfgOpts}")
