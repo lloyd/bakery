@@ -23,14 +23,13 @@
   },
   :install => {
     :Windows => lambda { |c|
+      FileUtils.cp("mongoose_s.lib", c[:output_lib_dir])
     },
     [ :MacOSX, :Linux ] => lambda { |c|
       FileUtils.cp("libmongoose_s.a", c[:output_lib_dir])
     }
   },
-  :post_install_common => {
-    [ :MacOSX, :Linux ] => lambda { |c|
-      FileUtils.cp("mongoose.h", c[:output_inc_dir])
-    }
+  :post_install_common => lambda { |c|
+    FileUtils.cp("mongoose.h", c[:output_inc_dir])
   }
 }
