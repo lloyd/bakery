@@ -47,6 +47,8 @@ class Bakery
         puts "    running post_install for #{p} (#{bt})" if @verbose      
         b.post_install
       }
+      puts "    running post_install_common for #{p}" if @verbose      
+      b.post_install_common
       puts "    cleaning up #{p}" if @verbose      
       b.dist_clean
       puts "    Writing reciept for #{p}" if @verbose      

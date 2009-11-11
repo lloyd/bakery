@@ -442,6 +442,11 @@ class Builder
     invokeLambda(:post_install, @recipe, :post_install)
   end
 
+  def post_install_common
+    @build_dir = @src_dir # yes martha, that's a hack
+    invokeLambda(:post_install_common, @recipe, :post_install_common)
+  end
+
   def dist_clean
   end
 
