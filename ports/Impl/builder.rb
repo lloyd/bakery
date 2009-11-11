@@ -74,11 +74,13 @@ class Builder
     @patch_cmd = "patch"
     if CONFIG['arch'] =~ /mswin/
       @platform = :Windows
+      @platlookup = [ @platform, :All ]
       @sevenZCmd = File.expand_path(File.join(@port_dir, "WinTools", "7z.exe"))
       @patch_cmd = File.expand_path(File.join(@port_dir, "WinTools", "patch.exe"))
       @cmake_generator = "Visual Studio 9 2008"
     elsif CONFIG['arch'] =~ /darwin/
       @platform = :MacOSX
+      @platlookup = [ @platform, :Unix, :All ]
 
       # Compiler/linker flags needed for 10.4 compatibility.  The surrounding
       # spaces are important, don't be tempted to remove them.
@@ -103,6 +105,7 @@ class Builder
       ENV['CXX'] = 'g++-4.0'
     elsif CONFIG['arch'] =~ /linux/
       @platform = :Linux
+      @platlookup = [ @platform, :Unix, :All ]
     end
 
     @cmake_generator = cmake_gen if cmake_gen
@@ -310,7 +313,8 @@ class Builder
     
     # first we'll find patches!
     patches = Array.new
-    [ @platform, :All ].each do |p|
+
+    @platlookup.each do |p|
       patches += Dir.glob(File.join(portDir, "*_#{p.to_s}.patch"))
     end
     patches.sort!
