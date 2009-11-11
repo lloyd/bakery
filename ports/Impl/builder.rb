@@ -281,6 +281,10 @@ class Builder
         elsif path =~ /.tgz/
           if @platform == :Windows
             system("#{@sevenZCmd} x #{path}")
+            tarPath = File.basename(path, ".*") + ".tar"
+            puts "untarring #{tarPath}..."
+            system("#{@sevenZCmd} x #{tarPath}")
+            FileUtils.rm_f(tarPath)
           else
             system("tar xvzf #{path}")
           end
