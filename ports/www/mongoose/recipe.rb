@@ -15,7 +15,7 @@
       system("nmake CL_FLAGS=\"#{cflags}\" msvc")
     },
     [ :MacOSX, :Linux ] => lambda { |c|
-      cflags = " -Wall"
+      cflags = "#{c[:os_compile_flags]} -Wall"
       cflags += (c[:build_type] == :debug) ? " -g -O0" : " -O2"
       ENV['CFLAGS'] = cflags
       system("make unix")
