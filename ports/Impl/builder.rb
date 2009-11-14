@@ -63,8 +63,11 @@ class Builder
 
     # lib dir will be updated at _pre_build_ time (once per build type)
 
-    tarball = File.basename(URI.parse(@recipe[:url]).path)
-    @tarball = File.expand_path(File.join(@distfiles_path, tarball))
+    @tarball = nil
+    if @recipe.has_key?(:url) && @recipe[:url]
+      tarball = File.basename(URI.parse(@recipe[:url]).path)
+      @tarball = File.expand_path(File.join(@distfiles_path, tarball))
+    end
 
     # initialize OS specific compile/link flags to the empty string
     @os_compile_flags = ""
@@ -118,7 +121,8 @@ class Builder
       :output_bin_dir => @output_bin_dir,
       :cmake_generator => @cmake_generator,
       :os_compile_flags => @os_compile_flags,
-      :os_link_flags => @os_link_flags
+      :os_link_flags => @os_link_flags,
+      :recipe_dir => File.expand_path(File.dirname(@recipe_path))
     }
 
     # where shall our manifest live?
@@ -210,6 +214,11 @@ class Builder
   end
 
   def fetch
+    if !@recipe.has_key?(:url) || !@recipe[:url]
+      puts "      nothing to fetch for this port"
+      return
+    end
+
     url = @recipe[:url]
 
     if !checkMD5
@@ -257,6 +266,11 @@ class Builder
   end
 
   def unpack
+    if !@tarball
+      puts "      nothing to unpack for this port"
+      return
+    end
+    
     srcPath = File.join(@workdir_path, "src")
     FileUtils.mkdir_p srcPath
     Dir.chdir(srcPath) do
