@@ -1,6 +1,4 @@
 {
-  :url => nil,
-  :md5 => nil,
   :build => lambda { |c|
     # compile jsmin.c 
     puts c[:source_dir]

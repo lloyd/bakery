@@ -41,9 +41,9 @@ class Builder
 
     # now let's read and parse the recipe
     @recipe = eval(File.read(@recipe_path))
-    [ :url, :md5 ].each { |sym|
-      __checkSym @recipe, sym
-    }
+#    [ :url, :md5 ].each { |sym|
+#      __checkSym @recipe, sym
+#    }
 
     @distfiles_path = File.join(@port_dir, "distfiles")
     FileUtils.mkdir_p(@distfiles_path)
