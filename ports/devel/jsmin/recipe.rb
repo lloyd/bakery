@@ -9,7 +9,6 @@
       raise "not yet implemented!  gotta compile! XXX"
     else
       cmd = "gcc -Wall -g -o jsmin #{jsminSrc}"
-      puts "CC: #{cmd}"
       system(cmd)
     end
   },
