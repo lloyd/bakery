@@ -4,12 +4,12 @@
   :configure => {
     [ :Linux, :MacOSX ] => lambda { |c|
       if $platform == :MacOSX
-        ENV['CFLAGS'] = ENV['CFLAGS'].to_s + $darwinCompatCompileFlags
-        ENV['CXXFLAGS'] = ENV['CXXFLAGS'].to_s + $darwinCompatCompileFlags
+        ENV['CFLAGS'] = "#{c[:os_compile_flags]} #{ENV['CFLAGS']}"
+        ENV['LDFLAGS'] = "#{c[:os_link_flags]} #{ENV['LDFLAGS']}"
       end
 
       if c[:build_type] == :debug
-        ENV['CFLAGS'] = ENV['CFLAGS'].to_s + " -g -O0"
+        ENV['CFLAGS'] = "-g -O0 #{ENV['CFLAGS']}"
       end
 
       configScript = File.join(c[:src_dir], "configure")
