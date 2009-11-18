@@ -8,10 +8,10 @@
                  :verbose => true)
   },
   :configure => {
-    [:Linux, :MacOSX] => lambda { |c|
+    [ :Linux, :MacOSX ] => lambda { |c|
       configCmd = File.join(c[:src_dir], "source", "runConfigureICU")    
       configCmd += " #{c[:platform].to_s} --prefix=#{c[:output_dir]} "
-      configCmd += " --enable-static --disable-shared --disable-icuio --disable-layout"
+      configCmd += " --enable-static --disable-icuio --disable-layout"
       if c[:build_type] == :debug
         configCmd += " --enable-debug --disable-release"
         ENV['CFLAGS'] = "#{ENV['CFLAGS']} -g -O0"
