@@ -79,7 +79,9 @@ class Builder
       @platform = :Windows
       @platlookup = [ @platform, :All ]
       @sevenZCmd = File.expand_path(File.join(@port_dir, "WinTools", "7z.exe"))
-      @patch_cmd = File.expand_path(File.join(@port_dir, "WinTools", "patch.exe"))
+      # on windows, patch is called ptch since an exe named "patch" will
+      # cause a UAC on Vista
+      @patch_cmd = File.expand_path(File.join(@port_dir, "WinTools", "ptch.exe"))
       @cmake_generator = "Visual Studio 9 2008"
     elsif CONFIG['arch'] =~ /darwin/
       @platform = :MacOSX
