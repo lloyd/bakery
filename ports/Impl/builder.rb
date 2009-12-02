@@ -184,7 +184,7 @@ class Builder
       FileUtils.mkdir_p( @output_inc_dir )      
     end
 
-    # for purposes of reciepts, let's take a snapshot of the lib directory
+    # for purposes of receipts, let's take a snapshot of the lib directory
     @libdir_before = __libdir_contents
   end
 
@@ -468,7 +468,7 @@ class Builder
   def dist_clean
   end
 
-  def write_reciept
+  def write_receipt
     sigs = Hash.new
     __libdir_contents.subtract(@libdir_before).each { |l|
       l = File.join("lib", l)

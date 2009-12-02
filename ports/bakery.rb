@@ -51,8 +51,8 @@ class Bakery
       b.post_install_common
       puts "    cleaning up #{p}" if @verbose      
       b.dist_clean
-      puts "    Writing reciept for #{p}" if @verbose      
-      b.write_reciept
+      puts "    Writing receipt for #{p}" if @verbose      
+      b.write_receipt
     }
   end
 end

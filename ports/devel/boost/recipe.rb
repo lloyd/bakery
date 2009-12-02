@@ -1,6 +1,6 @@
 {
-  :url => "http://downloads.sourceforge.net/boost/boost_1_39_0.tar.bz2",
-  :md5 => "a17281fd88c48e0d866e1a12deecbcc0",
+  :url => "http://downloads.sourceforge.net/boost/boost_1_41_0.tar.bz2",
+  :md5 => "8bb65e133907db727a2a825c5400d0a6",
   :configure => lambda { |c|
     # for the configure step we'll build bjam
     bjamSrcPath = File.join(c[:src_dir], "tools", "jam", "src")
@@ -78,17 +78,6 @@
     
     Dir.glob("**/#{buildType}/**/libboost*.#{libSuffix}").each do |l|
       FileUtils.cp(l, c[:output_lib_dir], :verbose => true)
-      
-      # Make symlinks to libs on non-windows systems.
-      # The autolink stuff on windows eliminates the need for this
-      if c[:platform] != :Windows
-        longName = File.basename(l)
-        shortName = longName[0, longName.index('-')] + "." + libSuffix
-        puts "making symlink for #{shortName}..."
-        Dir.chdir(c[:output_lib_dir]) do
-          FileUtils.ln_sf(longName, shortName, :verbose => $verbose)
-        end
-      end
     end
   }
 }
