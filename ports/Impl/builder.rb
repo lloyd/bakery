@@ -150,9 +150,19 @@ class Builder
   
   def needsBuild
     return true if !File.exist?(@receipt_path)
+    
+    r = File.open( @receipt_path ) { |yf| YAML::load( yf ) }
 
-    # first we'll compare the build time (manifest mtime) with the recipe time,
-    # if the latter is sooner than the former, we're out of date.
+    # first, if the reciept contents have changed, then we need a rebuild.
+    # (we don't care if they've moved, really)
+    return true if r[:recipe] != __fastMD5( @recipe_path )
+
+    # second, we'll compare the build time (manifest mtime) with the times of
+    # all of the files in the same directory as the recipe.  If any of those
+    # files are newer, we're calling this guy out of date.
+    # XXX: this *requires* folks put a reciept in a dir.  High level problem
+    # here is that there's a number of files (recipe and patches) that should
+    # trigger a rebuild.  How do we automagically get the *best* set of files?
     build_time = File.new(@receipt_path).mtime
 
     recipe_time = nil
@@ -181,7 +191,7 @@ class Builder
     if File.exist?(@receipt_path)
       puts "      removing previous build output..."
       r = File.open( @receipt_path ) { |yf| YAML::load( yf ) }
-      r.each { |p,md5|
+      r[:files].each { |p,md5|
         FileUtils.rm_f(File.join(@output_dir, p), :verbose => true )
       }
       FileUtils.rm_f( @receipt_path )
@@ -514,7 +524,10 @@ class Builder
         md5 = __fastMD5(File.join(@output_dir, h))
         sigs[h] = md5
     } }
-
-    File.open(@receipt_path, "w") { |r| YAML.dump(sigs.sort, r) }
+    rf = {
+      :recipe => __fastMD5(@recipe_path),
+      :files => sigs.sort
+    }
+    File.open(@receipt_path, "w") { |r| YAML.dump(rf, r) }
   end
 end
