@@ -326,6 +326,30 @@ class Builder
     @conf[:src_dir] = @src_dir
   end
 
+  def use_source p
+    # if path provided is a tarball, we'll set @tarball and pop over
+    # into the unpack code.  otherwise if it's a directory we'll
+    # copy in the contents.
+    if p =~ /\.tar\./ || p =~ /zip$/ || p =~ /tgz$/ 
+      @tarball = p
+      unpack
+    elsif File.directory?(p)
+      srcPath = File.join(@workdir_path, "src")
+      FileUtils.mkdir_p srcPath
+
+      Dir.glob(File.join(p, "*")).each { |f|
+        # skip toplevel dotfiles
+        next if f =~ /^\./
+        FileUtils.cp_r(f, srcPath)
+      }
+      
+      @src_dir = srcPath
+      @conf[:src_dir] = @src_dir
+    else
+      raise "I don't know how to \"use\" this: #{p}"
+    end
+  end
+
   def patch
     patch_log = File.join(@workdir_path, "patch.log")
     FileUtils.rm_f(patch_log)

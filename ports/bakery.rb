@@ -14,6 +14,7 @@ class Bakery
     throw "now packages specified in order" if !order[:packages]
     @packages = order[:packages]
     @cmake_generator = (order && order[:cmake_generator])
+    @use_source = order[:use_source]
   end
   
   def build
@@ -27,10 +28,17 @@ class Bakery
       end
       puts "    cleaning #{p}" if @verbose      
       b.clean
-      puts "    fetching #{p}" if @verbose      
-      b.fetch
-      puts "    unpacking #{p}" if @verbose      
-      b.unpack
+      # if use_source is specified for this package it short circuts
+      # fetch and unpack
+      if @use_source && @use_source.has_key?(p)
+        puts "    copying local source for #{p} (#{@use_source[p]})" if @verbose      
+        b.use_source @use_source[p]
+      else 
+        puts "    fetching #{p}" if @verbose      
+        b.fetch
+        puts "    unpacking #{p}" if @verbose      
+        b.unpack
+      end
       puts "    patching #{p}" if @verbose      
       b.patch
       puts "    post-patch #{p}" if @verbose      
