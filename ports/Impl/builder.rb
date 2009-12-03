@@ -153,7 +153,7 @@ class Builder
     
     r = File.open( @receipt_path ) { |yf| YAML::load( yf ) }
 
-    # first, if the reciept contents have changed, then we need a rebuild.
+    # first, if the recipe contents have changed, then we need a rebuild.
     # (we don't care if they've moved, really)
     return true if r[:recipe] != __fastMD5( @recipe_path )
 
