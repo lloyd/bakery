@@ -38,6 +38,9 @@ when 'build'
   if cl_args.has_key? "use_source"
     myorder[:use_source] = { myargv[1] => cl_args["use_source"] } 
   end
+  if cl_args.has_key? "use_recipe"
+    myorder[:use_recipe] = { myargv[1] => cl_args["use_recipe"] } 
+  end
   puts "synthesized order: "
   pp myorder
   b = Bakery.new(myorder) 

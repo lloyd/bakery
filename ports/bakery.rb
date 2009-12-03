@@ -15,13 +15,15 @@ class Bakery
     @packages = order[:packages]
     @cmake_generator = (order && order[:cmake_generator])
     @use_source = order[:use_source]
+    @use_recipe = order[:use_recipe]
   end
   
   def build
     puts "building #{@packages.length} packages:" if @verbose
     @packages.each { |p|
-      puts "--- building #{p} ---" if @verbose      
-      b = Builder.new(p, @verbose, @output_dir, @cmake_generator)
+      recipe = @use_recipe[p] if @use_recipe && @use_recipe.has_key?(p) 
+      puts "--- building #{p}#{recipe ? (" (" + recipe + ")") : ""} ---" if @verbose      
+      b = Builder.new(p, @verbose, @output_dir, @cmake_generator, recipe)
       if !b.needsBuild
         puts "    skipping #{p}, already built!" if @verbose              
         next

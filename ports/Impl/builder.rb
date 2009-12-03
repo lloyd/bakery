@@ -23,7 +23,7 @@ class Builder
     end
   end
 
-  def initialize pkg, verbose, output_dir, cmake_gen
+  def initialize pkg, verbose, output_dir, cmake_gen, recipe_location = nil
     @pkg = pkg
     @verbose = verbose
 
@@ -31,11 +31,17 @@ class Builder
     @port_dir = File.expand_path(File.dirname(File.dirname(__FILE__)))
 
     # try to locate the pkg
-    locations = [ File.join(@port_dir, pkg, "recipe.rb") ] +
-                Dir.glob(File.join(@port_dir, "*", pkg, "recipe.rb"))
+    locations = [
+                 recipe_location,
+                 File.join(@port_dir, pkg, "recipe.rb")
+                ] +
+      Dir.glob(File.join(@port_dir, "*", pkg, "recipe.rb"))
+
+    @recipe_path = nil
     locations.each { |x|
-      x = File.expand_path x
-      @recipe_path = x if (File.readable? x)
+      next if @recipe_path != nil || x == nil || !File.readable?(x)
+      @recipe_path = File.expand_path(x)
+      break
     }
     throw "unknown package: #{pkg}" if !@recipe_path
 
