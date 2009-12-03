@@ -34,9 +34,9 @@
         uconfig.write("\n")
         uconfig.write("# Compiler configuration\n")
         uconfig.write("using darwin : 4.0 : g++-4.0 -arch i386 : ")
-        uconfig.write("<compileflags>\"#{$darwinCompatCompileFlags}\" ")
+        uconfig.write("<compileflags>\"#{c[:os_compile_flags]}\" ")
         uconfig.write("<architecture>\"x86\" ")
-        uconfig.write("<linkflags>\"#{$darwinCompatLinkFlags}\" ;\n")
+        uconfig.write("<linkflags>\"#{c[:os_link_flags]}\" ;\n")
         uconfig.close
         
       elsif c[:platform] == :Windows
