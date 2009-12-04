@@ -3,9 +3,10 @@
   :md5 => 'e31fcacd3f2b996988c0852a5edfc680',
   :configure => {
     [:Linux, :MacOSX] => lambda { |c|
-      if c[:platform] == :Darwin
-        ENV['CFLAGS'] = ENV['CFLAGS'].to_s + c[:darwinCompatCompileFlags]
-        ENV['CXXFLAGS'] = ENV['CXXFLAGS'].to_s + c[:darwinCompatCompileFlags]
+      if c[:platform] == :MacOSX
+        ENV['CFLAGS'] = ENV['CFLAGS'].to_s + c[:os_compile_flags]
+        ENV['CXXFLAGS'] = ENV['CXXFLAGS'].to_s + c[:os_compile_flags]
+        ENV['LDFLAGS'] = ENV['LDFLAGS'].to_s + c[:os_link_flags]
       end
 
       if c[:build_type] == :debug
@@ -30,7 +31,7 @@
       puts buildCmd
       system(buildCmd)
     },
-    :MacOSX => "make", 
+    :MacOSX => "make",
     :Linux => "make"
   },
   :install => {

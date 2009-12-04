@@ -7,15 +7,15 @@
       puts "Building #{c[:build_type].to_s} bits..."
       ldflags = ""
       cflags = c[:build_type] == :debug ? "-g -O0" : ""
-      if c[:platform] == :Darwin
-        cflags += $darwinCompatCompileFlags
+      if c[:platform] == :MacOSX
+        cflags += c[:os_compile_flags]
       end
       cfgScript = File.join(c[:src_dir], "configure")
       configCmd = "#{cfgScript} --enable-static --disable-shared"
       configCmd += " --prefix=#{c[:output_dir]} --disable-doxygen"
       configCmd += " CXXFLAGS=\"#{cflags}\""
-      if $platform == :Darwin
-        configCmd += " LDFLAGS=\"#{$darwinCompatLinkFlags}\""
+      if $platform == :MacOSX
+        configCmd += " LDFLAGS=\"#{c[:os_link_flags]}\""
       end
       system(configCmd)
     }
