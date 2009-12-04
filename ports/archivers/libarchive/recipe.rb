@@ -12,10 +12,11 @@
         ENV['CFLAGS'] = ENV['CFLAGS'].to_s + " -g -O0"
       end
 
+      stageDir = File.join(File.dirname(c[:build_dir]), "stage")
       configCmd = File.join(c[:src_dir], "configure")    
       configCmd += " --without-lzmadec --without-bz2lib"
       configCmd += " --without-zlib --disable-shared --disable-bsdcpio"
-      configCmd += " --disable-bsdtar --enable-static --prefix=#{c[:output_dir]}"
+      configCmd += " --disable-bsdtar --enable-static --prefix=#{stageDir}"
       system(configCmd)
       puts "config cmd: #{configCmd}"
     }
@@ -47,7 +48,21 @@
                      c[:output_inc_dir], :verbose => true)
       end
     },
-    [:Linux, :MacOSX] => "make install"
+    [:Linux, :MacOSX] => lambda { |c|
+      stageDir = File.join(File.dirname(c[:build_dir]), "stage")
+      system("make install")
+
+      puts "Installing headers..."
+      [ "archive.h", "archive_entry.h" ].each do |h|
+        FileUtils.cp(File.join(stageDir, "include", h),
+                     c[:output_inc_dir], :verbose => true)
+      end
+
+      puts "Installing static library..."
+      FileUtils.cp(File.join(stageDir, "lib", "libarchive.a"),
+                   File.join(c[:output_lib_dir], "libarchive_s.a"),
+                   :verbose => true)
+    }      
   }
 }
 
