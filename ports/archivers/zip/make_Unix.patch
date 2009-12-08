@@ -1,0 +1,42 @@
+--- unzip101e/Makefile.orig	2003-09-10 11:00:16.000000000 -0700
++++ unzip101e/Makefile	2009-12-08 11:53:35.000000000 -0800
+@@ -1,25 +1,23 @@
+-CC=cc
+-CFLAGS=-O -I../..
++CC = cc
++LD = ld
++AR = ar
++CFLAGS = -I../..
+ 
+-UNZ_OBJS = miniunz.o unzip.o ioapi.o ../../libz.a
+-ZIP_OBJS = minizip.o zip.o   ioapi.o ../../libz.a
++LDFLAGS =
++ARFLAGS =
++
++STATICLIB = libzip_s.a
++OBJS = ioapi.o unzip.o zip.o
+ 
+ .c.o:
+ 	$(CC) -c $(CFLAGS) $*.c
+ 
+-all: miniunz minizip
++all: $(STATICLIB)
+ 
+-miniunz:  $(UNZ_OBJS)
+-	$(CC) $(CFLAGS) -o $@ $(UNZ_OBJS)
++$(STATICLIB):  $(OBJS)
++	$(AR) $(ARFLAGS) -r $@ $(OBJS)
+ 
+-minizip:  $(ZIP_OBJS)
+-	$(CC) $(CFLAGS) -o $@ $(ZIP_OBJS)
++clean:
++	/bin/rm -f $(STATICLIB) $(OBJS)
+ 
+-test:	miniunz minizip
+-	./minizip test readme.txt
+-	./miniunz -l test.zip
+-	mv readme.txt readme.old
+-	./miniunz test.zip
+ 
+-clean:
+-	/bin/rm -f *.o *~ minizip miniunz

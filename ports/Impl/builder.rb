@@ -333,6 +333,7 @@ class Builder
     end
 
     # now we have what we need to determine the unpack dirname
+    @unpack_dir = srcPath
     Dir.glob(File.join(srcPath, "*")).each { |d|
       @unpack_dir = d if File.directory? d
     }
