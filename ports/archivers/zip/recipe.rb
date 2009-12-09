@@ -3,41 +3,22 @@
 {
   :url => 'http://www.winimage.com/zLibDll/unzip101e.zip',
   :md5 => '59e14911bffbb40ce49aa38f6f1efd2a',
-  :configure => {
-    :Windows => lambda { |c|
-      zlibIncDir = File.join(c[:output_inc_dir], "..", "zlib")
-      if (!File.directory?(zlibIncDir))
-        raise "zlib must be built before zip"
-      end
-      cflags = "/Zi /EHsc /W4 /wd4131 /wd4244 /wd4189 /wd4245 /wd4100"
-      cflags += " /wd4996 -I#{zlibIncDir}"
-      cflags += " -DWINDOWS -D_WINDOWS -DWIN32 -D_WIN32 -DXP_WIN32"
-      if c[:build_type] == :debug
-        cflags += " /MTd -DDEBUG -D_DEBUG"
-      else
-        cflags += " /MT /O2"
-      end
-      ENV["CFLAGS"] = ENV['CFLAGS'].to_s + cflags
-    },
-    [:Linux, :MacOSX] => lambda { |c|
-      zlibIncDir = File.join(c[:output_inc_dir], "..", "zlib")
-      if (!File.directory?(zlibIncDir))
-        raise "zlib must be built before zip"
-      end
-      cflags = "-I#{zlibIncDir}"
-      if c[:platform] == :MacOSX
-        cflags += c[:os_compile_flags]
-        ENV['LDFLAGS'] = ENV['LDFLAGS'].to_s + c[:os_link_flags]
-      end
-      if c[:build_type] == :debug
-        cflags += " -g -O0"
-      end
-      ENV["CFLAGS"] = ENV['CFLAGS'].to_s + cflags
-    }
-  },
   :build => {
     :Windows => lambda { |c|
+      zlibIncDir = File.join(c[:output_inc_dir], "..", "zlib")
+      if (!File.directory?(zlibIncDir))
+        raise "zlib must be built before zip"
+      end
       Dir.chdir(c[:src_dir]) do
+        cflags = "/Zi /EHsc /W4 /wd4131 /wd4244 /wd4189 /wd4245 /wd4100"
+        cflags += " /wd4996 -I#{zlibIncDir} -I../.."
+        cflags += " -DWINDOWS -D_WINDOWS -DWIN32 -D_WIN32 -DXP_WIN32"
+        if c[:build_type] == :debug
+          cflags += " /MTd -DDEBUG -D_DEBUG"
+        else
+          cflags += " /MT /O2"
+        end
+        ENV["CFLAGS"] = ENV['CFLAGS'].to_s + cflags
         system("nmake -e -f Makefile")
         Dir.glob("*.obj").each do |o|
           FileUtils.cp(o, c[:build_dir])
@@ -46,8 +27,23 @@
       end
     },
     [:Linux, :MacOSX] => lambda { |c|
+      zlibIncDir = File.join(c[:output_inc_dir], "..", "zlib")
+      if (!File.directory?(zlibIncDir))
+        raise "zlib must be built before zip"
+      end
       Dir.chdir(c[:src_dir]) do
-        system("make")
+        cflags = "-I#{zlibIncDir} -I../.."
+        if c[:platform] == :MacOSX
+          cflags += c[:os_compile_flags]
+          ENV['LDFLAGS'] = ENV['LDFLAGS'].to_s + c[:os_link_flags]
+        end
+        if c[:build_type] == :debug
+          cflags += " -g -O0"
+        end
+        ENV["CFLAGS"] = ENV['CFLAGS'].to_s + cflags
+        puts "ruby CFLAGS = #{ENV['CFLAGS'].to_s}"
+        puts "ruby LDFLAGS = #{ENV['LDFLAGS'].to_s}"
+        system("make -e")
         Dir.glob("*.o").each do |o|
           FileUtils.cp(o, c[:build_dir])
         end
