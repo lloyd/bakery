@@ -1,0 +1,21 @@
+diff -ur ruby-1.9.1-p243.orig/win32/Makefile.sub ruby-1.9.1-p243/win32/Makefile.sub
+--- ruby-1.9.1-p243.orig/win32/Makefile.sub	Wed Jul 15 06:01:29 2009
++++ ruby-1.9.1-p243/win32/Makefile.sub	Thu Aug 20 12:38:40 2009
+@@ -193,7 +193,7 @@
+ DEFS = -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE
+ MANIFESTTOOL = mt -nologo
+ LDSHARED_0 = @$(MINIRUBY) -run -e wait_writable -- -n 10 $@
+-LDSHARED_1 = $(MANIFESTTOOL) -manifest $(@).manifest -outputresource:$(@);2
++LDSHARED_1 = if exist $(@).manifest $(MANIFESTTOOL) -manifest $(@).manifest -outputresource:$(@);2
+ LDSHARED_2 = @$(RM) $(@:/=\).manifest
+ !endif
+ CPPFLAGS = $(DEFS) $(ARCHDEFS) $(CPPFLAGS)
+@@ -628,7 +628,7 @@
+ s,@LINK_SO@,$$(LDSHARED) -Fe$$(@) $$(OBJS) $$(LIBS) $$(LOCAL_LIBS) -link $$(DLDFLAGS) -implib:$$(*F:.so=)-$$(arch).lib -pdb:$$(*F:.so=)-$$(arch).pdb -def:$$(DEFFILE),;t t
+ !if $(MSC_VER) >= 1400
+ s,@LINK_SO@,@$$(RUBY) -run -e wait_writable -- -n 10 $$(@),;t t
+-s,@LINK_SO@,$(MANIFESTTOOL) -manifest $$(@).manifest -outputresource:$$(@);2,;t t
++s,@LINK_SO@,if exist $$(@).manifest $(MANIFESTTOOL) -manifest $$(@).manifest -outputresource:$$(@);2,;t t
+ s,@LINK_SO@,@$$(RM) $$(@:/=\).manifest,;t t
+ !endif
+ s,@COMPILE_C@,$$(CC) $$(INCFLAGS) $$(CFLAGS) $$(CPPFLAGS) $$(COUTFLAG)$$(@) -c -Tc$$(<:\=/),;t t

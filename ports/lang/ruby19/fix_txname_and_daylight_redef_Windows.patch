@@ -1,0 +1,15 @@
+diff -ur ruby-1.9.1-p243.orig/strftime.c ruby-1.9.1-p243/strftime.c
+--- ruby-1.9.1-p243.orig/strftime.c	Thu Dec 25 02:53:58 2008
++++ ruby-1.9.1-p243/strftime.c	Thu Aug 20 12:04:55 2009
+@@ -127,9 +127,9 @@
+ #define DLL_IMPORT
+ #endif
+ #if !defined(OS2) && defined(HAVE_TZNAME)
+-extern DLL_IMPORT char *tzname[2];
++/*extern DLL_IMPORT char *tzname[2];*/
+ #ifdef HAVE_DAYLIGHT
+-extern DLL_IMPORT int daylight;
++/*extern DLL_IMPORT int daylight;*/
+ #endif
+ #ifdef HAVE_VAR_TIMEZONE
+ extern DLL_IMPORT TYPEOF_VAR_TIMEZONE timezone;

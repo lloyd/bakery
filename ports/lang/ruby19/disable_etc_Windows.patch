@@ -1,0 +1,36 @@
+diff -ur ruby-1.9.1-p243.orig/ext/Setup.atheos ruby-1.9.1-p243/ext/Setup.atheos
+--- ruby-1.9.1-p243.orig/ext/Setup.atheos	Mon Feb 12 16:01:19 2007
++++ ruby-1.9.1-p243/ext/Setup.atheos	Thu Aug 20 15:31:04 2009
+@@ -11,7 +11,7 @@
+ digest/sha2
+ dl
+ enumerator
+-etc
++#etc
+ fcntl
+ gdbm
+ iconv
+diff -ur ruby-1.9.1-p243.orig/ext/Setup.emx ruby-1.9.1-p243/ext/Setup.emx
+--- ruby-1.9.1-p243.orig/ext/Setup.emx	Mon Feb 12 16:01:19 2007
++++ ruby-1.9.1-p243/ext/Setup.emx	Thu Aug 20 15:30:48 2009
+@@ -11,7 +11,7 @@
+ digest/sha2
+ #dl
+ enumerator
+-etc
++#etc
+ fcntl
+ #gdbm
+ #iconv
+diff -ur ruby-1.9.1-p243.orig/ext/Setup.nt ruby-1.9.1-p243/ext/Setup.nt
+--- ruby-1.9.1-p243.orig/ext/Setup.nt	Mon Feb 12 16:01:19 2007
++++ ruby-1.9.1-p243/ext/Setup.nt	Thu Aug 20 15:30:45 2009
+@@ -11,7 +11,7 @@
+ digest/sha2
+ dl
+ enumerator
+-etc
++#etc
+ fcntl
+ #gdbm
+ #iconv

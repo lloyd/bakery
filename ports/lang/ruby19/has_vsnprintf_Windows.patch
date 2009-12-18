@@ -1,0 +1,11 @@
+diff -ur ruby-1.9.1-p243.orig/win32/Makefile.sub ruby-1.9.1-p243/win32/Makefile.sub
+--- ruby-1.9.1-p243.orig/win32/Makefile.sub	Wed Jul 15 06:01:29 2009
++++ ruby-1.9.1-p243/win32/Makefile.sub	Thu Aug 20 10:52:20 2009
+@@ -447,6 +447,7 @@
+ #define HAVE_STRTOD 1
+ #define HAVE_STRTOL 1
+ #define HAVE_STRTOUL 1
++#define HAVE_VSNPRINTF 1
+ #define HAVE_FLOCK 1
+ #define HAVE_ISNAN 1
+ #define HAVE_FINITE 1
