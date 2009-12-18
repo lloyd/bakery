@@ -24,6 +24,22 @@
   :install => {
     [ :Linux, :MacOSX ] => lambda { |c|
       system("make install")
+      
+      # now move output in lib dir into build config dir
+      Dir.glob(File.join(c[:output_dir], "lib", "*ruby*")).each { |l|
+        tgtBasename = File.basename(l)
+        tgt = File.join(c[:output_lib_dir], tgtBasename)
+        FileUtils.mv(l, tgt, :verbose => true)
+      }
+    }
+  },
+  :post_install_common => {
+    [ :Linux, :MacOSX ] => lambda { |c|
+      rb19dir = File.join(c[:output_dir], "include", "ruby-1.9.1")
+      Dir.glob(File.join(rb19dir, "*")).each { |h|
+        FileUtils.mv(h, c[:output_inc_dir], :verbose => true)
+      }
+      FileUtils.rmdir(rb19dir)
     }
   }
 }
