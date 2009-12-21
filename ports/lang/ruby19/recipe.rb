@@ -16,10 +16,19 @@
       configstr = configstr + "--disable-install-doc"
       puts "running configure: #{configstr}"
       system(configstr)
+    }, 
+    [ :Windows ] => lambda { |c|
+      ENV['RUNTIMEFLAG'] = '-MT'
+      # XXX: add openssl and zlib
+      ENV['EXTS'] = "bigdecimal,continuation,coverage,digest,digest/md5,digest/rmd160,digest/sha1,digest/sha2,dl,fcntl,fiber,json,mathn,nkf,racc/cparse,ripper,sdbm,socket,stringio,strscan,syck,win32ole" 
+      # grrr.  make a copy
+      Dir.glob(File.join(c[:src_dir], "*")).each { |f| FileUtils.cp_r(f, ".") }
+      system("win32\\configure.bat --prefix=#{c[:output_dir].gsub("/", "\\")} --disable-install-doc")
     }
   },
   :build => {
-    [ :Linux, :MacOSX ] => "make"
+    [ :Linux, :MacOSX ] => "make",
+    [ :Windows ] => "nmake"
   },
   :install => {
     [ :Linux, :MacOSX ] => lambda { |c|
@@ -31,7 +40,8 @@
         tgt = File.join(c[:output_lib_dir], tgtBasename)
         FileUtils.mv(l, tgt, :verbose => true)
       }
-    }
+    },
+    [ :Windows ] => "nmake install"
   },
   :post_install_common => {
     [ :Linux, :MacOSX ] => lambda { |c|
