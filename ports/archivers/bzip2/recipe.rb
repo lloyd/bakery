@@ -15,16 +15,20 @@
       end
     },
     [:Linux, :MacOSX] => lambda { |c|
-      cflags = "-Wall -Winline -D_FILE_OFFSET_BITS=64 "
-      if c[:platform] == :MacOSX
-        cflags += c[:os_compile_flags]
-        ENV['LDFLAGS'] = ENV['LDFLAGS'].to_s + c[:os_link_flags]
+      Dir.chdir(c[:src_dir]) do
+        cflags = "-Wall -Winline -D_FILE_OFFSET_BITS=64 "
+        if c[:platform] == :MacOSX
+          cflags += c[:os_compile_flags]
+          ENV['LDFLAGS'] = ENV['LDFLAGS'].to_s + c[:os_link_flags]
+        end
+        if c[:build_type] == :debug
+          cflags += " -g -O0"
+        else
+          cflags += " -O2"
+        end
+        ENV["CFLAGS"] = ENV['CFLAGS'].to_s + cflags
+        system("make -e clean all")
       end
-      if c[:build_type] == :debug
-        cflags += " -g -O0"
-      end
-      ENV["CFLAGS"] = ENV['CFLAGS'].to_s + cflags
-      system("make")
     }
   },
   :install => { 
