@@ -1,21 +1,17 @@
---- src/Makefile.orig	2009-12-08 16:14:44.000000000 -0800
-+++ src/Makefile	2009-12-08 16:21:18.000000000 -0800
-@@ -1,25 +1,18 @@
+--- src/Makefile.orig	2010-01-15 12:17:11.000000000 -0700
++++ src/Makefile	2010-01-15 12:19:37.000000000 -0700
+@@ -1,25 +1,16 @@
 -CC=cc
 -CFLAGS=-O -I../..
-+CC = cc
- 
+-
 -UNZ_OBJS = miniunz.o unzip.o ioapi.o ../../libz.a
 -ZIP_OBJS = minizip.o zip.o   ioapi.o ../../libz.a
-+STATICLIB = libzip_s.a
-+OBJS = ioapi.o unzip.o zip.o
- 
- .c.o:
- 	$(CC) -c $(CFLAGS) $*.c
- 
+-
+-.c.o:
+-	$(CC) -c $(CFLAGS) $*.c
+-
 -all: miniunz minizip
-+all: $(STATICLIB)
- 
+-
 -miniunz:  $(UNZ_OBJS)
 -	$(CC) $(CFLAGS) -o $@ $(UNZ_OBJS)
 -
@@ -27,12 +23,22 @@
 -	./miniunz -l test.zip
 -	mv readme.txt readme.old
 -	./miniunz test.zip
+-
+-clean:
+-	/bin/rm -f *.o *~ minizip miniunz
++CC = cc
++STATICLIB = libzip_s.a
++OBJS = ioapi.o unzip.o zip.o
++
++.c.o:
++	$(CC) -c $(CFLAGS) $*.c
++
++all: $(STATICLIB)
++
 +$(STATICLIB):  $(OBJS)
 +	echo "CFLAGS = $(CFLAGS)"
 +	echo "LDFLAGS = $(LDFLAGS)"
 +	libtool -static -o $@ $(OBJS)
- 
- clean:
--	/bin/rm -f *.o *~ minizip miniunz
-+	/bin/rm -f $(STATICLIB) $(OBJS)
 +
++clean:
++	/bin/rm -f $(STATICLIB) $(OBJS)
