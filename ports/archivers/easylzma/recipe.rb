@@ -7,8 +7,8 @@
     # on windows we must specify a generator, we'll get that from the
     # passed in configuration
     cmakeGen = "-G \"#{c[:cmake_generator]}\"" if c[:cmake_generator]
-    cmLine = "cmake -DCMAKE_BUILD_TYPE=\"#{btstr}\" #{cmakeGen} " +
-             " \"#{c[:src_dir]}\"" 
+    cmLine = "cmake -DCMAKE_BUILD_TYPE=\"#{btstr}\" #{c[:cmake_args]} " +
+             " #{cmakeGen} \"#{c[:src_dir]}\"" 
     system(cmLine)
   },
   :build => {

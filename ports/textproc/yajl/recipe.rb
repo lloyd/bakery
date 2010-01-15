@@ -9,8 +9,8 @@
     cmakeGen = "-G \"#{c[:cmake_generator]}\"" if c[:cmake_generator]
     cmLine = "cmake -DCMAKE_BUILD_TYPE=\"#{btstr}\" " +
                    "-DCMAKE_INSTALL_PREFIX=\"#{c[:output_dir]}\" " +
-                   "#{cmakeGen} " +
-                   " \"#{c[:src_dir]}\"" 
+                   " #{c[:cmake_args]} " +
+                   " #{cmakeGen} \"#{c[:src_dir]}\"" 
     system(cmLine)
   },
   :build => {

@@ -114,6 +114,7 @@ class Builder
       # globally update CC/CXX env vars
       ENV['CC'] = 'gcc-4.0'
       ENV['CXX'] = 'g++-4.0'
+      @cmake_args = "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.4"
     elsif CONFIG['arch'] =~ /linux/
       @platform = :Linux
       @platlookup = [ @platform, :Unix, :All ]
