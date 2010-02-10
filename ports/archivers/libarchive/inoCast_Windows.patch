@@ -1,0 +1,17 @@
+--- libarchive-2.7.902a/libarchive/archive_windows.c.orig	2010-01-06 17:19:15.459960900 -0800
++++ libarchive-2.7.902a/libarchive/archive_windows.c	2010-01-06 17:20:07.597656300 -0800
+@@ -108,10 +108,13 @@
+ static __inline ino_t
+ getino(struct ustat *ub)
+ {
++    ino_t res;
+ 	ULARGE_INTEGER ino64;
+ 	ino64.QuadPart = ub->st_ino;
+ 	/* I don't know this hashing is correct way */
+-	return (ino64.LowPart ^ (ino64.LowPart >> INOSIZE));
++	res = ino64.LowPart & 0xffff;
++	res ^= (ino64.LowPart >> INOSIZE) & 0xffff;
++    return res;
+ }
+ 
+ /*

@@ -1,0 +1,50 @@
+--- libarchive-2.7.902a\CMakeLists.txt.orig	2010-01-04 16:36:48.390625000 -0800
++++ libarchive-2.7.902a\CMakeLists.txt	2010-01-04 16:37:48.162109300 -0800
+@@ -4,6 +4,47 @@
+ #
+ CMAKE_MINIMUM_REQUIRED(VERSION 2.6.3 FATAL_ERROR)
+ SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/cmake")
++
++IF(WIN32)
++    SET(win32Defs "/DWINDOWS /D_WINDOWS /DWIN32 /D_WIN32 /DXP_WIN32 /DWIN32_LEAN_AND_MEAN /DNOSOUND /DNOCOMM /DNOMCX /DNOSERVICE /DNOIME /DNORPC")
++    SET(CMAKE_C_FLAGS
++        "${win32Defs} /EHsc /Gy /MT /W4 /Zi"
++        CACHE STRING "BrowserPlus CXX flags" FORCE)
++    SET(CMAKE_C_FLAGS_DEBUG "/MTd /DDEBUG /D_DEBUG /Od /RTC1 /RTCc"
++        CACHE STRING "BrowserPlus debug CXX flags" FORCE)
++    SET(CMAKE_C_FLAGS_RELEASE "/MT /DNDEBUG /O1"
++        CACHE STRING "BrowserPlus release CXX flags" FORCE)
++  
++    # libs to ignore, from http://msdn.microsoft.com/en-us/library/aa267384.aspx
++    #
++    SET(noDefaultLibFlagsDebug "/NODEFAULTLIB:libc.lib /NODEFAULTLIB:libcmt.lib /NODEFAULTLIB:msvcrt.lib /NODEFAULTLIB:libcd.lib /NODEFAULTLIB:msvcrtd.lib")
++    SET(noDefaultLibFlagsRelease "/NODEFAULTLIB:libc.lib /NODEFAULTLIB:msvcrt.lib /NODEFAULTLIB:libcd.lib /NODEFAULTLIB:libcmtd.lib /NODEFAULTLIB:msvcrtd.lib")
++ 
++    SET(linkFlags "/DEBUG /MANIFEST:NO")
++    SET(linkFlagsDebug " ${noDefaultLibFlagsDebug}")
++    SET(linkFlagsRelease " /INCREMENTAL:NO /OPT:REF /OPT:ICF ${noDefaultLibFlagsRelease}")
++  
++    SET(CMAKE_EXE_LINKER_FLAGS "${linkFlags}"
++        CACHE STRING "BrowserPlus linker flags" FORCE)
++    SET(CMAKE_EXE_LINKER_FLAGS_DEBUG "${linkFlagsDebug}"
++        CACHE STRING "BrowserPlus debug linker flags" FORCE)
++    SET(CMAKE_EXE_LINKER_FLAGS_RELEASE "${linkFlagsRelease}"
++        CACHE STRING "BrowserPlus release linker flags" FORCE)
++    SET(CMAKE_SHARED_LINKER_FLAGS "${linkFlags}"
++        CACHE STRING "BrowserPlus shared linker flags" FORCE)
++    SET(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${linkFlagsDebug}"
++        CACHE STRING "BrowserPlus shared debug linker flags" FORCE)
++    SET(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${linkFlagsRelease}"
++        CACHE STRING "BrowserPlus shared release linker flags" FORCE)
++ 
++    SET(CMAKE_MODULE_LINKER_FLAGS "${linkFlags}"
++        CACHE STRING "BrowserPlus module linker flags" FORCE)
++    SET(CMAKE_MODULE_LINKER_FLAGS_DEBUG "${linkFlagsDebug}"
++        CACHE STRING "BrowserPlus module debug linker flags" FORCE)
++    SET(CMAKE_MODULE_LINKER_FLAGS_RELEASE "${linkFlagsRelease}"
++        CACHE STRING "BrowserPlus module release linker flags" FORCE)
++ENDIF()
++
+ #
+ # Version - read from 'version' file.
+ #
