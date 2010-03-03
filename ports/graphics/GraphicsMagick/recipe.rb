@@ -1,5 +1,5 @@
 {
-  :url => 'http://softlayer.dl.sourceforge.net/project/graphicsmagick/graphicsmagick/1.3.7/GraphicsMagick-1.3.7.tar.bz2',
+  :url => 'http://github.com/downloads/lloyd/bakery/GraphicsMagick-1.3.7.tar.bz2',
   :md5 => '42bfd382ddcda399880721170bcbf61b',
   :post_patch => {
     :Windows => lambda { |c| 
