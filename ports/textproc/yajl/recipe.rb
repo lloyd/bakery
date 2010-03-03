@@ -1,6 +1,6 @@
 {
-  :url => 'http://cloud.github.com/downloads/lloyd/yajl/yajl-1.0.7.tar.gz',
-  :md5 => 'a4436163408fe9b8c9545ca028ef1b4f',
+  :url => 'http://github.com/downloads/lloyd/yajl/yajl-1.0.9.tar.gz',
+  :md5 => '8643ff2fef762029e51c86882a4d0fc6',
   :configure => lambda { |c|
     btstr = c[:build_type].to_s.capitalize
     cmakeGen = nil
