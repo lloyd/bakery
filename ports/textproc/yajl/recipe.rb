@@ -38,5 +38,10 @@
         FileUtils.mv(f, c[:output_lib_dir]) if !File.directory? f
       }
     }
+  },
+  :post_install_common => lambda { |c|
+    Dir.glob(File.join("src", "api", "*")).each { |f|
+      FileUtils.cp(f, c[:output_inc_dir])
+    }
   }
 }
