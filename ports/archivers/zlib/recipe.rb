@@ -1,6 +1,6 @@
 {
-  :url => "http://www.zlib.net/zlib-1.2.3.tar.gz",
-  :md5 => "debc62758716a169df9f62e6ab2bc634",
+  :url => "http://www.zlib.net/zlib-1.2.4.tar.gz",
+  :md5 => "47f6ed51b3c83a8534f9228531effa18",
   :configure => {
     [ :Linux, :MacOSX ] => lambda { |c|
       ENV['CFLAGS'] = "#{c[:os_compile_flags]} #{ENV['CFLAGS']}"
