@@ -24,7 +24,7 @@
     :Windows => lambda { |c|
       pathToSLN = File.join(c[:src_dir], "projects", "visualc6", "zlib.sln")
       bt = c[:build_type].to_s.capitalize
-      devenvCmd = "devenv #{pathToSLN} /build \"LIB #{bt}\""
+      devenvCmd = "devenv #{pathToSLN} /build \"LIB #{bt}\" /project zlib"
       puts "issuing: #{devenvCmd}"
       system(devenvCmd)
     }
