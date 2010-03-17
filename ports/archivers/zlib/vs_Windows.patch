@@ -1,13 +1,13 @@
-diff -Naur zlib-1.2.3.orig/projects/visualc6/example.vcproj zlib-1.2.3/projects/visualc6/example.vcproj
---- zlib-1.2.3.orig/projects/visualc6/example.vcproj	1969-12-31 16:00:00.000000000 -0800
-+++ zlib-1.2.3/projects/visualc6/example.vcproj	2009-06-17 11:35:34.707529600 -0700
-@@ -0,0 +1,818 @@
+diff -PNaur zlib-1.2.4.orig/projects/visualc6/example.vcproj zlib-1.2.4/projects/visualc6/example.vcproj
+--- zlib-1.2.4.orig/projects/visualc6/example.vcproj	1969-12-31 16:00:00.000000000 -0800
++++ zlib-1.2.4/projects/visualc6/example.vcproj	2010-03-17 11:41:12.187500000 -0700
+@@ -0,0 +1,822 @@
 +<?xml version="1.0" encoding="Windows-1252"?>
 +<VisualStudioProject
 +	ProjectType="Visual C++"
 +	Version="9.00"
 +	Name="example"
-+	ProjectGUID="{50211CF4-EC4A-4755-BA72-49B9C74BECBC}"
++	ProjectGUID="{41A473AA-B537-47D2-92E7-F78369D314FA}"
 +	TargetFrameworkVersion="0"
 +	>
 +	<Platforms>
@@ -47,7 +47,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/example.vcproj zlib-1.2.3/projects/
 +			<Tool
 +				Name="VCCLCompilerTool"
 +				Optimization="0"
-+				PreprocessorDefinitions="WIN32;_DEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_DEBUG"
 +				MinimalRebuild="true"
 +				BasicRuntimeChecks="3"
 +				RuntimeLibrary="3"
@@ -55,6 +55,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/example.vcproj zlib-1.2.3/projects/
 +				AssemblerListingLocation=".\Win32_LIB_ASM_Debug/"
 +				ObjectFile=".\Win32_LIB_ASM_Debug/"
 +				ProgramDataBaseFileName=".\Win32_LIB_ASM_Debug/"
++				BrowseInformation="1"
 +				WarningLevel="3"
 +				SuppressStartupBanner="true"
 +				DebugInformationFormat="4"
@@ -137,7 +138,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/example.vcproj zlib-1.2.3/projects/
 +				Name="VCCLCompilerTool"
 +				Optimization="2"
 +				InlineFunctionExpansion="1"
-+				PreprocessorDefinitions="WIN32;NDEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG"
 +				StringPooling="true"
 +				RuntimeLibrary="2"
 +				EnableFunctionLevelLinking="true"
@@ -225,7 +226,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/example.vcproj zlib-1.2.3/projects/
 +				Name="VCCLCompilerTool"
 +				Optimization="2"
 +				InlineFunctionExpansion="1"
-+				PreprocessorDefinitions="WIN32;NDEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG"
 +				StringPooling="true"
 +				RuntimeLibrary="2"
 +				EnableFunctionLevelLinking="true"
@@ -313,7 +314,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/example.vcproj zlib-1.2.3/projects/
 +				Name="VCCLCompilerTool"
 +				Optimization="2"
 +				InlineFunctionExpansion="1"
-+				PreprocessorDefinitions="WIN32;NDEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG"
 +				StringPooling="true"
 +				RuntimeLibrary="2"
 +				EnableFunctionLevelLinking="true"
@@ -401,7 +402,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/example.vcproj zlib-1.2.3/projects/
 +				Name="VCCLCompilerTool"
 +				Optimization="2"
 +				InlineFunctionExpansion="1"
-+				PreprocessorDefinitions="WIN32;NDEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG"
 +				StringPooling="true"
 +				RuntimeLibrary="2"
 +				EnableFunctionLevelLinking="true"
@@ -488,7 +489,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/example.vcproj zlib-1.2.3/projects/
 +			<Tool
 +				Name="VCCLCompilerTool"
 +				Optimization="0"
-+				PreprocessorDefinitions="WIN32;_DEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_DEBUG"
 +				MinimalRebuild="true"
 +				BasicRuntimeChecks="3"
 +				RuntimeLibrary="3"
@@ -496,6 +497,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/example.vcproj zlib-1.2.3/projects/
 +				AssemblerListingLocation=".\Win32_LIB_Debug/"
 +				ObjectFile=".\Win32_LIB_Debug/"
 +				ProgramDataBaseFileName=".\Win32_LIB_Debug/"
++				BrowseInformation="1"
 +				WarningLevel="3"
 +				SuppressStartupBanner="true"
 +				DebugInformationFormat="4"
@@ -577,7 +579,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/example.vcproj zlib-1.2.3/projects/
 +			<Tool
 +				Name="VCCLCompilerTool"
 +				Optimization="0"
-+				PreprocessorDefinitions="WIN32;_DEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_DEBUG"
 +				MinimalRebuild="true"
 +				BasicRuntimeChecks="3"
 +				RuntimeLibrary="3"
@@ -585,6 +587,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/example.vcproj zlib-1.2.3/projects/
 +				AssemblerListingLocation=".\Win32_DLL_Debug/"
 +				ObjectFile=".\Win32_DLL_Debug/"
 +				ProgramDataBaseFileName=".\Win32_DLL_Debug/"
++				BrowseInformation="1"
 +				WarningLevel="3"
 +				SuppressStartupBanner="true"
 +				DebugInformationFormat="4"
@@ -666,7 +669,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/example.vcproj zlib-1.2.3/projects/
 +			<Tool
 +				Name="VCCLCompilerTool"
 +				Optimization="0"
-+				PreprocessorDefinitions="WIN32;_DEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_DEBUG"
 +				MinimalRebuild="true"
 +				BasicRuntimeChecks="3"
 +				RuntimeLibrary="3"
@@ -674,6 +677,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/example.vcproj zlib-1.2.3/projects/
 +				AssemblerListingLocation=".\Win32_DLL_ASM_Debug/"
 +				ObjectFile=".\Win32_DLL_ASM_Debug/"
 +				ProgramDataBaseFileName=".\Win32_DLL_ASM_Debug/"
++				BrowseInformation="1"
 +				WarningLevel="3"
 +				SuppressStartupBanner="true"
 +				DebugInformationFormat="4"
@@ -820,16 +824,16 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/example.vcproj zlib-1.2.3/projects/
 +	<Globals>
 +	</Globals>
 +</VisualStudioProject>
-diff -Naur zlib-1.2.3.orig/projects/visualc6/minigzip.vcproj zlib-1.2.3/projects/visualc6/minigzip.vcproj
---- zlib-1.2.3.orig/projects/visualc6/minigzip.vcproj	1969-12-31 16:00:00.000000000 -0800
-+++ zlib-1.2.3/projects/visualc6/minigzip.vcproj	2009-06-17 11:35:34.699717200 -0700
-@@ -0,0 +1,818 @@
+diff -PNaur zlib-1.2.4.orig/projects/visualc6/minigzip.vcproj zlib-1.2.4/projects/visualc6/minigzip.vcproj
+--- zlib-1.2.4.orig/projects/visualc6/minigzip.vcproj	1969-12-31 16:00:00.000000000 -0800
++++ zlib-1.2.4/projects/visualc6/minigzip.vcproj	2010-03-17 11:41:12.156250000 -0700
+@@ -0,0 +1,822 @@
 +<?xml version="1.0" encoding="Windows-1252"?>
 +<VisualStudioProject
 +	ProjectType="Visual C++"
 +	Version="9.00"
 +	Name="minigzip"
-+	ProjectGUID="{60907948-5680-4102-8A0F-F07567DF4EA8}"
++	ProjectGUID="{1E42A676-538B-49B6-A43C-10C5703A7EB2}"
 +	TargetFrameworkVersion="0"
 +	>
 +	<Platforms>
@@ -869,7 +873,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/minigzip.vcproj zlib-1.2.3/projects
 +			<Tool
 +				Name="VCCLCompilerTool"
 +				Optimization="0"
-+				PreprocessorDefinitions="WIN32;_DEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_DEBUG"
 +				MinimalRebuild="true"
 +				BasicRuntimeChecks="3"
 +				RuntimeLibrary="3"
@@ -877,6 +881,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/minigzip.vcproj zlib-1.2.3/projects
 +				AssemblerListingLocation=".\Win32_DLL_ASM_Debug/"
 +				ObjectFile=".\Win32_DLL_ASM_Debug/"
 +				ProgramDataBaseFileName=".\Win32_DLL_ASM_Debug/"
++				BrowseInformation="1"
 +				WarningLevel="3"
 +				SuppressStartupBanner="true"
 +				DebugInformationFormat="4"
@@ -958,7 +963,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/minigzip.vcproj zlib-1.2.3/projects
 +			<Tool
 +				Name="VCCLCompilerTool"
 +				Optimization="0"
-+				PreprocessorDefinitions="WIN32;_DEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_DEBUG"
 +				MinimalRebuild="true"
 +				BasicRuntimeChecks="3"
 +				RuntimeLibrary="3"
@@ -966,6 +971,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/minigzip.vcproj zlib-1.2.3/projects
 +				AssemblerListingLocation=".\Win32_LIB_ASM_Debug/"
 +				ObjectFile=".\Win32_LIB_ASM_Debug/"
 +				ProgramDataBaseFileName=".\Win32_LIB_ASM_Debug/"
++				BrowseInformation="1"
 +				WarningLevel="3"
 +				SuppressStartupBanner="true"
 +				DebugInformationFormat="4"
@@ -1048,7 +1054,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/minigzip.vcproj zlib-1.2.3/projects
 +				Name="VCCLCompilerTool"
 +				Optimization="2"
 +				InlineFunctionExpansion="1"
-+				PreprocessorDefinitions="WIN32;NDEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG"
 +				StringPooling="true"
 +				RuntimeLibrary="2"
 +				EnableFunctionLevelLinking="true"
@@ -1136,7 +1142,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/minigzip.vcproj zlib-1.2.3/projects
 +				Name="VCCLCompilerTool"
 +				Optimization="2"
 +				InlineFunctionExpansion="1"
-+				PreprocessorDefinitions="WIN32;NDEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG"
 +				StringPooling="true"
 +				RuntimeLibrary="2"
 +				EnableFunctionLevelLinking="true"
@@ -1223,7 +1229,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/minigzip.vcproj zlib-1.2.3/projects
 +			<Tool
 +				Name="VCCLCompilerTool"
 +				Optimization="0"
-+				PreprocessorDefinitions="WIN32;_DEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_DEBUG"
 +				MinimalRebuild="true"
 +				BasicRuntimeChecks="3"
 +				RuntimeLibrary="3"
@@ -1231,6 +1237,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/minigzip.vcproj zlib-1.2.3/projects
 +				AssemblerListingLocation=".\Win32_LIB_Debug/"
 +				ObjectFile=".\Win32_LIB_Debug/"
 +				ProgramDataBaseFileName=".\Win32_LIB_Debug/"
++				BrowseInformation="1"
 +				WarningLevel="3"
 +				SuppressStartupBanner="true"
 +				DebugInformationFormat="4"
@@ -1312,7 +1319,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/minigzip.vcproj zlib-1.2.3/projects
 +			<Tool
 +				Name="VCCLCompilerTool"
 +				Optimization="0"
-+				PreprocessorDefinitions="WIN32;_DEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_DEBUG"
 +				MinimalRebuild="true"
 +				BasicRuntimeChecks="3"
 +				RuntimeLibrary="3"
@@ -1320,6 +1327,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/minigzip.vcproj zlib-1.2.3/projects
 +				AssemblerListingLocation=".\Win32_DLL_Debug/"
 +				ObjectFile=".\Win32_DLL_Debug/"
 +				ProgramDataBaseFileName=".\Win32_DLL_Debug/"
++				BrowseInformation="1"
 +				WarningLevel="3"
 +				SuppressStartupBanner="true"
 +				DebugInformationFormat="4"
@@ -1402,7 +1410,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/minigzip.vcproj zlib-1.2.3/projects
 +				Name="VCCLCompilerTool"
 +				Optimization="2"
 +				InlineFunctionExpansion="1"
-+				PreprocessorDefinitions="WIN32;NDEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG"
 +				StringPooling="true"
 +				RuntimeLibrary="2"
 +				EnableFunctionLevelLinking="true"
@@ -1490,7 +1498,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/minigzip.vcproj zlib-1.2.3/projects
 +				Name="VCCLCompilerTool"
 +				Optimization="2"
 +				InlineFunctionExpansion="1"
-+				PreprocessorDefinitions="WIN32;NDEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG"
 +				StringPooling="true"
 +				RuntimeLibrary="2"
 +				EnableFunctionLevelLinking="true"
@@ -1642,24 +1650,29 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/minigzip.vcproj zlib-1.2.3/projects
 +	<Globals>
 +	</Globals>
 +</VisualStudioProject>
-diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.sln zlib-1.2.3/projects/visualc6/zlib.sln
---- zlib-1.2.3.orig/projects/visualc6/zlib.sln	1969-12-31 16:00:00.000000000 -0800
-+++ zlib-1.2.3/projects/visualc6/zlib.sln	2009-06-17 11:35:34.715342000 -0700
+diff -PNaur zlib-1.2.4.orig/projects/visualc6/zlib.ncb zlib-1.2.4/projects/visualc6/zlib.ncb
+--- zlib-1.2.4.orig/projects/visualc6/zlib.ncb	1969-12-31 16:00:00.000000000 -0800
++++ zlib-1.2.4/projects/visualc6/zlib.ncb	2010-03-17 11:41:12.515625000 -0700
+@@ -0,0 +1 @@
++Microsoft C/C++ MSF 7.00
+diff -PNaur zlib-1.2.4.orig/projects/visualc6/zlib.sln zlib-1.2.4/projects/visualc6/zlib.sln
+--- zlib-1.2.4.orig/projects/visualc6/zlib.sln	1969-12-31 16:00:00.000000000 -0800
++++ zlib-1.2.4/projects/visualc6/zlib.sln	2010-03-17 11:41:12.187500000 -0700
 @@ -0,0 +1,80 @@
 +ï»¿
 +Microsoft Visual Studio Solution File, Format Version 10.00
 +# Visual Studio 2008
-+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "example", "example.vcproj", "{50211CF4-EC4A-4755-BA72-49B9C74BECBC}"
++Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "example", "example.vcproj", "{41A473AA-B537-47D2-92E7-F78369D314FA}"
 +	ProjectSection(ProjectDependencies) = postProject
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52} = {A1B2551A-1115-40EB-9709-C4AF186B3E52}
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739} = {ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}
 +	EndProjectSection
 +EndProject
-+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "minigzip", "minigzip.vcproj", "{60907948-5680-4102-8A0F-F07567DF4EA8}"
++Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "minigzip", "minigzip.vcproj", "{1E42A676-538B-49B6-A43C-10C5703A7EB2}"
 +	ProjectSection(ProjectDependencies) = postProject
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52} = {A1B2551A-1115-40EB-9709-C4AF186B3E52}
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739} = {ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}
 +	EndProjectSection
 +EndProject
-+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "zlib.vcproj", "{A1B2551A-1115-40EB-9709-C4AF186B3E52}"
++Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "zlib.vcproj", "{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}"
 +EndProject
 +Global
 +	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1673,69 +1686,75 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.sln zlib-1.2.3/projects/visual
 +		LIB Release|Win32 = LIB Release|Win32
 +	EndGlobalSection
 +	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-+		{50211CF4-EC4A-4755-BA72-49B9C74BECBC}.DLL ASM Debug|Win32.ActiveCfg = DLL ASM Debug|Win32
-+		{50211CF4-EC4A-4755-BA72-49B9C74BECBC}.DLL ASM Debug|Win32.Build.0 = DLL ASM Debug|Win32
-+		{50211CF4-EC4A-4755-BA72-49B9C74BECBC}.DLL ASM Release|Win32.ActiveCfg = DLL ASM Release|Win32
-+		{50211CF4-EC4A-4755-BA72-49B9C74BECBC}.DLL ASM Release|Win32.Build.0 = DLL ASM Release|Win32
-+		{50211CF4-EC4A-4755-BA72-49B9C74BECBC}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
-+		{50211CF4-EC4A-4755-BA72-49B9C74BECBC}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
-+		{50211CF4-EC4A-4755-BA72-49B9C74BECBC}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
-+		{50211CF4-EC4A-4755-BA72-49B9C74BECBC}.DLL Release|Win32.Build.0 = DLL Release|Win32
-+		{50211CF4-EC4A-4755-BA72-49B9C74BECBC}.LIB ASM Debug|Win32.ActiveCfg = LIB ASM Debug|Win32
-+		{50211CF4-EC4A-4755-BA72-49B9C74BECBC}.LIB ASM Debug|Win32.Build.0 = LIB ASM Debug|Win32
-+		{50211CF4-EC4A-4755-BA72-49B9C74BECBC}.LIB ASM Release|Win32.ActiveCfg = LIB ASM Release|Win32
-+		{50211CF4-EC4A-4755-BA72-49B9C74BECBC}.LIB ASM Release|Win32.Build.0 = LIB ASM Release|Win32
-+		{50211CF4-EC4A-4755-BA72-49B9C74BECBC}.LIB Debug|Win32.ActiveCfg = LIB Debug|Win32
-+		{50211CF4-EC4A-4755-BA72-49B9C74BECBC}.LIB Debug|Win32.Build.0 = LIB Debug|Win32
-+		{50211CF4-EC4A-4755-BA72-49B9C74BECBC}.LIB Release|Win32.ActiveCfg = LIB Release|Win32
-+		{50211CF4-EC4A-4755-BA72-49B9C74BECBC}.LIB Release|Win32.Build.0 = LIB Release|Win32
-+		{60907948-5680-4102-8A0F-F07567DF4EA8}.DLL ASM Debug|Win32.ActiveCfg = DLL ASM Debug|Win32
-+		{60907948-5680-4102-8A0F-F07567DF4EA8}.DLL ASM Debug|Win32.Build.0 = DLL ASM Debug|Win32
-+		{60907948-5680-4102-8A0F-F07567DF4EA8}.DLL ASM Release|Win32.ActiveCfg = DLL ASM Release|Win32
-+		{60907948-5680-4102-8A0F-F07567DF4EA8}.DLL ASM Release|Win32.Build.0 = DLL ASM Release|Win32
-+		{60907948-5680-4102-8A0F-F07567DF4EA8}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
-+		{60907948-5680-4102-8A0F-F07567DF4EA8}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
-+		{60907948-5680-4102-8A0F-F07567DF4EA8}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
-+		{60907948-5680-4102-8A0F-F07567DF4EA8}.DLL Release|Win32.Build.0 = DLL Release|Win32
-+		{60907948-5680-4102-8A0F-F07567DF4EA8}.LIB ASM Debug|Win32.ActiveCfg = LIB ASM Debug|Win32
-+		{60907948-5680-4102-8A0F-F07567DF4EA8}.LIB ASM Debug|Win32.Build.0 = LIB ASM Debug|Win32
-+		{60907948-5680-4102-8A0F-F07567DF4EA8}.LIB ASM Release|Win32.ActiveCfg = LIB ASM Release|Win32
-+		{60907948-5680-4102-8A0F-F07567DF4EA8}.LIB ASM Release|Win32.Build.0 = LIB ASM Release|Win32
-+		{60907948-5680-4102-8A0F-F07567DF4EA8}.LIB Debug|Win32.ActiveCfg = LIB Debug|Win32
-+		{60907948-5680-4102-8A0F-F07567DF4EA8}.LIB Debug|Win32.Build.0 = LIB Debug|Win32
-+		{60907948-5680-4102-8A0F-F07567DF4EA8}.LIB Release|Win32.ActiveCfg = LIB Release|Win32
-+		{60907948-5680-4102-8A0F-F07567DF4EA8}.LIB Release|Win32.Build.0 = LIB Release|Win32
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52}.DLL ASM Debug|Win32.ActiveCfg = DLL ASM Debug|Win32
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52}.DLL ASM Debug|Win32.Build.0 = DLL ASM Debug|Win32
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52}.DLL ASM Release|Win32.ActiveCfg = DLL ASM Release|Win32
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52}.DLL ASM Release|Win32.Build.0 = DLL ASM Release|Win32
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52}.DLL Release|Win32.Build.0 = DLL Release|Win32
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52}.LIB ASM Debug|Win32.ActiveCfg = LIB ASM Debug|Win32
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52}.LIB ASM Debug|Win32.Build.0 = LIB ASM Debug|Win32
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52}.LIB ASM Release|Win32.ActiveCfg = LIB ASM Release|Win32
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52}.LIB ASM Release|Win32.Build.0 = LIB ASM Release|Win32
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52}.LIB Debug|Win32.ActiveCfg = LIB Debug|Win32
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52}.LIB Debug|Win32.Build.0 = LIB Debug|Win32
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52}.LIB Release|Win32.ActiveCfg = LIB Release|Win32
-+		{A1B2551A-1115-40EB-9709-C4AF186B3E52}.LIB Release|Win32.Build.0 = LIB Release|Win32
++		{41A473AA-B537-47D2-92E7-F78369D314FA}.DLL ASM Debug|Win32.ActiveCfg = DLL ASM Debug|Win32
++		{41A473AA-B537-47D2-92E7-F78369D314FA}.DLL ASM Debug|Win32.Build.0 = DLL ASM Debug|Win32
++		{41A473AA-B537-47D2-92E7-F78369D314FA}.DLL ASM Release|Win32.ActiveCfg = DLL ASM Release|Win32
++		{41A473AA-B537-47D2-92E7-F78369D314FA}.DLL ASM Release|Win32.Build.0 = DLL ASM Release|Win32
++		{41A473AA-B537-47D2-92E7-F78369D314FA}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
++		{41A473AA-B537-47D2-92E7-F78369D314FA}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
++		{41A473AA-B537-47D2-92E7-F78369D314FA}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
++		{41A473AA-B537-47D2-92E7-F78369D314FA}.DLL Release|Win32.Build.0 = DLL Release|Win32
++		{41A473AA-B537-47D2-92E7-F78369D314FA}.LIB ASM Debug|Win32.ActiveCfg = LIB ASM Debug|Win32
++		{41A473AA-B537-47D2-92E7-F78369D314FA}.LIB ASM Debug|Win32.Build.0 = LIB ASM Debug|Win32
++		{41A473AA-B537-47D2-92E7-F78369D314FA}.LIB ASM Release|Win32.ActiveCfg = LIB ASM Release|Win32
++		{41A473AA-B537-47D2-92E7-F78369D314FA}.LIB ASM Release|Win32.Build.0 = LIB ASM Release|Win32
++		{41A473AA-B537-47D2-92E7-F78369D314FA}.LIB Debug|Win32.ActiveCfg = LIB Debug|Win32
++		{41A473AA-B537-47D2-92E7-F78369D314FA}.LIB Debug|Win32.Build.0 = LIB Debug|Win32
++		{41A473AA-B537-47D2-92E7-F78369D314FA}.LIB Release|Win32.ActiveCfg = LIB Release|Win32
++		{41A473AA-B537-47D2-92E7-F78369D314FA}.LIB Release|Win32.Build.0 = LIB Release|Win32
++		{1E42A676-538B-49B6-A43C-10C5703A7EB2}.DLL ASM Debug|Win32.ActiveCfg = DLL ASM Debug|Win32
++		{1E42A676-538B-49B6-A43C-10C5703A7EB2}.DLL ASM Debug|Win32.Build.0 = DLL ASM Debug|Win32
++		{1E42A676-538B-49B6-A43C-10C5703A7EB2}.DLL ASM Release|Win32.ActiveCfg = DLL ASM Release|Win32
++		{1E42A676-538B-49B6-A43C-10C5703A7EB2}.DLL ASM Release|Win32.Build.0 = DLL ASM Release|Win32
++		{1E42A676-538B-49B6-A43C-10C5703A7EB2}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
++		{1E42A676-538B-49B6-A43C-10C5703A7EB2}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
++		{1E42A676-538B-49B6-A43C-10C5703A7EB2}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
++		{1E42A676-538B-49B6-A43C-10C5703A7EB2}.DLL Release|Win32.Build.0 = DLL Release|Win32
++		{1E42A676-538B-49B6-A43C-10C5703A7EB2}.LIB ASM Debug|Win32.ActiveCfg = LIB ASM Debug|Win32
++		{1E42A676-538B-49B6-A43C-10C5703A7EB2}.LIB ASM Debug|Win32.Build.0 = LIB ASM Debug|Win32
++		{1E42A676-538B-49B6-A43C-10C5703A7EB2}.LIB ASM Release|Win32.ActiveCfg = LIB ASM Release|Win32
++		{1E42A676-538B-49B6-A43C-10C5703A7EB2}.LIB ASM Release|Win32.Build.0 = LIB ASM Release|Win32
++		{1E42A676-538B-49B6-A43C-10C5703A7EB2}.LIB Debug|Win32.ActiveCfg = LIB Debug|Win32
++		{1E42A676-538B-49B6-A43C-10C5703A7EB2}.LIB Debug|Win32.Build.0 = LIB Debug|Win32
++		{1E42A676-538B-49B6-A43C-10C5703A7EB2}.LIB Release|Win32.ActiveCfg = LIB Release|Win32
++		{1E42A676-538B-49B6-A43C-10C5703A7EB2}.LIB Release|Win32.Build.0 = LIB Release|Win32
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}.DLL ASM Debug|Win32.ActiveCfg = DLL ASM Debug|Win32
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}.DLL ASM Debug|Win32.Build.0 = DLL ASM Debug|Win32
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}.DLL ASM Release|Win32.ActiveCfg = DLL ASM Release|Win32
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}.DLL ASM Release|Win32.Build.0 = DLL ASM Release|Win32
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}.DLL Release|Win32.Build.0 = DLL Release|Win32
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}.LIB ASM Debug|Win32.ActiveCfg = LIB ASM Debug|Win32
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}.LIB ASM Debug|Win32.Build.0 = LIB ASM Debug|Win32
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}.LIB ASM Release|Win32.ActiveCfg = LIB ASM Release|Win32
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}.LIB ASM Release|Win32.Build.0 = LIB ASM Release|Win32
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}.LIB Debug|Win32.ActiveCfg = LIB Debug|Win32
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}.LIB Debug|Win32.Build.0 = LIB Debug|Win32
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}.LIB Release|Win32.ActiveCfg = LIB Release|Win32
++		{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}.LIB Release|Win32.Build.0 = LIB Release|Win32
 +	EndGlobalSection
 +	GlobalSection(SolutionProperties) = preSolution
 +		HideSolutionNode = FALSE
 +	EndGlobalSection
 +EndGlobal
-diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/visualc6/zlib.vcproj
---- zlib-1.2.3.orig/projects/visualc6/zlib.vcproj	1969-12-31 16:00:00.000000000 -0800
-+++ zlib-1.2.3/projects/visualc6/zlib.vcproj	2009-06-17 11:35:34.687998600 -0700
-@@ -0,0 +1,1914 @@
+diff -PNaur zlib-1.2.4.orig/projects/visualc6/zlib.suo zlib-1.2.4/projects/visualc6/zlib.suo
+--- zlib-1.2.4.orig/projects/visualc6/zlib.suo	1969-12-31 16:00:00.000000000 -0800
++++ zlib-1.2.4/projects/visualc6/zlib.suo	2010-03-17 11:41:12.406000000 -0700
+@@ -0,0 +1 @@
++ÐÏà¡±
+\ No newline at end of file
+diff -PNaur zlib-1.2.4.orig/projects/visualc6/zlib.vcproj zlib-1.2.4/projects/visualc6/zlib.vcproj
+--- zlib-1.2.4.orig/projects/visualc6/zlib.vcproj	1969-12-31 16:00:00.000000000 -0800
++++ zlib-1.2.4/projects/visualc6/zlib.vcproj	2010-03-17 11:41:12.156250000 -0700
+@@ -0,0 +1,2122 @@
 +<?xml version="1.0" encoding="Windows-1252"?>
 +<VisualStudioProject
 +	ProjectType="Visual C++"
 +	Version="9.00"
 +	Name="zlib"
-+	ProjectGUID="{A1B2551A-1115-40EB-9709-C4AF186B3E52}"
++	ProjectGUID="{ACD1F2CD-10A8-4FE0-98AE-CDF3ADCB2739}"
 +	TargetFrameworkVersion="0"
 +	>
 +	<Platforms>
@@ -1746,100 +1765,6 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +	<ToolFiles>
 +	</ToolFiles>
 +	<Configurations>
-+		<Configuration
-+			Name="DLL ASM Debug|Win32"
-+			OutputDirectory=".\Win32_DLL_ASM_Debug"
-+			IntermediateDirectory=".\Win32_DLL_ASM_Debug"
-+			ConfigurationType="2"
-+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
-+			UseOfMFC="0"
-+			ATLMinimizesCRunTimeLibraryUsage="false"
-+			>
-+			<Tool
-+				Name="VCPreBuildEventTool"
-+			/>
-+			<Tool
-+				Name="VCCustomBuildTool"
-+			/>
-+			<Tool
-+				Name="VCXMLDataGeneratorTool"
-+			/>
-+			<Tool
-+				Name="VCWebServiceProxyGeneratorTool"
-+			/>
-+			<Tool
-+				Name="VCMIDLTool"
-+				PreprocessorDefinitions="_DEBUG"
-+				MkTypLibCompatible="true"
-+				SuppressStartupBanner="true"
-+				TargetEnvironment="1"
-+				TypeLibraryName=".\Win32_DLL_ASM_Debug/zlib.tlb"
-+				HeaderFileName=""
-+			/>
-+			<Tool
-+				Name="VCCLCompilerTool"
-+				Optimization="0"
-+				PreprocessorDefinitions="WIN32;_DEBUG;ASMV;ASMINF"
-+				MinimalRebuild="true"
-+				BasicRuntimeChecks="3"
-+				RuntimeLibrary="3"
-+				PrecompiledHeaderFile=".\Win32_DLL_ASM_Debug/zlib.pch"
-+				AssemblerListingLocation=".\Win32_DLL_ASM_Debug/"
-+				ObjectFile=".\Win32_DLL_ASM_Debug/"
-+				ProgramDataBaseFileName=".\Win32_DLL_ASM_Debug/"
-+				WarningLevel="3"
-+				SuppressStartupBanner="true"
-+				DebugInformationFormat="4"
-+			/>
-+			<Tool
-+				Name="VCManagedResourceCompilerTool"
-+			/>
-+			<Tool
-+				Name="VCResourceCompilerTool"
-+				PreprocessorDefinitions="_DEBUG"
-+				Culture="1033"
-+			/>
-+			<Tool
-+				Name="VCPreLinkEventTool"
-+			/>
-+			<Tool
-+				Name="VCLinkerTool"
-+				AdditionalDependencies="odbc32.lib odbccp32.lib"
-+				OutputFile="Win32_DLL_ASM_Debug\zlib1d.dll"
-+				LinkIncremental="2"
-+				SuppressStartupBanner="true"
-+				ModuleDefinitionFile="..\..\win32\zlib.def"
-+				GenerateDebugInformation="true"
-+				ProgramDatabaseFile=".\Win32_DLL_ASM_Debug/zlib1d.pdb"
-+				RandomizedBaseAddress="1"
-+				DataExecutionPrevention="0"
-+				ImportLibrary=".\Win32_DLL_ASM_Debug/zlib1d.lib"
-+				TargetMachine="1"
-+			/>
-+			<Tool
-+				Name="VCALinkTool"
-+			/>
-+			<Tool
-+				Name="VCManifestTool"
-+			/>
-+			<Tool
-+				Name="VCXDCMakeTool"
-+			/>
-+			<Tool
-+				Name="VCBscMakeTool"
-+				SuppressStartupBanner="true"
-+				OutputFile=".\Win32_DLL_ASM_Debug/zlib.bsc"
-+			/>
-+			<Tool
-+				Name="VCFxCopTool"
-+			/>
-+			<Tool
-+				Name="VCAppVerifierTool"
-+			/>
-+			<Tool
-+				Name="VCPostBuildEventTool"
-+			/>
-+		</Configuration>
 +		<Configuration
 +			Name="DLL Release|Win32"
 +			OutputDirectory=".\Win32_DLL_Release"
@@ -1874,7 +1799,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				Name="VCCLCompilerTool"
 +				Optimization="2"
 +				InlineFunctionExpansion="1"
-+				PreprocessorDefinitions="WIN32;NDEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG"
 +				StringPooling="true"
 +				RuntimeLibrary="2"
 +				EnableFunctionLevelLinking="true"
@@ -1934,6 +1859,101 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +			/>
 +		</Configuration>
 +		<Configuration
++			Name="DLL ASM Debug|Win32"
++			OutputDirectory=".\Win32_DLL_ASM_Debug"
++			IntermediateDirectory=".\Win32_DLL_ASM_Debug"
++			ConfigurationType="2"
++			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
++			UseOfMFC="0"
++			ATLMinimizesCRunTimeLibraryUsage="false"
++			>
++			<Tool
++				Name="VCPreBuildEventTool"
++			/>
++			<Tool
++				Name="VCCustomBuildTool"
++			/>
++			<Tool
++				Name="VCXMLDataGeneratorTool"
++			/>
++			<Tool
++				Name="VCWebServiceProxyGeneratorTool"
++			/>
++			<Tool
++				Name="VCMIDLTool"
++				PreprocessorDefinitions="_DEBUG"
++				MkTypLibCompatible="true"
++				SuppressStartupBanner="true"
++				TargetEnvironment="1"
++				TypeLibraryName=".\Win32_DLL_ASM_Debug/zlib.tlb"
++				HeaderFileName=""
++			/>
++			<Tool
++				Name="VCCLCompilerTool"
++				Optimization="0"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_DEBUG;ASMV;ASMINF"
++				MinimalRebuild="true"
++				BasicRuntimeChecks="3"
++				RuntimeLibrary="3"
++				PrecompiledHeaderFile=".\Win32_DLL_ASM_Debug/zlib.pch"
++				AssemblerListingLocation=".\Win32_DLL_ASM_Debug/"
++				ObjectFile=".\Win32_DLL_ASM_Debug/"
++				ProgramDataBaseFileName=".\Win32_DLL_ASM_Debug/"
++				BrowseInformation="1"
++				WarningLevel="3"
++				SuppressStartupBanner="true"
++				DebugInformationFormat="4"
++			/>
++			<Tool
++				Name="VCManagedResourceCompilerTool"
++			/>
++			<Tool
++				Name="VCResourceCompilerTool"
++				PreprocessorDefinitions="_DEBUG"
++				Culture="1033"
++			/>
++			<Tool
++				Name="VCPreLinkEventTool"
++			/>
++			<Tool
++				Name="VCLinkerTool"
++				AdditionalDependencies="odbc32.lib odbccp32.lib"
++				OutputFile="Win32_DLL_ASM_Debug\zlib1d.dll"
++				LinkIncremental="2"
++				SuppressStartupBanner="true"
++				ModuleDefinitionFile="..\..\win32\zlib.def"
++				GenerateDebugInformation="true"
++				ProgramDatabaseFile=".\Win32_DLL_ASM_Debug/zlib1d.pdb"
++				RandomizedBaseAddress="1"
++				DataExecutionPrevention="0"
++				ImportLibrary=".\Win32_DLL_ASM_Debug/zlib1d.lib"
++				TargetMachine="1"
++			/>
++			<Tool
++				Name="VCALinkTool"
++			/>
++			<Tool
++				Name="VCManifestTool"
++			/>
++			<Tool
++				Name="VCXDCMakeTool"
++			/>
++			<Tool
++				Name="VCBscMakeTool"
++				SuppressStartupBanner="true"
++				OutputFile=".\Win32_DLL_ASM_Debug/zlib.bsc"
++			/>
++			<Tool
++				Name="VCFxCopTool"
++			/>
++			<Tool
++				Name="VCAppVerifierTool"
++			/>
++			<Tool
++				Name="VCPostBuildEventTool"
++			/>
++		</Configuration>
++		<Configuration
 +			Name="LIB ASM Debug|Win32"
 +			OutputDirectory=".\Win32_LIB_ASM_Debug"
 +			IntermediateDirectory=".\Win32_LIB_ASM_Debug"
@@ -1960,7 +1980,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +			<Tool
 +				Name="VCCLCompilerTool"
 +				Optimization="0"
-+				PreprocessorDefinitions="WIN32;_DEBUG;ASMV;ASMINF"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_DEBUG;ASMV;ASMINF"
 +				MinimalRebuild="true"
 +				BasicRuntimeChecks="3"
 +				RuntimeLibrary="3"
@@ -1968,6 +1988,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				AssemblerListingLocation=".\Win32_LIB_ASM_Debug/"
 +				ObjectFile=".\Win32_LIB_ASM_Debug/"
 +				ProgramDataBaseFileName=".\Win32_LIB_ASM_Debug/"
++				BrowseInformation="1"
 +				WarningLevel="3"
 +				SuppressStartupBanner="true"
 +				DebugInformationFormat="4"
@@ -2040,7 +2061,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				Name="VCCLCompilerTool"
 +				Optimization="2"
 +				InlineFunctionExpansion="1"
-+				PreprocessorDefinitions="WIN32;NDEBUG;ASMV;ASMINF"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;ASMV;ASMINF"
 +				StringPooling="true"
 +				RuntimeLibrary="2"
 +				EnableFunctionLevelLinking="true"
@@ -2126,7 +2147,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +			<Tool
 +				Name="VCCLCompilerTool"
 +				Optimization="0"
-+				PreprocessorDefinitions="WIN32;_DEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_DEBUG"
 +				MinimalRebuild="true"
 +				BasicRuntimeChecks="3"
 +				RuntimeLibrary="1"
@@ -2134,6 +2155,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				AssemblerListingLocation=".\Win32_LIB_Debug/"
 +				ObjectFile=".\Win32_LIB_Debug/"
 +				ProgramDataBaseFileName=".\Win32_LIB_Debug/"
++				BrowseInformation="1"
 +				WarningLevel="3"
 +				SuppressStartupBanner="true"
 +				DebugInformationFormat="4"
@@ -2205,7 +2227,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +			<Tool
 +				Name="VCCLCompilerTool"
 +				Optimization="0"
-+				PreprocessorDefinitions="WIN32;_DEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_DEBUG"
 +				MinimalRebuild="true"
 +				BasicRuntimeChecks="3"
 +				RuntimeLibrary="3"
@@ -2213,6 +2235,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				AssemblerListingLocation=".\Win32_DLL_Debug/"
 +				ObjectFile=".\Win32_DLL_Debug/"
 +				ProgramDataBaseFileName=".\Win32_DLL_Debug/"
++				BrowseInformation="1"
 +				WarningLevel="3"
 +				SuppressStartupBanner="true"
 +				DebugInformationFormat="4"
@@ -2294,7 +2317,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				Name="VCCLCompilerTool"
 +				Optimization="2"
 +				InlineFunctionExpansion="1"
-+				PreprocessorDefinitions="WIN32;NDEBUG"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG"
 +				StringPooling="true"
 +				RuntimeLibrary="0"
 +				EnableFunctionLevelLinking="true"
@@ -2367,7 +2390,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				Name="VCCLCompilerTool"
 +				Optimization="2"
 +				InlineFunctionExpansion="1"
-+				PreprocessorDefinitions="WIN32;NDEBUG;ASMV;ASMINF"
++				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;ASMV;ASMINF"
 +				StringPooling="true"
 +				RuntimeLibrary="2"
 +				EnableFunctionLevelLinking="true"
@@ -2424,7 +2447,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				RelativePath="..\..\adler32.c"
 +				>
 +				<FileConfiguration
-+					Name="DLL ASM Debug|Win32"
++					Name="DLL Release|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -2432,7 +2455,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
-+					Name="DLL Release|Win32"
++					Name="DLL ASM Debug|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -2492,7 +2515,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				RelativePath="..\..\compress.c"
 +				>
 +				<FileConfiguration
-+					Name="DLL ASM Debug|Win32"
++					Name="DLL Release|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -2500,7 +2523,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
-+					Name="DLL Release|Win32"
++					Name="DLL ASM Debug|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -2560,7 +2583,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				RelativePath="..\..\crc32.c"
 +				>
 +				<FileConfiguration
-+					Name="DLL ASM Debug|Win32"
++					Name="DLL Release|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -2568,7 +2591,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
-+					Name="DLL Release|Win32"
++					Name="DLL ASM Debug|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -2628,7 +2651,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				RelativePath="..\..\deflate.c"
 +				>
 +				<FileConfiguration
-+					Name="DLL ASM Debug|Win32"
++					Name="DLL Release|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -2636,7 +2659,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
-+					Name="DLL Release|Win32"
++					Name="DLL ASM Debug|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -2693,8 +2716,16 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				</FileConfiguration>
 +			</File>
 +			<File
-+				RelativePath="..\..\gzio.c"
++				RelativePath="..\..\gzclose.c"
 +				>
++				<FileConfiguration
++					Name="DLL Release|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
 +				<FileConfiguration
 +					Name="DLL ASM Debug|Win32"
 +					>
@@ -2704,7 +2735,203 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
++					Name="LIB ASM Debug|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="DLL ASM Release|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="LIB Debug|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="DLL Debug|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="LIB Release|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="LIB ASM Release|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++			</File>
++			<File
++				RelativePath="..\..\gzlib.c"
++				>
++				<FileConfiguration
 +					Name="DLL Release|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="DLL ASM Debug|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="LIB ASM Debug|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="DLL ASM Release|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="LIB Debug|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="DLL Debug|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="LIB Release|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="LIB ASM Release|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++			</File>
++			<File
++				RelativePath="..\..\gzread.c"
++				>
++				<FileConfiguration
++					Name="DLL Release|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="DLL ASM Debug|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="LIB ASM Debug|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="DLL ASM Release|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="LIB Debug|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="DLL Debug|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="LIB Release|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="LIB ASM Release|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++			</File>
++			<File
++				RelativePath="..\..\gzwrite.c"
++				>
++				<FileConfiguration
++					Name="DLL Release|Win32"
++					>
++					<Tool
++						Name="VCCLCompilerTool"
++						PreprocessorDefinitions=""
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="DLL ASM Debug|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -2764,7 +2991,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				RelativePath="..\..\infback.c"
 +				>
 +				<FileConfiguration
-+					Name="DLL ASM Debug|Win32"
++					Name="DLL Release|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -2772,7 +2999,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
-+					Name="DLL Release|Win32"
++					Name="DLL ASM Debug|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -2832,7 +3059,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				RelativePath="..\..\inffast.c"
 +				>
 +				<FileConfiguration
-+					Name="DLL ASM Debug|Win32"
++					Name="DLL Release|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -2840,7 +3067,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
-+					Name="DLL Release|Win32"
++					Name="DLL ASM Debug|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -2900,7 +3127,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				RelativePath="..\..\inflate.c"
 +				>
 +				<FileConfiguration
-+					Name="DLL ASM Debug|Win32"
++					Name="DLL Release|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -2908,7 +3135,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
-+					Name="DLL Release|Win32"
++					Name="DLL ASM Debug|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -2968,7 +3195,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				RelativePath="..\..\inftrees.c"
 +				>
 +				<FileConfiguration
-+					Name="DLL ASM Debug|Win32"
++					Name="DLL Release|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -2976,7 +3203,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
-+					Name="DLL Release|Win32"
++					Name="DLL ASM Debug|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -3036,7 +3263,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				RelativePath="..\..\trees.c"
 +				>
 +				<FileConfiguration
-+					Name="DLL ASM Debug|Win32"
++					Name="DLL Release|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -3044,7 +3271,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
-+					Name="DLL Release|Win32"
++					Name="DLL ASM Debug|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -3104,7 +3331,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				RelativePath="..\..\uncompr.c"
 +				>
 +				<FileConfiguration
-+					Name="DLL ASM Debug|Win32"
++					Name="DLL Release|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -3112,7 +3339,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
-+					Name="DLL Release|Win32"
++					Name="DLL ASM Debug|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -3208,7 +3435,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				RelativePath="..\..\zutil.c"
 +				>
 +				<FileConfiguration
-+					Name="DLL ASM Debug|Win32"
++					Name="DLL Release|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -3216,7 +3443,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
-+					Name="DLL Release|Win32"
++					Name="DLL ASM Debug|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -3326,21 +3553,21 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				RelativePath="..\..\win32\zlib1.rc"
 +				>
 +				<FileConfiguration
-+					Name="DLL ASM Debug|Win32"
-+					>
-+					<Tool
-+						Name="VCResourceCompilerTool"
-+						PreprocessorDefinitions=""
-+						AdditionalIncludeDirectories="\work\projects\BrowserPlus\services\Zipper\Main\External\zlib\zlib-1.2.3\win32"
-+					/>
-+				</FileConfiguration>
-+				<FileConfiguration
 +					Name="DLL Release|Win32"
 +					>
 +					<Tool
 +						Name="VCResourceCompilerTool"
 +						PreprocessorDefinitions=""
-+						AdditionalIncludeDirectories="\work\projects\BrowserPlus\services\Zipper\Main\External\zlib\zlib-1.2.3\win32"
++						AdditionalIncludeDirectories="\Users\durand\Desktop\zlib-1.2.4\zlib-1.2.4\win32"
++					/>
++				</FileConfiguration>
++				<FileConfiguration
++					Name="DLL ASM Debug|Win32"
++					>
++					<Tool
++						Name="VCResourceCompilerTool"
++						PreprocessorDefinitions=""
++						AdditionalIncludeDirectories="\Users\durand\Desktop\zlib-1.2.4\zlib-1.2.4\win32"
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
@@ -3349,7 +3576,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					<Tool
 +						Name="VCResourceCompilerTool"
 +						PreprocessorDefinitions=""
-+						AdditionalIncludeDirectories="\work\projects\BrowserPlus\services\Zipper\Main\External\zlib\zlib-1.2.3\win32"
++						AdditionalIncludeDirectories="\Users\durand\Desktop\zlib-1.2.4\zlib-1.2.4\win32"
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
@@ -3358,7 +3585,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					<Tool
 +						Name="VCResourceCompilerTool"
 +						PreprocessorDefinitions=""
-+						AdditionalIncludeDirectories="\work\projects\BrowserPlus\services\Zipper\Main\External\zlib\zlib-1.2.3\win32"
++						AdditionalIncludeDirectories="\Users\durand\Desktop\zlib-1.2.4\zlib-1.2.4\win32"
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
@@ -3367,7 +3594,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					<Tool
 +						Name="VCResourceCompilerTool"
 +						PreprocessorDefinitions=""
-+						AdditionalIncludeDirectories="\work\projects\BrowserPlus\services\Zipper\Main\External\zlib\zlib-1.2.3\win32"
++						AdditionalIncludeDirectories="\Users\durand\Desktop\zlib-1.2.4\zlib-1.2.4\win32"
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
@@ -3376,7 +3603,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					<Tool
 +						Name="VCResourceCompilerTool"
 +						PreprocessorDefinitions=""
-+						AdditionalIncludeDirectories="\work\projects\BrowserPlus\services\Zipper\Main\External\zlib\zlib-1.2.3\win32"
++						AdditionalIncludeDirectories="\Users\durand\Desktop\zlib-1.2.4\zlib-1.2.4\win32"
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
@@ -3385,7 +3612,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					<Tool
 +						Name="VCResourceCompilerTool"
 +						PreprocessorDefinitions=""
-+						AdditionalIncludeDirectories="\work\projects\BrowserPlus\services\Zipper\Main\External\zlib\zlib-1.2.3\win32"
++						AdditionalIncludeDirectories="\Users\durand\Desktop\zlib-1.2.4\zlib-1.2.4\win32"
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
@@ -3394,7 +3621,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					<Tool
 +						Name="VCResourceCompilerTool"
 +						PreprocessorDefinitions=""
-+						AdditionalIncludeDirectories="\work\projects\BrowserPlus\services\Zipper\Main\External\zlib\zlib-1.2.3\win32"
++						AdditionalIncludeDirectories="\Users\durand\Desktop\zlib-1.2.4\zlib-1.2.4\win32"
 +					/>
 +				</FileConfiguration>
 +			</File>
@@ -3407,6 +3634,14 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				RelativePath="..\..\contrib\masmx86\gvmat32.asm"
 +				>
 +				<FileConfiguration
++					Name="DLL Release|Win32"
++					ExcludedFromBuild="true"
++					>
++					<Tool
++						Name="VCCustomBuildTool"
++					/>
++				</FileConfiguration>
++				<FileConfiguration
 +					Name="DLL ASM Debug|Win32"
 +					>
 +					<Tool
@@ -3414,14 +3649,6 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +						Description="Assembling..."
 +						CommandLine="ml.exe /nologo /c /coff /Cx /Zi /Fo&quot;$(IntDir)\$(InputName).obj&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 +						Outputs="$(IntDir)\$(InputName).obj"
-+					/>
-+				</FileConfiguration>
-+				<FileConfiguration
-+					Name="DLL Release|Win32"
-+					ExcludedFromBuild="true"
-+					>
-+					<Tool
-+						Name="VCCustomBuildTool"
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
@@ -3483,7 +3710,8 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				RelativePath="..\..\contrib\masmx86\gvmat32c.c"
 +				>
 +				<FileConfiguration
-+					Name="DLL ASM Debug|Win32"
++					Name="DLL Release|Win32"
++					ExcludedFromBuild="true"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -3492,8 +3720,7 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
-+					Name="DLL Release|Win32"
-+					ExcludedFromBuild="true"
++					Name="DLL ASM Debug|Win32"
 +					>
 +					<Tool
 +						Name="VCCLCompilerTool"
@@ -3563,6 +3790,14 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +				RelativePath="..\..\contrib\masmx86\inffas32.asm"
 +				>
 +				<FileConfiguration
++					Name="DLL Release|Win32"
++					ExcludedFromBuild="true"
++					>
++					<Tool
++						Name="VCCustomBuildTool"
++					/>
++				</FileConfiguration>
++				<FileConfiguration
 +					Name="DLL ASM Debug|Win32"
 +					>
 +					<Tool
@@ -3570,14 +3805,6 @@ diff -Naur zlib-1.2.3.orig/projects/visualc6/zlib.vcproj zlib-1.2.3/projects/vis
 +						Description="Assembling..."
 +						CommandLine="ml.exe /nologo /c /coff /Cx /Zi /Fo&quot;$(IntDir)\$(InputName).obj&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 +						Outputs="$(IntDir)\$(InputName).obj"
-+					/>
-+				</FileConfiguration>
-+				<FileConfiguration
-+					Name="DLL Release|Win32"
-+					ExcludedFromBuild="true"
-+					>
-+					<Tool
-+						Name="VCCustomBuildTool"
 +					/>
 +				</FileConfiguration>
 +				<FileConfiguration
