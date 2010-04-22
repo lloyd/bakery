@@ -1,5 +1,5 @@
 {
-  :url => 'http://cloud.github.com/downloads/lloyd/easylzma/easylzma-0.0.7.tar.gz',
+  :url => 'http://github.com/downloads/lloyd/easylzma/easylzma-0.0.7.tar.gz',
   :md5 => '78b4d067c58208748f07c4b142db9bb2',
   :configure => lambda { |c|
     btstr = c[:build_type].to_s.capitalize
