@@ -47,18 +47,24 @@
     },
     [ :Linux, :MacOSX ] => lambda { |c|
       system("make install")
-      # install static libs
-      Dir.glob(File.join(c[:build_dir], "lib", "*.a")).each { |l|
-        FileUtils.cp(l, c[:output_lib_dir], :verbose => true)
+      # now glob all files containing icu in the lib dir, and move into
+      # lib/{debug,release}
+      Dir.glob(File.join(c[:output_dir], "lib", "*icu*")).each { |l|
+        FileUtils.mv(l, c[:output_lib_dir], :verbose => true)
       }
     }
   },
 
-  :post_install_common => {
-    [ :Linux, :MacOSX ] => lambda { |c|
-      FileUtils.cp(File.join(c[:build_dir], "include", "unicode"),
-                   c[:output_inc_dir], :verbose => true)
-    }      
+  :post_install_common => lambda { |c|
+    # move the include/unicode directory into include/icu/unicode
+
+    # XXX: note, this sucks because users must include include/icu directly,
+    # which breaks the bakery's ability to protect you from system includes.
+    # better would be to programatically patch all includes to #include "icu/XXX"
+    # rather than how icu wants you to do it, #include "unicode/XXX".
+    # this would mean bakery users can just include include/ and use headers
+    # with #include "icu/<header>"
+    FileUtils.mv(File.join(c[:output_dir], "include", "unicode"),
+                 c[:output_inc_dir], :verbose => true)
   }
 }
-
