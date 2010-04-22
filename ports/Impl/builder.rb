@@ -118,6 +118,7 @@ class Builder
     elsif CONFIG['arch'] =~ /linux/
       @platform = :Linux
       @platlookup = [ @platform, :Unix, :All ]
+      @os_compile_flags = " -fPIC "
     end
 
     @cmake_generator = cmake_gen if cmake_gen
