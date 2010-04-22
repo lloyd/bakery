@@ -1,5 +1,5 @@
 {
-  :url => "http://www.zlib.net/zlib-1.2.4.tar.gz",
+  :url => "http://github.com/downloads/lloyd/bakery/zlib-1.2.4.tar.gz",
   :md5 => "47f6ed51b3c83a8534f9228531effa18",
   :configure => {
     [ :Linux, :MacOSX ] => lambda { |c|
