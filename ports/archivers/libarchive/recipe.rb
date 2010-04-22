@@ -43,7 +43,7 @@ end
       cmakeGen = "-G \"#{c[:cmake_generator]}\"" if c[:cmake_generator]
     end
     buildType = "-DCMAKE_BUILD_TYPE:STRING=#{c[:build_type].to_s.capitalize}"
-    cmakeVars = "-DCMAKE_INSTALL_PREFIX:PATH=#{installDir} -DENABLE_ACL:BOOL=OFF -DENABLE_XATTR:BOOL=OFF"
+    cmakeVars = "-DCMAKE_INSTALL_PREFIX:PATH=#{installDir} -DENABLE_ACL:BOOL=OFF -DENABLE_XATTR:BOOL=OFF -DENABLE_XML:BOOL=OFF -DENABLE_LZMA:BOOL=OFF"
     
     # XXX, test_write_compress_program fails on doze, causes devenv to fail
     if c[:platform] == :Windows
