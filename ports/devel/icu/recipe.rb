@@ -24,7 +24,9 @@
 
   :build => {
     :Windows => lambda { |c| 
-      system("devenv icu\\source\\allinone\\allinone.sln /build #{c[:build_type]} > make_out.txt")
+      Dir.chdir(c[:src_dir]) do
+        system("devenv source\\allinone\\allinone.sln /build #{c[:build_type]} > make_out.txt")
+      end
     },
     [ :MacOSX, :Linux ] => lambda { |c|
       if c[:platform] == :MacOSX
@@ -44,6 +46,19 @@
 
   :install => {
     :Windows => lambda { |c|
+      # install static libs
+      libDir = File.join(c[:src_dir], "lib")
+      libsToInstall = %w(icudt_s.lib icuuc_s.lib icuin_s.lib)
+      libsToInstall.each do |l|
+        # debug builds may have 'd' on the lib name
+        src = l
+        if c[:build_type] == :debug && !File.exists?(File.join(libDir, src))
+          src = l.sub("_s.lib", "d_s.lib")
+        end
+        FileUtils.install(File.join(libDir, src),
+                          File.join(c[:output_lib_dir], l),
+                          :verbose => true)
+      end
     },
     [ :Linux, :MacOSX ] => lambda { |c|
       system("make install")
@@ -55,16 +70,22 @@
     }
   },
 
-  :post_install_common => lambda { |c|
-    # move the include/unicode directory into include/icu/unicode
+  :post_install_common => {
+    [ :MacOSX, :Linux ] => lambda { |c|
+      # move the include/unicode directory into include/icu/unicode
 
-    # XXX: note, this sucks because users must include include/icu directly,
-    # which breaks the bakery's ability to protect you from system includes.
-    # better would be to programatically patch all includes to #include "icu/XXX"
-    # rather than how icu wants you to do it, #include "unicode/XXX".
-    # this would mean bakery users can just include include/ and use headers
-    # with #include "icu/<header>"
-    FileUtils.mv(File.join(c[:output_dir], "include", "unicode"),
-                 c[:output_inc_dir], :verbose => true)
+      # XXX: note, this sucks because users must include include/icu directly,
+      # which breaks the bakery's ability to protect you from system includes.
+      # better would be to programatically patch all includes to #include "icu/XXX"
+      # rather than how icu wants you to do it, #include "unicode/XXX".
+      # this would mean bakery users can just include include/ and use headers
+      # with #include "icu/<header>"
+      FileUtils.mv(File.join(c[:output_dir], "include", "unicode"),
+                   c[:output_inc_dir], :verbose => true)
+    },
+    :Windows => lambda { |c|
+      FileUtils.cp_r(File.join(c[:src_dir], "include", "unicode"),
+                     c[:output_inc_dir], :verbose => true)
+    }
   }
 }
