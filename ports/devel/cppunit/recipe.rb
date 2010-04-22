@@ -1,4 +1,3 @@
-
 {
   :url => "http://prdownloads.sourceforge.net/cppunit/cppunit-1.12.1.tar.gz",
   :md5 => "bd30e9cf5523cdfc019b94f5e1d7fd19",
@@ -29,7 +28,10 @@
     },
     :Windows => lambda { |c|
       buildType = c[:build_type].to_s
-      system("devenv CppUnitLibraries.sln /build \"#{buildType} static\"")
+      Dir.chdir(File.join(c[:src_dir], "src")) do
+        devenvOut = File.join(c[:build_dir], "devenv.out")
+        system("devenv CppUnitLibraries.sln /project cppunit /build \"#{buildType} static\" >#{devenvOut}")
+      end
     }
   },
 
@@ -42,11 +44,11 @@
 
     :Windows => lambda { |c|
       # install static lib
-      puts "installing #{c[:build_type].to_s} static library..."
+      buildType = c[:build_type].to_s
       libTrailer = (c[:build_type] == :debug) ? "d" : ""
-      FileUtils.cp(File.join(c[:build_dir], "lib", "cppunit#{libTrailer}.lib"),
-                   File.join(c[:output_lib_dir], "cppunit.lib"),
-                   :verbose => true)
+      libFile = File.join(c[:src_dir], "src", "cppunit", buildType, "cppunit#{libTrailer}.lib")
+      puts "installing #{c[:build_type].to_s} static library..."
+      FileUtils.cp(libFile, File.join(c[:output_lib_dir], "cppunit.lib"), :verbose => true)
     }
   },
 
