@@ -464,7 +464,7 @@ class Builder
     @conf[:build_dir] = @build_dir
 
     # update lib dir
-    @output_lib_dir = File.join(@output_dir, "lib", buildType.to_s)
+    @output_lib_dir = File.join(@output_dir, "lib", buildType.to_s.capitalize)
     FileUtils.mkdir_p(@output_lib_dir)
     @conf[:output_lib_dir] = @output_lib_dir
   end
