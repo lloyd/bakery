@@ -38,6 +38,9 @@
       # mv headers
       FileUtils.mv(File.join(c[:output_dir], "include", "histedit.h"),
                    c[:output_inc_dir], :verbose => $verbose)
+      FileUtils.mv(File.join(c[:output_dir], "include", "editline", "readline.h"),
+                   c[:output_inc_dir], :verbose => $verbose)
+      FileUtils.rmdir(File.join(c[:output_dir], "include", "editline"))
     }
   }
 }
