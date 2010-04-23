@@ -62,8 +62,7 @@ class Builder
     @workdir_path = File.join(@port_dir, "work", @pkg)
     FileUtils.mkdir_p(@workdir_path)
 
-#    @logdir_path = File.join(@workdir_path, "logs")
-#    FileUtils.mkdir_p(@logdir_path)
+    @logdir_path = File.join(@workdir_path, "logs")
 
     # create and define directories where ports should put stuff
     @output_dir = output_dir ? output_dir : File.join(@port_dir, "dist")
@@ -228,7 +227,7 @@ class Builder
 
     if File.exist?(@receipt_path)
       puts "      removing previous build output..."
-      __redirectOutput(File.join(@workdir_path, "clean.log")) do
+      __redirectOutput("clean") do
         # now remove installed artifacts if needed
         r = File.open( @receipt_path ) { |yf| YAML::load( yf ) }
         r[:files].each { |p,md5|
@@ -331,7 +330,7 @@ class Builder
   def install_from_cache
     fname = File.join(@cache_dir, "#{@pkg}-#{__getPortMD5()}.tgz")    
     if File.exist? fname
-      __redirectOutput(File.join(@workdir_path, "install_from_cache.log")) do
+      __redirectOutput("install_from_cache") do
         Dir.chdir(@output_dir) do
           if @platform == :Windows
             system("#{@sevenZCmd} x #{fname}")
@@ -358,7 +357,7 @@ class Builder
     srcPath = File.join(@workdir_path, "src")
     FileUtils.mkdir_p srcPath
     Dir.chdir(srcPath) do
-      __redirectOutput(File.join(@workdir_path, "unpack.log")) do
+      __redirectOutput("unpack") do
         path = @tarball
         puts "      unpacking #{path}..."
         if path =~ /.tar./
@@ -434,8 +433,7 @@ class Builder
   end
 
   def patch
-    patch_log = File.join(@workdir_path, "patch.log")
-    FileUtils.rm_f(patch_log)
+    FileUtils.rm_f(__getLogPath("patch"))
     portDir = File.dirname(@recipe_path)
     
     # first we'll find patches!
@@ -449,7 +447,7 @@ class Builder
     patches.each do |p|
       p = File.expand_path(p)
       puts "      Applying #{File.basename(p, ".patch")}"
-      __redirectOutput(patch_log, true) do
+      __redirectOutput("patch", true) do
         puts "output redirected"
         # now let's apply p  
         Dir.chdir(@src_dir) {
@@ -480,7 +478,18 @@ class Builder
     @conf[:output_lib_dir] = @output_lib_dir
   end
 
-  def __redirectOutput fName, append = false
+  def __getLogPath phase
+    File.join(@logdir_path, "#{phase}.log") 
+  end
+
+  def __redirectOutput phase, append = false
+    FileUtils.mkdir_p(@logdir_path)
+    if @conf.has_key? :build_type
+      phase = phase + "_" + @conf[:build_type].to_s
+    end
+
+    fName = __getLogPath(phase)
+
     File.open(fName, (append ? "a" : "w")) { |f|    
       # redirect stderr and stdout
       old_stdout = $stdout.dup
@@ -499,7 +508,7 @@ class Builder
   def runBuildPhase2 phase
     # execute in the build dir
     Dir.chdir(@build_dir) {
-      __redirectOutput("#{phase}.log") { yield }
+      __redirectOutput("#{phase}") { yield }
     }
   end
 
@@ -567,6 +576,7 @@ class Builder
 
   def post_install
     invokeLambda(:post_install, @recipe, :post_install)
+    @conf.delete :build_type
   end
 
   def post_install_common
@@ -600,7 +610,7 @@ class Builder
     fname = File.join(@cache_dir, "#{@pkg}-#{__getPortMD5()}.tgz")
     FileUtils.rm_f(tmpfname)
     FileUtils.rm_f(fname)
-    __redirectOutput(File.join(@workdir_path, "save_to_cache.log")) do
+    __redirectOutput("save_to_cache") do
       Dir.chdir(@output_dir) {
         # lets' add the reciepts file to file_installed
         @files_installed.add Pathname.new(@receipt_path).relative_path_from(Pathname.new(@output_dir)).to_s
