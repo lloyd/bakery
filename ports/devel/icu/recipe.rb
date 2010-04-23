@@ -11,6 +11,16 @@
 
   :configure => {
     [ :Linux, :MacOSX ] => lambda { |c|
+      if c[:platform] == :MacOSX
+        ENV['CFLAGS'] = "#{c[:os_compile_flags]} #{ENV['CFLAGS']}"
+        ENV['CXXFLAGS'] = "#{c[:os_compile_flags]} #{ENV['CFLAGS']}"
+        ENV['LDFLAGS'] = "#{c[:os_link_flags]} #{ENV['LDFLAGS']}"
+      end
+      if c[:build_type] == :debug
+        ENV['CFLAGS'] = "#{ENV['CFLAGS']} -g -O0"
+        ENV['CXXFLAGS'] = "#{ENV['CFLAGS']} -g -O0"
+      end
+
       configCmd = File.join(c[:src_dir], "source", "runConfigureICU")    
       configCmd += " #{c[:platform].to_s} --prefix=#{c[:output_dir]} "
       configCmd += " --enable-static --disable-icuio --disable-layout"
@@ -29,15 +39,6 @@
       end
     },
     [ :MacOSX, :Linux ] => lambda { |c|
-      if c[:platform] == :MacOSX
-        ENV['CFLAGS'] = "#{c[:os_compile_flags]} #{ENV['CFLAGS']}"
-        ENV['CXXFLAGS'] = "#{c[:os_compile_flags]} #{ENV['CFLAGS']}"
-        ENV['LDFLAGS'] = "#{c[:os_link_flags]} #{ENV['LDFLAGS']}"
-      end
-      if c[:build_type] == :debug
-        ENV['CFLAGS'] = "#{ENV['CFLAGS']} -g -O0"
-        ENV['CXXFLAGS'] = "#{ENV['CFLAGS']} -g -O0"
-      end
       system("make")
       # the '|| echo' prevents termination since make check fails.  nice
       system("make check || echo")
