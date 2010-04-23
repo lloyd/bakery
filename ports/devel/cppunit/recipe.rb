@@ -11,7 +11,7 @@
       end
       cfgScript = File.join(c[:src_dir], "configure")
       configCmd = "#{cfgScript} --enable-static --disable-shared"
-      configCmd += " --prefix=#{c[:build_dir]} --disable-doxygen"
+      configCmd += " --prefix=#{c[:output_dir]} --disable-doxygen"
       configCmd += " CXXFLAGS=\"#{cxxflags}\""
       if c[:platform] == :MacOSX
         configCmd += " LDFLAGS=\"#{c[:os_link_flags]}\""
@@ -24,7 +24,6 @@
   :build => {
     [ :Linux, :MacOSX ] => lambda { |c|
       system("make")
-      system("make install")
     },
     :Windows => lambda { |c|
       buildType = c[:build_type].to_s
@@ -37,8 +36,9 @@
 
   :install => {
     [ :Linux, :MacOSX ] => lambda { |c|
-      Dir.glob(File.join(c[:build_dir], "lib", "*cppunit*")).each { |f|
-        FileUtils.cp(f, c[:output_lib_dir], :verbose => true)
+      system("make install")
+      Dir.glob(File.join(c[:output_dir], "lib", "*cppunit*")).each { |f|
+        FileUtils.mv(f, c[:output_lib_dir], :verbose => true)
       }
     },
 
@@ -52,12 +52,13 @@
     }
   },
 
-  :post_install_common => lambda { |c|
-    # install headers
-    puts "installing headers..."
-    Dir.glob(File.join(File.join(c[:src_dir], "include",
-                                 "cppunit", "*"))).each { |h| 
-      FileUtils.cp_r(h, c[:output_inc_dir], :verbose => true)
+  :post_install_common => {
+    :Windows => lambda { |c|
+      # install headers 
+      puts "installing headers..."
+      Dir.glob(File.join(File.join(c[:src_dir], "include", "cppunit", "*"))).each { |h| 
+        FileUtils.cp_r(h, c[:output_inc_dir], :verbose => true)
+      }
     }
   }
 }
