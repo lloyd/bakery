@@ -317,6 +317,27 @@ class Builder
     end
   end
 
+  def install_from_cache
+    fname = File.join(@cache_dir, "#{@pkg}-#{__getPortMD5()}.tgz")    
+    if File.exist? fname
+      __redirectOutput(File.join(@workdir_path, "install_from_cache.log")) do
+        Dir.chdir(@output_dir) do
+          if @platform == :Windows
+            system("#{@sevenZCmd} x #{fname}")
+            tarPath = File.basename(fname, ".*") + ".tar"
+            puts "untarring #{tarPath}..."
+            system("#{@sevenZCmd} x #{tarPath}")
+            FileUtils.rm_f(tarPath)
+          else
+            system("tar xvzf #{fname}")
+          end
+          return true
+        end
+      end
+    end
+    return false
+  end
+
   def unpack
     if !@tarball
       puts "      nothing to unpack for this port"

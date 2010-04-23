@@ -31,9 +31,15 @@ class Bakery
       end
       puts "  - cleaning #{p}" if @verbose      
       b.clean
+      # if we've got the built bits in the cache, then let's use em
+      # and call it a day!
+      puts "  - checking cache for built pkg" if @verbose
+      if b.install_from_cache
+        puts "      Installed from cache!  all done." if @verbose
+        return
       # if use_source is specified for this package it short circuts
       # fetch and unpack
-      if @use_source && @use_source.has_key?(p)
+      elsif @use_source && @use_source.has_key?(p)
         puts "  - copying local source for #{p} (#{@use_source[p]})" if @verbose      
         b.use_source @use_source[p]
       else 
