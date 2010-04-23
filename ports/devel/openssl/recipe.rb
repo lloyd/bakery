@@ -25,6 +25,13 @@ end
       else
         configureCmd = "sh ./config"
       end
+
+      if c[:platform] == :MacOSX
+        includeDir = File.join(c[:src_dir], "include")
+        libDir = c[:src_dir]
+        ENV['BP_EXTRA_CFLAGS'] = "-I#{includeDir} -L#{libDir} #{c[:os_compile_flags]}"
+      end
+
       system("#{configureCmd} no-shared --prefix=#{c[:build_dir]}")
     }
   },
@@ -39,12 +46,6 @@ end
           ENV['CFLAGS'] = ENV['CFLAGS'].to_s + " -g -O0"
         end
         ENV['LDFLAGS'] = ENV['LDFLAGS'].to_s + c[:os_link_flags]
-      end
-
-      if c[:platform] == :Darwin
-        includeDir = File.join(c[:src_dir], "include")
-        libDir = c[:src_dir]
-        ENV['BP_EXTRA_CFLAGS'] = "-I#{includeDir} -L#{libDir}"
       end
 
       makeCmd = c[:platform] == :Windows ? "nmake -f ms\\nt.mak" : "make"
