@@ -38,7 +38,7 @@ class Bakery
       puts "  - checking cache for built pkg" if @verbose
       if b.install_from_cache
         puts "      Installed from cache!  all done." if @verbose
-        return
+        next
       # if use_source is specified for this package it short circuts
       # fetch and unpack
       elsif @use_source && @use_source.has_key?(p)
