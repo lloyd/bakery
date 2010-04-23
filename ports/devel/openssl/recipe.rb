@@ -1,9 +1,25 @@
+# Windows needs to use ActiveState perl.  If the
+# perl we find isn't ActiveState, we assume that 
+# ActiveState is installed in c:\Perl (the default).
+# MSys perl will hang the build.  Sigh.
+def setupEnv(c)
+  if c[:platform] == :Windows
+    if `perl --version`.include?("ActiveState") == false
+      if `C:\\Perl\\bin\\perl --version`.include?("ActiveState") == false
+        raise "Unable to find ActiveState perl in c:\\Perl"
+      end
+      ENV['PATH'] = "C:\\Perl\\bin;" + ENV['PATH'].to_s
+    end
+  end
+end
+
 {
   :url => "http://openssl.org/source/openssl-0.9.8k.tar.gz",
   :md5 => "e555c6d58d276aec7fdc53363e338ab3",
 
   :configure => lambda { |c|
     Dir.chdir(c[:src_dir]) {
+      setupEnv(c)
       if c[:platform] == :Windows
         configureCmd = "perl Configure VC-WIN32"
       else
@@ -14,6 +30,7 @@
   },
 
   :build => lambda { |c|
+    setupEnv(c)
     Dir.chdir(c[:src_dir]) {
       # setup compile/link flags
       if c[:platform] != :Windows
@@ -32,7 +49,7 @@
 
       makeCmd = c[:platform] == :Windows ? "nmake -f ms\\nt.mak" : "make"
 
-      system("ms\\do_masm.bat") if $platform == "Windows"
+      system("ms\\do_masm.bat") if c[:platform] == :Windows
       system("#{makeCmd}")
       system("#{makeCmd} test")
       system("#{makeCmd} install")
@@ -70,14 +87,16 @@
   :post_install_common => lambda { |c|
     Dir.chdir(c[:build_dir]) {
       puts "Installing headers..."
-      FileUtils.cp_r(File.join("include", "openssl"),
-                     c[:output_inc_dir], :verbose => true)
+      Dir.glob(File.join("include", "openssl", "*.h")).each { |h|
+        FileUtils.cp(h, c[:output_inc_dir], :verbose => true)
+      }
       
       puts "Installing openssl.cnf..."
-      sslDir = File.join(c[:output_dir], "ssl")
-      FileUtils.mkdir_p(sslDir)
-      FileUtils.cp_r(File.join("ssl", "openssl.cnf"), 
-                     sslDir, :verbose => true)
+      src = "openssl.cnf"
+      src = File.join("ssl", src) if c[:platform] != :Windows
+      dest = File.join(c[:output_dir], "ssl")
+      FileUtils.mkdir_p(dest)
+      FileUtils.cp_r(src, dest, :verbose => true)
     }
   }
 }
