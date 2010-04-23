@@ -13,12 +13,12 @@
     [ :Linux, :MacOSX ] => lambda { |c|
       if c[:platform] == :MacOSX
         ENV['CFLAGS'] = "#{c[:os_compile_flags]} #{ENV['CFLAGS']}"
-        ENV['CXXFLAGS'] = "#{c[:os_compile_flags]} #{ENV['CFLAGS']}"
+        ENV['CXXFLAGS'] = "#{c[:os_compile_flags]} #{ENV['CXXFLAGS']}"
         ENV['LDFLAGS'] = "#{c[:os_link_flags]} #{ENV['LDFLAGS']}"
       end
       if c[:build_type] == :debug
         ENV['CFLAGS'] = "#{ENV['CFLAGS']} -g -O0"
-        ENV['CXXFLAGS'] = "#{ENV['CFLAGS']} -g -O0"
+        ENV['CXXFLAGS'] = "#{ENV['CXXFLAGS']} -g -O0"
       end
 
       configCmd = File.join(c[:src_dir], "source", "runConfigureICU")    
