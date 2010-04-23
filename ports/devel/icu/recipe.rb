@@ -65,7 +65,7 @@
       # now glob all files containing icu in the lib dir, and move into
       # lib/{debug,release}
       Dir.glob(File.join(c[:output_dir], "lib", "*icu*")).each { |l|
-        FileUtils.mv(l, c[:output_lib_dir], :verbose => true)
+        FileUtils.mv(l, c[:output_lib_dir], :verbose => true) if !File.directory?(l)
       }
     }
   },
