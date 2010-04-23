@@ -328,16 +328,13 @@ class Builder
   end
 
   def install_from_cache
-    fname = File.join(@cache_dir, "#{@pkg}-#{__getPortMD5()}.tgz")    
+    ext = ((@platform == :Windows) ? "7z" : "tgz")
+    fname = File.join(@cache_dir, "#{@pkg}-#{__getPortMD5()}.#{ext}")
     if File.exist? fname
       __redirectOutput("install_from_cache") do
         Dir.chdir(@output_dir) do
           if @platform == :Windows
-            system("#{@sevenZCmd} x #{fname}")
-            tarPath = File.basename(fname, ".*") + ".tar"
-            puts "untarring #{tarPath}..."
-            system("#{@sevenZCmd} x #{tarPath}")
-            FileUtils.rm_f(tarPath)
+            system("#{@sevenZCmd} x -y #{fname}")
           else
             system("tar xvzf #{fname}")
           end
@@ -606,9 +603,8 @@ class Builder
 
   def save_to_cache
     FileUtils.mkdir_p(@cache_dir)
-    tmpfname = File.join(@cache_dir, "#{@pkg}-#{__getPortMD5()}.tar")
-    fname = File.join(@cache_dir, "#{@pkg}-#{__getPortMD5()}.tgz")
-    FileUtils.rm_f(tmpfname)
+    ext = ((@platform == :Windows) ? "7z" : "tgz")
+    fname = File.join(@cache_dir, "#{@pkg}-#{__getPortMD5()}.#{ext}")
     FileUtils.rm_f(fname)
     __redirectOutput("save_to_cache") do
       Dir.chdir(@output_dir) {
@@ -618,9 +614,7 @@ class Builder
         filelist = File.join(@workdir_path, "filelist.txt")
         File.open(filelist, "w+") { |f| @files_installed.each { |fi| f.puts fi } }
         if @platform == :Windows
-          system("#{@sevenZCmd} a -ttar #{tmpfname.gsub(/([" ])/, "\\\1")} @#{filelist.gsub(/([" ])/, "\\\1")}")        
-          system("#{@sevenZCmd} a -tgzip #{fname.gsub(/([" ])/, "\\\1")} #{tmpfname.gsub(/([" ])/, "\\\1")}")        
-          FileUtils.rm_f(tmpfname)
+          system("#{@sevenZCmd} a -y #{fname.gsub(/([" ])/, "\\\1")} @#{filelist.gsub(/([" ])/, "\\\1")}")
         else
           system("tar -T #{filelist.gsub(/([" ])/, "\\\1")} -czf #{fname.gsub(/([" ])/, "\\\1")}")
         end
