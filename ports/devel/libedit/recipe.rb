@@ -3,7 +3,7 @@
   :md5 => "379afe3fa302e41fc3cb82ad5c969596",
   :configure => {
     [ :Linux, :MacOSX ] => lambda { |c|
-      if $platform == :MacOSX
+      if c[:platform] == :MacOSX
         ENV['CFLAGS'] = "#{c[:os_compile_flags]} #{ENV['CFLAGS']}"
         ENV['LDFLAGS'] = "#{c[:os_link_flags]} #{ENV['LDFLAGS']}"
       end
