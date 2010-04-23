@@ -11,6 +11,7 @@
                    "-DCMAKE_INSTALL_PREFIX=\"#{c[:output_dir]}\" " +
                    " #{c[:cmake_args]} " +
                    " #{cmakeGen} \"#{c[:src_dir]}\"" 
+    puts cmLine
     system(cmLine)
   },
   :build => {
