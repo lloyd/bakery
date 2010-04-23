@@ -10,10 +10,11 @@ include Config
 alias actual_system system
 
 def system *args
-  puts "system(\"#{args.join('", "')}\")"
+#  puts "system(\"#{args.join('", "')}\")"
   rv = actual_system(*args)
   raise "system invocation failed (#{args.join(' ')})" if !rv
   raise "system call returned non success: #{$?}" if $? != 0
+  return rv
 end
 
 class Builder
@@ -23,9 +24,10 @@ class Builder
     end
   end
 
-  def initialize pkg, verbose, output_dir, cmake_gen, recipe_location = nil
+  def initialize pkg, verbose, output_dir, cmake_gen, cache_dir, recipe_location = nil
     @pkg = pkg
     @verbose = verbose
+    @cache_dir = cache_dir
 
     # capture the top level portDir
     @port_dir = File.expand_path(File.dirname(File.dirname(__FILE__)))
@@ -45,6 +47,8 @@ class Builder
     }
     throw "unknown package: #{pkg}" if !@recipe_path
 
+    @recipe_dir = File.expand_path(File.dirname(@recipe_path))
+
     # now let's read and parse the recipe
     @recipe = eval(File.read(@recipe_path))
 #    [ :url, :md5 ].each { |sym|
@@ -56,6 +60,9 @@ class Builder
 
     @workdir_path = File.join(@port_dir, "work", @pkg)
     FileUtils.mkdir_p(@workdir_path)
+
+#    @logdir_path = File.join(@workdir_path, "logs")
+#    FileUtils.mkdir_p(@logdir_path)
 
     @output_dir = output_dir ? output_dir : File.join(@port_dir, "dist")
     FileUtils.mkdir_p(@output_dir)    
@@ -132,13 +139,17 @@ class Builder
       :cmake_generator => @cmake_generator,
       :os_compile_flags => @os_compile_flags,
       :os_link_flags => @os_link_flags,
-      :recipe_dir => File.expand_path(File.dirname(@recipe_path))
+      :recipe_dir => @recipe_dir
     }
 
     # where shall our manifest live?
     @receipts_dir = File.join(@output_dir, "receipts")
     FileUtils.mkdir_p(@receipts_dir)
     @receipt_path = File.join(@receipts_dir, "#{@pkg}.yaml")
+
+    # port md5 calculation is expensive.  we only calculate it once per invocation
+    # using this member as a cache
+    @port_md5 = nil
   end
 
   def __libdir_contents
@@ -149,35 +160,36 @@ class Builder
       Set.new
     end
   end
+
+  # a "port md5" is a single md5 that captures the state of all files in the
+  # ports directory.  if any of them changes, then the port md5 changes too
+  # and a rebuild is triggered.  Because a recipe includes the md5 of the
+  # contents of the source tarball, this "port md5" is really an md5 over the
+  # entire input to the build process, sans environmental factors (env vars,
+  # compiler version, etc).  
+  def __getPortMD5
+    return @port_md5 if @port_md5 != nil
+
+    md5s = Array.new
+
+    Dir.glob(File.join(@recipe_dir, "**", "*")).each{ |f|
+      md5s.push __fastMD5(f)    
+    }
+    @port_md5 = Digest::MD5::hexdigest(md5s.sort.join)
+    return @port_md5
+  end
   
   def needsBuild
     return true if !File.exist?(@receipt_path)
     
     r = File.open( @receipt_path ) { |yf| YAML::load( yf ) }
 
-    # first, if the recipe contents have changed, then we need a rebuild.
-    # (we don't care if they've moved, really)
-    return true if r[:recipe] != __fastMD5( @recipe_path )
+    # first, if the recipe contents have changed, or any of the contents inside
+    # the port directory (patches, etc), then we need a rebuild.
+    # (and we don't care if they've moved, really, it's about contents)
+    return true if r[:recipe] != __getPortMD5
 
-    # second, we'll compare the build time (manifest mtime) with the times of
-    # all of the files in the same directory as the recipe.  If any of those
-    # files are newer, we're calling this guy out of date.
-    # XXX: this *requires* folks put a reciept in a dir.  High level problem
-    # here is that there's a number of files (recipe and patches) that should
-    # trigger a rebuild.  How do we automagically get the *best* set of files?
-    build_time = File.new(@receipt_path).mtime
-
-    recipe_time = nil
-    Dir.glob(File.join(File.dirname(@recipe_path), "**", "*")).each{ |f|
-      next if !File.file? f
-      if recipe_time == nil
-        recipe_time = File.new(f).mtime        
-      elsif File.new(f).mtime > recipe_time
-        recipe_time = File.new(f).mtime
-      end
-    }
-
-    return true if recipe_time > build_time
+    return false
   end
 
   def check
@@ -206,6 +218,11 @@ class Builder
 
     # for purposes of receipts, let's take a snapshot of the lib directory
     @libdir_before = __libdir_contents
+
+    # the total set of files that were installed, populated during write_receipts
+    # phase.
+    @libs_installed = Array.new
+    @incs_installed = Array.new
   end
 
   def __fastMD5 file
@@ -515,22 +532,45 @@ class Builder
 
   def write_receipt
     sigs = Hash.new
+    @libs_installed = Array.new
     __libdir_contents.subtract(@libdir_before).each { |l|
       l = File.join("lib", l)
+      @libs_installed.push l
       md5 = __fastMD5(File.join(@output_dir, l))
       sigs[l] = md5
     }
 
+    @incs_installed = Array.new
     Dir.chdir(@output_inc_dir) { Dir.glob("**/*").each { |h|
         next if File.directory? h
         h = File.join("include", @pkg, h)
+        @incs_installed.push h
         md5 = __fastMD5(File.join(@output_dir, h))
         sigs[h] = md5
     } }
     rf = {
-      :recipe => __fastMD5(@recipe_path),
+      :recipe => __getPortMD5(),
       :files => sigs.sort
     }
     File.open(@receipt_path, "w") { |r| YAML.dump(rf, r) }
+  end
+
+  def save_to_cache
+    FileUtils.mkdir_p(@cache_dir)
+    tmpfname = File.join(@cache_dir, "#{@pkg}-#{__getPortMD5()}.tar")
+    fname = File.join(@cache_dir, "#{@pkg}-#{__getPortMD5()}.tgz")
+    FileUtils.rm_f(tmpfname)
+    FileUtils.rm_f(fname)
+    Dir.chdir(@output_dir) {
+      cmdline = (@incs_installed | @libs_installed).map { |i| i.gsub(/([" ])/, "\\\1") }.join(" ") 
+      if @platform == :Windows
+        system("7z a -ttar #{tmpfname.gsub(/([" ])/, "\\\1")} #{cmdline}")        
+        system("7z a -tgzip #{fname.gsub(/([" ])/, "\\\1")} #{tmpfname.gsub(/([" ])/, "\\\1")}")        
+        FileUtils.rm_f(tmpfname)
+      else
+        system("tar czf #{fname.gsub(/([" ])/, "\\\1")} #{cmdline}")
+      end
+    }
+    puts "      #{File.size(fname) / 1024}kb saved to #{File.basename(fname)}"
   end
 end

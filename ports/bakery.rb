@@ -16,6 +16,7 @@ class Bakery
     @cmake_generator = (order && order[:cmake_generator])
     @use_source = order[:use_source]
     @use_recipe = order[:use_recipe]
+    @cache_dir = File.join(ENV['HOME'], ".bakery_pkgcache")
   end
   
   def build
@@ -23,46 +24,48 @@ class Bakery
     @packages.each { |p|
       recipe = @use_recipe[p] if @use_recipe && @use_recipe.has_key?(p) 
       puts "--- building #{p}#{recipe ? (" (" + recipe + ")") : ""} ---" if @verbose      
-      b = Builder.new(p, @verbose, @output_dir, @cmake_generator, recipe)
+      b = Builder.new(p, @verbose, @output_dir, @cmake_generator, @cache_dir, recipe)
       if !b.needsBuild
-        puts "    skipping #{p}, already built!" if @verbose              
+        puts "  - skipping #{p}, already built!" if @verbose              
         next
       end
-      puts "    cleaning #{p}" if @verbose      
+      puts "  - cleaning #{p}" if @verbose      
       b.clean
       # if use_source is specified for this package it short circuts
       # fetch and unpack
       if @use_source && @use_source.has_key?(p)
-        puts "    copying local source for #{p} (#{@use_source[p]})" if @verbose      
+        puts "  - copying local source for #{p} (#{@use_source[p]})" if @verbose      
         b.use_source @use_source[p]
       else 
-        puts "    fetching #{p}" if @verbose      
+        puts "  - fetching #{p}" if @verbose      
         b.fetch
-        puts "    unpacking #{p}" if @verbose      
+        puts "  - unpacking #{p}" if @verbose      
         b.unpack
       end
-      puts "    patching #{p}" if @verbose      
+      puts "  - patching #{p}" if @verbose      
       b.patch
-      puts "    post-patch #{p}" if @verbose      
+      puts "  - post-patch #{p}" if @verbose      
       b.post_patch
       @build_types.each { |bt|
-        puts "    pre_build step for #{p} (#{bt})" if @verbose      
+        puts "  - pre_build step for #{p} (#{bt})" if @verbose      
         b.pre_build bt
-        puts "    configuring #{p} (#{bt})" if @verbose      
+        puts "  - configuring #{p} (#{bt})" if @verbose      
         b.configure
-        puts "    building #{p} (#{bt})" if @verbose      
+        puts "  - building #{p} (#{bt})" if @verbose      
         b.build
-        puts "    installing #{p} (#{bt})" if @verbose      
+        puts "  - installing #{p} (#{bt})" if @verbose      
         b.install
-        puts "    running post_install for #{p} (#{bt})" if @verbose      
+        puts "  - running post_install for #{p} (#{bt})" if @verbose      
         b.post_install
       }
-      puts "    running post_install_common for #{p}" if @verbose      
+      puts "  - running post_install_common for #{p}" if @verbose      
       b.post_install_common
-      puts "    cleaning up #{p}" if @verbose      
+      puts "  - cleaning up #{p}" if @verbose      
       b.dist_clean
-      puts "    Writing receipt for #{p}" if @verbose      
+      puts "  - Writing receipt for #{p}" if @verbose      
       b.write_receipt
+      puts "  - Saving #{p} build output to cache (#{@cache_dir})" if @verbose      
+      b.save_to_cache
     }
   end
 end
