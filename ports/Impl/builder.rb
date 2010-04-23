@@ -226,19 +226,21 @@ class Builder
     FileUtils.rm_rf(@workdir_path)
     FileUtils.mkdir_p(@workdir_path)
 
-    # now remove installed artifacts if needed
     if File.exist?(@receipt_path)
       puts "      removing previous build output..."
-      r = File.open( @receipt_path ) { |yf| YAML::load( yf ) }
-      r[:files].each { |p,md5|
-        FileUtils.rm_f(File.join(@output_dir, p), :verbose => true )
-      }
-      FileUtils.rm_f( @receipt_path )
-
-      # for good measure, let's remove and re-create the header directory
-      # (handles nested directories)
-      FileUtils.rm_rf( @output_inc_dir )
-      FileUtils.mkdir_p( @output_inc_dir )      
+      __redirectOutput(File.join(@workdir_path, "clean.log")) do
+        # now remove installed artifacts if needed
+        r = File.open( @receipt_path ) { |yf| YAML::load( yf ) }
+        r[:files].each { |p,md5|
+          FileUtils.rm_f(File.join(@output_dir, p), :verbose => true )
+        }
+        FileUtils.rm_f( @receipt_path, :verbose => true )
+        
+        # for good measure, let's remove and re-create the header directory
+        # (handles nested directories)
+        FileUtils.rm_rf( @output_inc_dir, :verbose => true )
+        FileUtils.mkdir_p( @output_inc_dir, :verbose => true )      
+      end
     end
 
     # for purposes of receipts, let's take a snapshot of the lib directory
