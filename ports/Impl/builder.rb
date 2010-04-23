@@ -189,7 +189,7 @@ class Builder
     md5s = Array.new
 
     Dir.glob(File.join(@recipe_dir, "**", "*")).each{ |f|
-      md5s.push __fastMD5(f)    
+      md5s.push __fastMD5(f) if File.file? f
     }
 
     # now include md5s of the bakery's implementation.  this means port md5s
@@ -197,7 +197,7 @@ class Builder
     # conservative, but intended to avoid some hard-to-chase-down bugs.
     md5s.push(__fastMD5(File.join(@port_dir, "bakery.rb")))
     Dir.glob(File.join(@port_dir, "Impl", "**", "*")).each{ |f|
-      md5s.push __fastMD5(f)    
+      md5s.push __fastMD5(f) if File.file? f    
     }
     
     @port_md5 = Digest::MD5::hexdigest(md5s.sort.join)
