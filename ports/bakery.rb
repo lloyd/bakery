@@ -1,3 +1,5 @@
+# The top level include file for the bakery 
+
 require File.join(File.dirname(__FILE__), 'Impl', 'builder')
 
 class Bakery
