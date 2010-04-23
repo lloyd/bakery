@@ -5,6 +5,7 @@ require 'rbconfig'
 require 'fileutils'
 require 'open-uri'
 require 'digest/md5'
+require 'pathname'
 include Config
 
 alias actual_system system
@@ -64,15 +65,19 @@ class Builder
 #    @logdir_path = File.join(@workdir_path, "logs")
 #    FileUtils.mkdir_p(@logdir_path)
 
+    # create and define directories where ports should put stuff
     @output_dir = output_dir ? output_dir : File.join(@port_dir, "dist")
     FileUtils.mkdir_p(@output_dir)    
 
-    # now let's ensure the include dir exists
     @output_inc_dir = File.join(@output_dir, "include", @pkg)
     FileUtils.mkdir_p(@output_inc_dir)    
 
     @output_bin_dir = File.join(@output_dir, "bin")
     FileUtils.mkdir_p(@output_bin_dir)    
+
+    @output_doc_dir = File.join(@output_dir, "doc", @pkg)
+    @output_share_dir = File.join(@output_dir, "share")
+    
 
     # lib dir will be updated at _pre_build_ time (once per build type)
 
@@ -136,6 +141,8 @@ class Builder
       :output_dir => @output_dir,
       :output_inc_dir => @output_inc_dir,
       :output_bin_dir => @output_bin_dir,
+      :output_doc_dir => @output_doc_dir,
+      :output_share_dir => @output_share_dir,
       :cmake_generator => @cmake_generator,
       :os_compile_flags => @os_compile_flags,
       :os_link_flags => @os_link_flags,
@@ -152,13 +159,22 @@ class Builder
     @port_md5 = nil
   end
 
-  def __libdir_contents
-    lib_dir = File.join(@output_dir, "lib")
-    if File.directory? lib_dir
-      Set.new(Dir.chdir(lib_dir){ Dir.glob("**/*").reject { |f| File.directory?(f) } })
-    else
-      Set.new
-    end
+  # fetch the current contents of one of the subdirs of output_dir (like lib/ include/
+  # share/ or bin/
+  def __output_contents
+    oc = Set.new
+    Dir.glob(File.join(@output_dir, "*")).each { |p|
+      prefix = File.basename(p)
+      # skip receipts dir
+      next if prefix == 'receipts'
+      if File.directory? p
+        oc.merge(Dir.chdir(p) {
+                   Dir.glob("**/*").reject { |f| File.directory?(f) }.collect { |f| File.join(prefix, f ) } })
+      else
+        oc.add(prefix)
+      end
+    }
+    oc
   end
 
   # a "port md5" is a single md5 that captures the state of all files in the
@@ -217,12 +233,11 @@ class Builder
     end
 
     # for purposes of receipts, let's take a snapshot of the lib directory
-    @libdir_before = __libdir_contents
+    @output_dir_before = __output_contents
 
     # the total set of files that were installed, populated during write_receipts
     # phase.
-    @libs_installed = Array.new
-    @incs_installed = Array.new
+    @files_installed = Array.new
   end
 
   def __fastMD5 file
@@ -532,22 +547,14 @@ class Builder
 
   def write_receipt
     sigs = Hash.new
-    @libs_installed = Array.new
-    __libdir_contents.subtract(@libdir_before).each { |l|
-      l = File.join("lib", l)
-      @libs_installed.push l
-      md5 = __fastMD5(File.join(@output_dir, l))
-      sigs[l] = md5
+    @files_installed = __output_contents.subtract(@output_dir_before)
+
+    Dir.chdir(@output_dir) { 
+      @files_installed.each { |l|
+        sigs[l] = __fastMD5(File.join(@output_dir, l))
+      }
     }
 
-    @incs_installed = Array.new
-    Dir.chdir(@output_inc_dir) { Dir.glob("**/*").each { |h|
-        next if File.directory? h
-        h = File.join("include", @pkg, h)
-        @incs_installed.push h
-        md5 = __fastMD5(File.join(@output_dir, h))
-        sigs[h] = md5
-    } }
     rf = {
       :recipe => __getPortMD5(),
       :files => sigs.sort
@@ -563,7 +570,10 @@ class Builder
     FileUtils.rm_f(fname)
     __redirectOutput(File.join(@workdir_path, "save_to_cache.log")) do
       Dir.chdir(@output_dir) {
-        cmdline = (@incs_installed | @libs_installed).map { |i| i.gsub(/([" ])/, "\\\1") }.join(" ") 
+        # lets' add the reciepts file to file_installed
+        @files_installed.add Pathname.new(@receipt_path).relative_path_from(Pathname.new(@output_dir)).to_s
+
+        cmdline = (@files_installed).map { |i| i.gsub(/([" ])/, "\\\1") }.join(" ") 
         if @platform == :Windows
           system("#{@sevenZCmd} a -ttar #{tmpfname.gsub(/([" ])/, "\\\1")} #{cmdline}")        
           system("#{@sevenZCmd} a -tgzip #{fname.gsub(/([" ])/, "\\\1")} #{tmpfname.gsub(/([" ])/, "\\\1")}")        
