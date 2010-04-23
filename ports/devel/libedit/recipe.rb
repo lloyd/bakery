@@ -31,6 +31,9 @@
       FileUtils.mv(File.join(c[:output_dir], "lib", "libedit.a"),
                    File.join(c[:output_lib_dir], "libedit_s.a"),
                    :verbose => true)
+      FileUtils.mv(File.join(c[:output_dir], "lib", "libedit.la"),
+                   File.join(c[:output_lib_dir], "libedit_s.la"),
+                   :verbose => true)
 
       # mv headers
       FileUtils.mv(File.join(c[:output_dir], "include", "histedit.h"),
