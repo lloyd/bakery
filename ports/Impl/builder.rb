@@ -594,13 +594,14 @@ class Builder
         # lets' add the reciepts file to file_installed
         @files_installed.add Pathname.new(@receipt_path).relative_path_from(Pathname.new(@output_dir)).to_s
 
-        cmdline = (@files_installed).map { |i| i.gsub(/([" ])/, "\\\1") }.join(" ") 
+        filelist = File.join(@workdir_path, "filelist.txt")
+        File.open(filelist, "w+") { |f| @files_installed.each { |fi| f.puts fi } }
         if @platform == :Windows
-          system("#{@sevenZCmd} a -ttar #{tmpfname.gsub(/([" ])/, "\\\1")} #{cmdline}")        
+          system("#{@sevenZCmd} a -ttar #{tmpfname.gsub(/([" ])/, "\\\1")} @#{filelist.gsub(/([" ])/, "\\\1")}")        
           system("#{@sevenZCmd} a -tgzip #{fname.gsub(/([" ])/, "\\\1")} #{tmpfname.gsub(/([" ])/, "\\\1")}")        
           FileUtils.rm_f(tmpfname)
         else
-          system("tar czf #{fname.gsub(/([" ])/, "\\\1")} #{cmdline}")
+          system("tar -T #{filelist.gsub(/([" ])/, "\\\1")} -czf #{fname.gsub(/([" ])/, "\\\1")}")
         end
       }
     end
