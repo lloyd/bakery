@@ -22,7 +22,7 @@
   },
   :install => {
     :Windows => lambda { |c|
-      Dir.glob(File.join(c[:build_dir], "yajl-1.0.7", "*")).each { |d|
+      Dir.glob(File.join(c[:build_dir], "yajl-1.0.9", "*")).each { |d|
         FileUtils.cp_r(d , c[:output_dir])
       }
     },

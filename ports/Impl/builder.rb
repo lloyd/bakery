@@ -187,7 +187,7 @@ class Builder
     # first, if the recipe contents have changed, or any of the contents inside
     # the port directory (patches, etc), then we need a rebuild.
     # (and we don't care if they've moved, really, it's about contents)
-    return true if r[:recipe] != __getPortMD5
+    return true if r[:recipe] != __getPortMD5()
 
     return false
   end
@@ -561,16 +561,18 @@ class Builder
     fname = File.join(@cache_dir, "#{@pkg}-#{__getPortMD5()}.tgz")
     FileUtils.rm_f(tmpfname)
     FileUtils.rm_f(fname)
-    Dir.chdir(@output_dir) {
-      cmdline = (@incs_installed | @libs_installed).map { |i| i.gsub(/([" ])/, "\\\1") }.join(" ") 
-      if @platform == :Windows
-        system("7z a -ttar #{tmpfname.gsub(/([" ])/, "\\\1")} #{cmdline}")        
-        system("7z a -tgzip #{fname.gsub(/([" ])/, "\\\1")} #{tmpfname.gsub(/([" ])/, "\\\1")}")        
-        FileUtils.rm_f(tmpfname)
-      else
-        system("tar czf #{fname.gsub(/([" ])/, "\\\1")} #{cmdline}")
-      end
-    }
+    __redirectOutput(File.join(@workdir_path, "save_to_cache.log")) do
+      Dir.chdir(@output_dir) {
+        cmdline = (@incs_installed | @libs_installed).map { |i| i.gsub(/([" ])/, "\\\1") }.join(" ") 
+        if @platform == :Windows
+          system("#{@sevenZCmd} a -ttar #{tmpfname.gsub(/([" ])/, "\\\1")} #{cmdline}")        
+          system("#{@sevenZCmd} a -tgzip #{fname.gsub(/([" ])/, "\\\1")} #{tmpfname.gsub(/([" ])/, "\\\1")}")        
+          FileUtils.rm_f(tmpfname)
+        else
+          system("tar czf #{fname.gsub(/([" ])/, "\\\1")} #{cmdline}")
+        end
+      }
+    end
     puts "      #{File.size(fname) / 1024}kb saved to #{File.basename(fname)}"
   end
 end
