@@ -1,6 +1,6 @@
 {
-  :url => "http://downloads.sourceforge.net/boost/boost_1_41_0.tar.bz2",
-  :md5 => "8bb65e133907db727a2a825c5400d0a6",
+  :url => "http://downloads.sourceforge.net/boost/boost_1_42_0.tar.bz2",
+  :md5 => "7bf3b4eb841b62ffb0ade2b82218ebe6",
   :configure => lambda { |c|
     # for the configure step we'll build bjam
     bjamSrcPath = File.join(c[:src_dir], "tools", "jam", "src")
