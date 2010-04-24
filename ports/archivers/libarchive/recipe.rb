@@ -21,6 +21,7 @@ end
     installDir = File.join(c[:build_dir], "install")
     zlibIncDir = File.join(File.dirname(c[:output_inc_dir]), "zlib")
     bzip2IncDir = File.join(File.dirname(c[:output_inc_dir]), "bzip2")
+    opensslIncDir = File.dirname(c[:output_inc_dir])
     if c[:platform] == :Windows
       realSrcDir = File.expand_path(realSrcDir).gsub(/\//, "\\")
       installDir = File.expand_path(installDir).gsub(/\//, "\\")
@@ -43,7 +44,16 @@ end
       cmakeGen = "-G \"#{c[:cmake_generator]}\"" if c[:cmake_generator]
     end
     buildType = "-DCMAKE_BUILD_TYPE:STRING=#{c[:build_type].to_s.capitalize}"
-    cmakeVars = "-DCMAKE_INSTALL_PREFIX:PATH=#{installDir} -DENABLE_ACL:BOOL=OFF -DENABLE_XATTR:BOOL=OFF -DENABLE_XML:BOOL=OFF -DENABLE_LZMA:BOOL=OFF -DENABLE_OPENSSL:BOOL=OFF"
+    cmakeVars = "-DCMAKE_INSTALL_PREFIX:PATH=#{installDir} "
+    cmakeVars += "-DENABLE_ACL:BOOL=OFF -DENABLE_XATTR:BOOL=OFF "
+    cmakeVars += "-DENABLE_XML:BOOL=OFF -DENABLE_LZMA:BOOL=OFF "
+    cmakeVars += "-DOPENSSL_INCLUDE_DIR:String=#{opensslIncDir} "
+    cmakeVars += "-DOPENSSL_LIBRARIES:String=libeay32_s.lib;ssleay32_s.lib "
+    cmakeVars += "-DENABLE_TAR_SHARED:BOOL=OFF "
+    cmakeVars += "-DENABLE_CPIO_SHARED:BOOL=OFF "
+    cmakeVars += "-DADDITIONAL_LINK_DIRS:String=#{c[:output_lib_dir]}"
+
+#    cmakeVars += "-DENABLE_OPENSSL:BOOL=OFF"
     
     # XXX, test_write_compress_program fails on doze, causes devenv to fail
     if c[:platform] == :Windows
