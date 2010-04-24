@@ -37,6 +37,12 @@ end
     ENV['EXT_LIB_DIR'] = c[:output_lib_dir]
     ENV['BZIP2_INC_DIR'] = bzip2IncDir
 
+    if c[:platform] == :Windows    
+      openssl_libs = "libeay32_s.lib;ssleay32_s.lib"
+    else 
+      openssl_libs = "ssl_s;crypto_s"
+    end
+      
     cmakeGen = nil
     if useNMake
       cmakeGen = "-G \"NMake Makefiles\"" if c[:platform] == :Windows
@@ -48,12 +54,10 @@ end
     cmakeVars += "-DENABLE_ACL:BOOL=OFF -DENABLE_XATTR:BOOL=OFF "
     cmakeVars += "-DENABLE_XML:BOOL=OFF -DENABLE_LZMA:BOOL=OFF "
     cmakeVars += "-DOPENSSL_INCLUDE_DIR:String=#{opensslIncDir} "
-    cmakeVars += "-DOPENSSL_LIBRARIES:String=libeay32_s.lib;ssleay32_s.lib "
+    cmakeVars += "-DOPENSSL_LIBRARIES:String=\"#{openssl_libs}\" "
     cmakeVars += "-DENABLE_TAR_SHARED:BOOL=OFF "
     cmakeVars += "-DENABLE_CPIO_SHARED:BOOL=OFF "
     cmakeVars += "-DADDITIONAL_LINK_DIRS:String=#{c[:output_lib_dir]}"
-
-#    cmakeVars += "-DENABLE_OPENSSL:BOOL=OFF"
     
     # XXX, test_write_compress_program fails on doze, causes devenv to fail
     if c[:platform] == :Windows
