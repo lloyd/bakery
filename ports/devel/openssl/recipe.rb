@@ -26,10 +26,13 @@ end
         configureCmd = "sh ./config"
       end
 
-      if c[:platform] == :MacOSX
+      if c[:platform] != :Windows
         includeDir = File.join(c[:src_dir], "include")
         libDir = c[:src_dir]
-        ENV['BP_EXTRA_CFLAGS'] = "-I#{includeDir} -L#{libDir} #{c[:os_compile_flags]}"
+        extraCFlags = "-I#{includeDir} -L#{libDir} #{c[:os_compile_flags]}"
+        extraCFlags += " -g -O0" if c[:build_type] == :debug
+        ENV['BP_EXTRA_CFLAGS'] = extraCFlags
+        ENV['LDFLAGS'] = ENV['LDFLAGS'].to_s + c[:os_link_flags]
       end
 
       system("#{configureCmd} no-shared --prefix=#{c[:build_dir]}")
@@ -39,17 +42,7 @@ end
   :build => lambda { |c|
     setupEnv(c)
     Dir.chdir(c[:src_dir]) {
-      # setup compile/link flags
-      if c[:platform] != :Windows
-        ENV['CFLAGS'] = ENV['CFLAGS'].to_s + c[:os_compile_flags]
-        if c[:build_type] == :debug
-          ENV['CFLAGS'] = ENV['CFLAGS'].to_s + " -g -O0"
-        end
-        ENV['LDFLAGS'] = ENV['LDFLAGS'].to_s + c[:os_link_flags]
-      end
-
       makeCmd = c[:platform] == :Windows ? "nmake -f ms\\nt.mak" : "make"
-
       system("ms\\do_masm.bat") if c[:platform] == :Windows
       system("#{makeCmd}")
       system("#{makeCmd} test")
