@@ -50,7 +50,8 @@
       # now use bjam to build 
       baseCmd = "#{bjamPath} toolset=#{toolset} "
       baseCmd += " link=static threading=multi runtime-link=static"
-      baseCmd += " --build-dir=#{c[:build_dir]} stage"
+      rpToBuildDir = Pathname.new(c[:build_dir]).relative_path_from(Pathname.pwd).to_s
+      baseCmd += " --build-dir=#{rpToBuildDir} stage"
       if c[:platform] == :MacOSX
         baseCmd += " --user-config=user-config.jam"
       end
