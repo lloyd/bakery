@@ -1,6 +1,8 @@
 {
   :url => 'http://github.com/downloads/lloyd/bakery/GraphicsMagick-1.3.7.tar.bz2',
   :md5 => '42bfd382ddcda399880721170bcbf61b',
+  :deps => [ 'jpeg', 'libpng', 'zlib' ],
+  
   :post_patch => {
     :Windows => lambda { |c| 
       puts "Running post-patch"

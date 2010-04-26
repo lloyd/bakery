@@ -15,6 +15,7 @@ end
 {
   :url => 'http://libarchive.googlecode.com/files/libarchive-2.8.0.tar.gz',
   :md5 => '400fd9ba51fffe6c65c75387fffba9d9',
+  :deps => [ 'openssl', 'zlib', 'bzip2' ],
 
   :configure => lambda { |c|
     realSrcDir = c[:src_dir]

@@ -58,6 +58,8 @@ class Builder
 #      __checkSym @recipe, sym
 #    }
 
+    @deps = (@recipe.has_key? :deps) ? @recipe[:deps] : Array.new
+
     @distfiles_path = File.join(@cache_dir, "distfiles")
     FileUtils.mkdir_p(@distfiles_path)
 
@@ -158,6 +160,10 @@ class Builder
     # port md5 calculation is expensive.  we only calculate it once per invocation
     # using this member as a cache
     @port_md5 = nil
+  end
+
+  def deps
+    @deps
   end
 
   # fetch the current contents of one of the subdirs of output_dir (like lib/ include/

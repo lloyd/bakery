@@ -4,6 +4,17 @@ require File.join(File.dirname(__FILE__), 'Impl', 'builder')
 require File.join(File.dirname(__FILE__), 'Impl', 'build_timer')
 require File.join(File.dirname(__FILE__), 'Impl', 'fast_md5')
 
+
+require 'tsort'
+     
+class Hash
+  include TSort
+  alias tsort_each_node each_key
+  def tsort_each_child(node, &block)
+    fetch(node).each(&block)
+  end
+end
+
 class Bakery
   @@distfiles_dir = File.join(File.dirname(__FILE__), "distfiles")
   @@work_dir = File.join(File.dirname(__FILE__), "work")
@@ -20,6 +31,22 @@ class Bakery
     @use_source = order[:use_source]
     @use_recipe = order[:use_recipe]
     @cache_dir = File.join(ENV['HOME'], ".bakery_pkgcache")
+
+    # now handle dependencies...
+    fullDeps = Hash.new
+
+    # first track down all dependencies
+    stack = @packages
+    while stack.length > 0
+      p = stack.pop
+      next if fullDeps.has_key? p
+      recipe = @use_recipe[p] if @use_recipe && @use_recipe.has_key?(p) 
+      b = Builder.new(p, @verbose, @output_dir, @cmake_generator, @cache_dir, recipe)      
+      fullDeps[p] = b.deps
+      b.deps.each { |d| stack.push d }
+    end
+    # topological sort
+    @packages = fullDeps.tsort
   end
   
   def build
