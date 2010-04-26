@@ -8,10 +8,11 @@ require 'digest/md5'
 require 'pathname'
 include Config
 
+require File.join(File.dirname(__FILE__), 'build_timer')
+
 alias actual_system system
 
 def system *args
-#  puts "system(\"#{args.join('", "')}\")"
   rv = actual_system(*args)
   raise "system invocation failed (#{args.join(' ')})" if !rv
   raise "system call returned non success: #{$?}" if $? != 0
@@ -56,7 +57,7 @@ class Builder
 #      __checkSym @recipe, sym
 #    }
 
-    @distfiles_path = File.join(@port_dir, "distfiles")
+    @distfiles_path = File.join(@cache_dir, "distfiles")
     FileUtils.mkdir_p(@distfiles_path)
 
     @workdir_path = File.join(@port_dir, "work", @pkg)
@@ -221,12 +222,12 @@ class Builder
   end
 
   def clean
-    puts "      removing previous build artifacts (#{@workdir_path})..."
+    log_with_time "      removing previous build artifacts (#{@workdir_path})..."
     FileUtils.rm_rf(@workdir_path)
     FileUtils.mkdir_p(@workdir_path)
 
     if File.exist?(@receipt_path)
-      puts "      removing previous build output..."
+      log_with_time "      removing previous build output..."
       __redirectOutput("clean") do
         # now remove installed artifacts if needed
         r = File.open( @receipt_path ) { |yf| YAML::load( yf ) }
@@ -277,14 +278,14 @@ class Builder
 
   def fetch
     if !@recipe.has_key?(:url) || !@recipe[:url]
-      puts "      nothing to fetch for this port"
+      log_with_time "      nothing to fetch for this port"
       return
     end
 
     url = @recipe[:url]
 
     if !checkMD5
-      puts "      #{url}"
+      log_with_time "      #{url}"
       perms = @platform == :Windows ? "wb" : "w"
       totalSize = 0
       lastPercent = 0
@@ -295,8 +296,9 @@ class Builder
           :content_length_proc => lambda {|t|
               if (t && t > 0)
                 totalSize = t
-                puts "      reading #{totalSize} bytes..."
-                STDOUT.printf("      %% down: ")
+                log_with_time "      reading #{totalSize} bytes..."
+                STDOUT.printf log_get_time
+                STDOUT.printf("       %% down: ")
                 STDOUT.flush
               else
                 STDOUT.print("      downloading tarball of unknown size")
@@ -323,7 +325,7 @@ class Builder
             end
       throw "md5 mismatch on #{@tarball} downloaded from #{url}" if !checkMD5
     else
-      puts "      #{File.basename(@tarball)} already in distfiles/ no download required"
+      log_with_time "      #{File.basename(@tarball)} already in distfiles/ no download required"
     end
   end
 
@@ -347,7 +349,7 @@ class Builder
 
   def unpack
     if !@tarball
-      puts "      nothing to unpack for this port"
+      log_with_time "      nothing to unpack for this port"
       return
     end
     
@@ -399,7 +401,7 @@ class Builder
     Dir.glob(File.join(srcPath, "*")).each { |d|
       @unpack_dir = d if File.directory? d
     }
-    puts "      unpacked to #{@unpack_dir}"
+    log_with_time "      unpacked to #{@unpack_dir}"
 
     @src_dir = File.expand_path(@unpack_dir)
     @conf[:src_dir] = @src_dir
@@ -440,15 +442,13 @@ class Builder
       patches += Dir.glob(File.join(portDir, "*_#{p.to_s}.patch"))
     end
     patches.sort!
-    puts "      Found #{patches.length} patch(es)!"
+    log_with_time "      Found #{patches.length} patch(es)!"
     patches.each do |p|
       p = File.expand_path(p)
-      puts "      Applying #{File.basename(p, ".patch")}"
+      log_with_time "      Applying #{File.basename(p, ".patch")}"
       __redirectOutput("patch", true) do
-        puts "output redirected"
         # now let's apply p  
         Dir.chdir(@src_dir) {
-          puts "inside src_dir"
           pline = "#{@patch_cmd} -p1 < #{p}"
           puts "executing patch cmd: #{pline}" 
           system(pline)
@@ -542,7 +542,7 @@ class Builder
 
     if obj && obj.has_key?(sym)
       if obj[sym] == nil
-        puts "      (not required on this platform)"
+        log_with_time "      (not required on this platform)"
       elsif obj[sym].kind_of?(Hash)
         invokeLambda(step, obj[sym], @platform)
       elsif obj[sym].kind_of?(String)
@@ -555,7 +555,7 @@ class Builder
         throw "invalid recipe file (handling #{sym})"
       end
     else 
-      puts "      WARNING: #{step} step not supplied!"
+      log_with_time "      WARNING: #{step} step not supplied!"
     end
   end
 
@@ -620,6 +620,6 @@ class Builder
         end
       }
     end
-    puts "      #{File.size(fname) / 1024}kb saved to #{File.basename(fname)}"
+    log_with_time "      #{File.size(fname) / 1024}kb saved to #{File.basename(fname)}"
   end
 end
