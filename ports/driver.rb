@@ -14,6 +14,8 @@ if ARGV.length < 1
   puts "      [ --use_source=<path> ] -- optional path to local source.  "
   puts "                               (tarball or directory)"
   puts "   list               -- list all ports"
+  puts "   check              -- check the bakery and ensure the output"
+  puts "                         directory is consistent"
   exit 1
 end
 
@@ -54,6 +56,9 @@ when 'list'
   }                                                  
   puts "#{allPorts.length} ports available:"
   allPorts.sort.each { |p| puts "  #{p}" }
+when 'check'
+  b = Bakery.new({ :verbose => true }) 
+  pp b.check
 else
   STDERR.puts "unrecognized command: #{myargv[1]}"
   exit 1

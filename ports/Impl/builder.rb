@@ -9,6 +9,7 @@ require 'pathname'
 include Config
 
 require File.join(File.dirname(__FILE__), 'build_timer')
+require File.join(File.dirname(__FILE__), 'fast_md5')
 
 alias actual_system system
 
@@ -217,10 +218,6 @@ class Builder
     return false
   end
 
-  def check
-
-  end
-
   def clean
     log_with_time "      removing previous build artifacts (#{@workdir_path})..."
     FileUtils.rm_rf(@workdir_path)
@@ -249,21 +246,6 @@ class Builder
     # the total set of files that were installed, populated during write_receipts
     # phase.
     @files_installed = Array.new
-  end
-
-  def __fastMD5 file
-    d = Digest::MD5.new
-    chunk = nil
-    md5 = nil
-    begin
-      File.open(file, "rb") { |f|
-        while (chunk = f.sysread(4096))
-          d.update(chunk)
-        end
-      }
-    rescue EOFError
-      d.to_s
-    end
   end
 
   def checkMD5 
