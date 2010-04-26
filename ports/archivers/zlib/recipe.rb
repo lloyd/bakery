@@ -1,6 +1,6 @@
 {
-  :url => "http://github.com/downloads/lloyd/bakery/zlib-1.2.4.tar.gz",
-  :md5 => "47f6ed51b3c83a8534f9228531effa18",
+  :url => "http://prdownloads.sourceforge.net/libpng/zlib-1.2.5.tar.bz2?download",
+  :md5 => "be1e89810e66150f5b0327984d8625a0",
   :configure => {
     [ :Linux, :MacOSX ] => lambda { |c|
       ENV['CFLAGS'] = "#{c[:os_compile_flags]} #{ENV['CFLAGS']}"
