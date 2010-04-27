@@ -72,7 +72,7 @@
     }
 
     # copy static libs
-    buildType = c[:build_type].to_s
+    buildType = c[:build_type].to_s.gsub(/[aeiou]/, "")
     puts "copying #{buildType} libraries..."
 
     libSuffix = ((c[:platform] == :Windows) ? "lib" : "a")
