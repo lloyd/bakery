@@ -8,9 +8,15 @@ require 'tsort'
 
 # implement combination(2) inline for support for ruby < 1.8.7
 def mycombinations arr
-  (0..arr.length-1).to_a.collect { |i| arr[(i+1),arr.length].collect{ |j| [arr[i],j] } }.flatten(1)
+  combs = Array.new
+  i = 0
+  while i < arr.length - 1
+    arr[i+1,arr.length].each { |j| combs.push [arr[i], j ] }
+    i += 1
+  end
+  combs
 end
-     
+
 class Hash
   include TSort
   alias tsort_each_node each_key
