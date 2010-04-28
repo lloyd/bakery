@@ -83,6 +83,12 @@ The Recipe - By build phase
 
 ### `:post_patch`
 
+#### intent
+
+#### working directory
+
+#### arguments
+
 ### `:pre_build`
 
 ### `:configure`
