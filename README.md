@@ -38,11 +38,11 @@ use in software projects, that is why the bakery exists.
  * terse yet expressive recipe file format (in ruby)
  * support for source local ports ("recipes" that you write or alter and are not hosted in the bakery)
 
-#### Adding Ports ("recipes")
+### Adding Ports ("recipes")
 
 Use some software that's not currently in the bakery?  Please visit the Bakers Guide (BakersGuide.md)
 
-#### Placing Orders
+### Placing Orders
 
 Starting a new project or have an existing project where managing 3rd
 party source is unwieldy?  Using the bakery is simple:
