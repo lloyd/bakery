@@ -4,8 +4,12 @@ require File.join(File.dirname(__FILE__), 'Impl', 'builder')
 require File.join(File.dirname(__FILE__), 'Impl', 'build_timer')
 require File.join(File.dirname(__FILE__), 'Impl', 'fast_md5')
 
-
 require 'tsort'
+
+# implement combination(2) inline for support for ruby < 1.8.7
+def mycombinations arr
+  (0..arr.length-1).to_a.collect { |i| arr[(i+1),arr.length].collect{ |j| [arr[i],j] } }.flatten(1)
+end
      
 class Hash
   include TSort
@@ -139,11 +143,11 @@ class Bakery
     # first let's ensure there's no files owned by multiple ports while we build up a
     # set of all owned files
     allOwnedFiles = Hash.new
-    receipts.collect{ |pkg, rcpt|
+    mycombinations(receipts.collect{ |pkg, rcpt|
       rcpt[:files].each { |a| allOwnedFiles[a[0]] = a[1] }
       fset = Set.new(rcpt[:files].map { |arr| arr[0] }) 
       [pkg, fset]
-    }.combination(2).each { |a, b|
+    }).each { |a, b|
       c = a[1] & b[1]
       state[:error].push "#{a[0]} & #{b[0]} both think they own certain files (vewy, vewy, bad): #{c.to_a.join(', ')}" if c.size > 0
     }
