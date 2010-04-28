@@ -12,6 +12,8 @@ a pile of source code and to turn it into something we can use.  Here's a comple
 recipe (for YAJL, a popular json parsing library), this file is stored in a directory named
 'yajl', in a file named 'recipe.rb':
 
+XXX: consider a simpler example.  hello world?
+
     {
       :url => 'http://github.com/downloads/lloyd/yajl/yajl-1.0.9.tar.gz',
       :md5 => '8643ff2fef762029e51c86882a4d0fc6',
@@ -74,8 +76,7 @@ Scanning the above file you'll see `:configure`, `:build`, `:install`, `:post_in
 shell command to execute to run the phase) or a function.  Further, you may specify different
 code blocks for different platforms by defining the implementation (value) of a build phase 
 as a map, where the subkeys are the platform (single symbol), or platforms (array of symbols)
-that the build step applies to.  
-
+that the build step applies to. 
 
 The Recipe - By build phase
 ---------------------------
@@ -93,3 +94,19 @@ The Recipe - By build phase
 ### `:post_install`
 
 ### `:post_install_common`
+
+Testing your recipe with driver.rb
+----------------------------------
+
+The "Work Directory" and checking out what happened
+----------------------------------------
+
+Bakery Layout Conventions
+-------------------------
+
+### include layout
+
+### build type support
+
+Patching
+--------
