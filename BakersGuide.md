@@ -50,7 +50,7 @@ XXX: consider a simpler example.  hello world?
           system("make install")
     
           # now let's move output to the appropriate place
-          # i.e. move from lib/libfoo.a to lib/debug/foo.a
+          # i.e. move from lib/libfoo.a to lib/debug/libfoo.a
           Dir.glob(File.join(c[:output_dir], "lib", "*")).each { |f|
             FileUtils.mv(f, c[:output_lib_dir]) if !File.directory? f
           }
