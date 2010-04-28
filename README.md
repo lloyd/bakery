@@ -1,7 +1,7 @@
 Welcome to the Bakery
 ---------------------
 
-![Baker smurf](BakerSmurf.png "Baker smurf.") The "bakery" is a framework to
+![Baker smurf](http://github.com/lloyd/bakery/raw/master/BakerSmurf.png "Baker smurf.") The "bakery" is a framework to
 download, unpack, patch, and build external software.  It is a "ports" system
 designed to be used by software projects targeting end users.  
 
