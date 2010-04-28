@@ -34,9 +34,11 @@ end
         ENV['LDFLAGS'] = ENV['LDFLAGS'].to_s + c[:os_link_flags]
       end
 
-      # Hrm, the gost engine, which is apparently fairly new to openssl,
-      # causes link errors.  We don't need it, so flush it.
-      system("#{configureCmd} no-hw no-shared no-gost --prefix=#{c[:build_dir]}")
+      # - Disable assembler routines (requires a different assembler on doze)
+      # - Disable crypto hardware support
+      # - Disable the gost engine, which is apparently fairly new to openssl, 
+      #   since it causes link errors.  We don't need it, so flush it.
+      system("#{configureCmd} no-hw no-asm no-shared no-gost --prefix=#{c[:build_dir]}")
     }
   },
 
@@ -45,7 +47,7 @@ end
     Dir.chdir(c[:src_dir]) {
       makeCmd = c[:platform] == :Windows ? "nmake -f ms\\nt.mak" : "make"
 
-      system("ms\\do_masm.bat") if c[:platform] == :Windows
+      system("ms\\do_ms.bat") if c[:platform] == :Windows
       system("#{makeCmd}")
       system("#{makeCmd} test")
       system("#{makeCmd} install")
@@ -88,8 +90,7 @@ end
       }
       
       puts "Installing openssl.cnf..."
-      src = "openssl.cnf"
-      src = File.join("ssl", src) if c[:platform] != :Windows
+      src = File.join("ssl", "openssl.cnf")
       dest = File.join(c[:output_dir], "ssl")
       FileUtils.mkdir_p(dest)
       FileUtils.cp_r(src, dest, :verbose => true)
