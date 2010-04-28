@@ -17,7 +17,8 @@
   :build => {
     :Windows => lambda { |c|
       buildStr = c[:build_type].to_s.capitalize
-      system("devenv YetAnotherJSONParser.sln /Build #{buildStr}")
+      devenvOut = File.join(c[:log_dir], "devenv_#{c[:build_type]}.txt")
+      system("devenv YetAnotherJSONParser.sln /Build #{buildStr} > #{devenvOut}")
     },
     [ :MacOSX, :Linux ] => "make" 
   },

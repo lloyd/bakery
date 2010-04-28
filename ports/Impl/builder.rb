@@ -149,7 +149,8 @@ class Builder
       :cmake_generator => @cmake_generator,
       :os_compile_flags => @os_compile_flags,
       :os_link_flags => @os_link_flags,
-      :recipe_dir => @recipe_dir
+      :recipe_dir => @recipe_dir,
+      :log_dir => @logdir_path
     }
 
     # where shall our manifest live?

@@ -59,7 +59,8 @@
     :Windows => lambda { |c|
       Dir.chdir(File.join(c[:src_dir])) do
         bt = c[:build_type].to_s.capitalize
-        system("devenv VisualMagick\\VisualStaticMT.sln /build #{bt}")
+        devenvOut = File.join(c[:log_dir], "devenv_#{c[:build_type]}.txt")
+        system("devenv VisualMagick\\VisualStaticMT.sln /build #{bt} > #{devenvOut}")
       end
     }
   },

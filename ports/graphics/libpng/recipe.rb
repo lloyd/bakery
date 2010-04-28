@@ -40,7 +40,8 @@
     :Windows => lambda { |c|
       Dir.chdir(File.join(c[:src_dir], "projects", "visualc71")) do
         bt = c[:build_type].to_s.capitalize
-        system("devenv libpng.sln /build \"LIB #{bt}\" /project libpng")
+        devenvOut = File.join(c[:log_dir], "devenv_#{c[:build_type]}.txt")
+        system("devenv libpng.sln /build \"LIB #{bt}\" /project libpng > #{devenvOut}")
       end
     }
   },

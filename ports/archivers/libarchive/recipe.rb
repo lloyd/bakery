@@ -76,8 +76,9 @@ end
     
     if c[:platform] == :Windows && !useNMake
       buildType = c[:build_type].to_s.capitalize
-      system("devenv libarchive.sln /build #{buildType}")
-      system("devenv libarchive.sln /build #{buildType} /project INSTALL")
+      devenvOut = File.join(c[:log_dir], "devenv_#{c[:build_type]}.txt")
+      system("devenv libarchive.sln /build #{buildType} > #{devenvOut}")
+      system("devenv libarchive.sln /build #{buildType} /project INSTALL >> #{devenvOut}")
     else
       makeCmd = c[:platform] == :Windows ? "nmake" : "make"
       system("#{makeCmd} -e")

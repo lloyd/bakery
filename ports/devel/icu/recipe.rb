@@ -35,7 +35,8 @@
   :build => {
     :Windows => lambda { |c| 
       Dir.chdir(c[:src_dir]) do
-        system("devenv source\\allinone\\allinone.sln /build #{c[:build_type]} > make_out.txt")
+        devenvOut = File.join(c[:log_dir], "devenv_#{c[:build_type]}.txt")
+        system("devenv source\\allinone\\allinone.sln /build #{c[:build_type]} > #{devenvOut}")
       end
     },
     [ :MacOSX, :Linux ] => lambda { |c|

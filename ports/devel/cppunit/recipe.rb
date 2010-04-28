@@ -28,7 +28,7 @@
     :Windows => lambda { |c|
       buildType = c[:build_type].to_s
       Dir.chdir(File.join(c[:src_dir], "src")) do
-        devenvOut = File.join(c[:build_dir], "devenv.out")
+        devenvOut = File.join(c[:log_dir], "devenv_#{c[:build_type]}.txt")
         system("devenv CppUnitLibraries.sln /project cppunit /build \"#{buildType} static\" >#{devenvOut}")
       end
     }
