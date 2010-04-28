@@ -325,9 +325,9 @@ class Builder
       __redirectOutput("install_from_cache") do
         Dir.chdir(@output_dir) do
           if @platform == :Windows
-            system("#{@sevenZCmd} x -y #{fname}")
+            system("\"#{@sevenZCmd}\" x -y \"#{fname}\"")
           else
-            system("tar xvzf #{fname}")
+            system("tar xvzf \"#{fname}\"")
           end
           return true
         end
@@ -350,34 +350,34 @@ class Builder
         puts "      unpacking #{path}..."
         if path =~ /.tar./
           if @platform == :Windows
-            system("#{@sevenZCmd} x #{path}")
+            system("\"#{@sevenZCmd}\" x \"#{path}\"")
             tarPath = File.basename(path, ".*")
-            system("#{@sevenZCmd} x #{tarPath}")
+            system("\"#{@sevenZCmd}\" x \"#{tarPath}\"")
             FileUtils.rm_f(tarPath)
           else
             if File.extname(path) == ".bz2"
-              system("tar xvjf #{path}")
+              system("tar xvjf \"#{path}\"")
             elsif File.extname(path) == ".gz"
-              system("tar xvzf #{path}")
+              system("tar xvzf \"#{path}\"")
             else
               throw "unrecognized format for #{path}"
             end
           end
         elsif path =~ /.tgz/
           if @platform == :Windows
-            system("#{@sevenZCmd} x #{path}")
+            system("\"#{@sevenZCmd}\" x \"#{path}\"")
             tarPath = File.basename(path, ".*") + ".tar"
             puts "untarring #{tarPath}..."
-            system("#{@sevenZCmd} x #{tarPath}")
+            system("\"#{@sevenZCmd}\" x \"#{tarPath}\"")
             FileUtils.rm_f(tarPath)
           else
-            system("tar xvzf #{path}")
+            system("tar xvzf \"#{path}\"")
           end
         elsif path =~ /.zip/
           if @platform == :Windows
-            system("#{@sevenZCmd} x #{path}")
+            system("\"#{@sevenZCmd}\" x \"#{path}\"")
           else
-            system("tar xvzf #{path}")
+            system("tar xvzf \"#{path}\"")
           end
         else
           throw "unrecognized format for #{path}"
@@ -438,7 +438,7 @@ class Builder
       __redirectOutput("patch", true) do
         # now let's apply p  
         Dir.chdir(@src_dir) {
-          pline = "#{@patch_cmd} -p1 < #{p}"
+          pline = "\"#{@patch_cmd}\" -p1 < \"#{p}\""
           puts "executing patch cmd: #{pline}" 
           system(pline)
         }
@@ -603,9 +603,9 @@ class Builder
         filelist = File.join(@workdir_path, "filelist.txt")
         File.open(filelist, "w+") { |f| @files_installed.each { |fi| f.puts fi } }
         if @platform == :Windows
-          system("#{@sevenZCmd} a -y #{fname.gsub(/([" ])/, "\\\1")} @#{filelist.gsub(/([" ])/, "\\\1")}")
+          system("\"#{@sevenZCmd}\" a -y \"#{fname}\" @\"#{filelist}\"")
         else
-          system("tar -T #{filelist.gsub(/([" ])/, "\\\1")} -czf #{fname.gsub(/([" ])/, "\\\1")}")
+          system("tar -T \"#{filelist}\" -czf \"#{fname}\"")
         end
       }
     end
