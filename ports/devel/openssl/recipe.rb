@@ -14,9 +14,8 @@ def setupEnv(c)
 end
 
 {
-  :url => "http://openssl.org/source/openssl-0.9.8k.tar.gz",
-  :md5 => "e555c6d58d276aec7fdc53363e338ab3",
-
+  :url => "http://openssl.org/source/openssl-1.0.0.tar.gz",
+  :md5 => "89eaa86e25b2845f920ec00ae4c864ed",
   :configure => lambda { |c|
     Dir.chdir(c[:src_dir]) {
       setupEnv(c)
@@ -35,7 +34,9 @@ end
         ENV['LDFLAGS'] = ENV['LDFLAGS'].to_s + c[:os_link_flags]
       end
 
-      system("#{configureCmd} no-shared --prefix=#{c[:build_dir]}")
+      # Hrm, the gost engine, which is apparently fairly new to openssl,
+      # causes link errors.  We don't need it, so flush it.
+      system("#{configureCmd} no-hw no-shared no-gost --prefix=#{c[:build_dir]}")
     }
   },
 
@@ -43,6 +44,7 @@ end
     setupEnv(c)
     Dir.chdir(c[:src_dir]) {
       makeCmd = c[:platform] == :Windows ? "nmake -f ms\\nt.mak" : "make"
+
       system("ms\\do_masm.bat") if c[:platform] == :Windows
       system("#{makeCmd}")
       system("#{makeCmd} test")

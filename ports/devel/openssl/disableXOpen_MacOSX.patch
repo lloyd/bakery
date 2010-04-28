@@ -1,5 +1,5 @@
---- openssl-0.9.8k/crypto/rand/randfile.c.orig	2009-05-13 15:20:56.000000000 -0700
-+++ openssl-0.9.8k/crypto/rand/randfile.c	2009-05-13 15:23:37.000000000 -0700
+--- openssl-1.0.0/crypto/rand/randfile.c.orig	2010-04-26 10:54:03.000000000 -0700
++++ openssl-1.0.0/crypto/rand/randfile.c	2010-04-26 10:54:29.000000000 -0700
 @@ -57,7 +57,8 @@
   */
  
