@@ -28,7 +28,12 @@
   },
   :build => {
     [ :Linux, :MacOSX ] => "make",
-    [ :Windows ] => "nmake"
+    [ :Windows ] => lambda { |c|
+      ENV['OLD_PATH'] = "#{ENV['PATH']}"
+      ENV['PATH'] = "#{ENV['PATH']};#{c[:wintools_dir].gsub('/', '\\')}\\bin"
+      system("nmake")
+      ENV['PATH'] = "#{ENV['OLD_PATH']}"
+    }
   },
   :install => {
     [ :Linux, :MacOSX ] => lambda { |c|
@@ -41,7 +46,12 @@
         FileUtils.mv(l, tgt, :verbose => true)
       }
     },
-    [ :Windows ] => "nmake install"
+    [ :Windows ] => lambda { |c|
+      ENV['OLD_PATH'] = "#{ENV['PATH']}"
+      ENV['PATH'] = "#{ENV['PATH']};#{c[:wintools_dir].gsub('/', '\\')}\\bin"
+      system("nmake install")
+      ENV['PATH'] = "#{ENV['OLD_PATH']}"
+    }
   },
   :post_install_common => {
     [ :Linux, :MacOSX ] => lambda { |c|

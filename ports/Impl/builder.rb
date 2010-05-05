@@ -27,7 +27,7 @@ class Builder
     end
   end
 
-  def initialize pkg, verbose, output_dir, cmake_gen, cache_dir, recipe_location = nil
+  def initialize pkg, verbose, output_dir, cmake_gen, cache_dir, wintools_dir, recipe_location = nil
     @pkg = pkg
     @verbose = verbose
     @cache_dir = cache_dir
@@ -67,6 +67,9 @@ class Builder
     FileUtils.mkdir_p(@workdir_path)
 
     @logdir_path = File.join(@workdir_path, "logs")
+
+    # create and define directories where ports should put stuff
+    @wintools_dir = wintools_dir ? wintools_dir : File.join(@port_dir, "WinTools")
 
     # create and define directories where ports should put stuff
     @output_dir = output_dir ? output_dir : File.join(@port_dir, "dist")
@@ -142,6 +145,7 @@ class Builder
     @conf = {
       :platform => @platform,
       :output_dir => @output_dir,
+      :wintools_dir => @wintools_dir,
       :output_inc_dir => @output_inc_dir,
       :output_bin_dir => @output_bin_dir,
       :output_doc_dir => @output_doc_dir,

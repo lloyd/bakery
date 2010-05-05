@@ -36,6 +36,9 @@ class Bakery
     @output_dir = File.join(File.dirname(__FILE__), "dist")
     @output_dir = order[:output_dir] if (order && order[:output_dir])
     @output_dir = File.expand_path(@output_dir)
+    @wintools_dir = File.join(File.dirname(__FILE__), "WinTools")
+    @wintools_dir = order[:wintools_dir] if (order && order[:wintools_dir])
+    @wintools_dir = File.expand_path(@wintools_dir)
     @packages = order.has_key?(:packages) ? order[:packages] : Array.new
     @cmake_generator = (order && order[:cmake_generator])
     @use_source = order[:use_source]
@@ -51,7 +54,7 @@ class Bakery
       p = stack.pop
       next if fullDeps.has_key? p
       recipe = @use_recipe[p] if @use_recipe && @use_recipe.has_key?(p) 
-      b = Builder.new(p, @verbose, @output_dir, @cmake_generator, @cache_dir, recipe)      
+      b = Builder.new(p, @verbose, @output_dir, @cmake_generator, @cache_dir, @wintools_dir, recipe)      
       fullDeps[p] = b.deps
       b.deps.each { |d| stack.push d }
     end
@@ -64,7 +67,7 @@ class Bakery
     @packages.each { |p|
       recipe = @use_recipe[p] if @use_recipe && @use_recipe.has_key?(p) 
       log_with_time "--- building #{p}#{recipe ? (" (" + recipe + ")") : ""} ---" if @verbose      
-      b = Builder.new(p, @verbose, @output_dir, @cmake_generator, @cache_dir, recipe)
+      b = Builder.new(p, @verbose, @output_dir, @cmake_generator, @cache_dir, @wintools_dir, recipe)
       if !b.needsBuild
         log_with_time "  - skipping #{p}, already built!" if @verbose              
         next
@@ -139,7 +142,7 @@ class Bakery
     Dir.glob(File.join(@output_dir, "receipts", "*.yaml")).each { |rp|
       pkg = File.basename(rp, ".yaml")
       recipe = @use_recipe[pkg] if @use_recipe && @use_recipe.has_key?(pkg)       
-      b = Builder.new(pkg, @verbose, @output_dir, @cmake_generator, @cache_dir, recipe)
+      b = Builder.new(pkg, @verbose, @output_dir, @cmake_generator, @cache_dir, @wintools_dir, recipe)
       state[:info].push "#{pkg} is out of date, and needs to be built" if b.needsBuild
 
       # now load up the receipts
