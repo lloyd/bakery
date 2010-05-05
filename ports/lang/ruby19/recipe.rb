@@ -68,7 +68,7 @@
         FileUtils.mv(h, c[:output_inc_dir], :verbose => true)
       }
       FileUtils.rmdir(rb19dir)
-    }
+    },
     [ :Windows ] => lambda { |c|
       rb19dir = File.join(c[:output_dir], "include", "ruby-1.9.1")
       Dir.glob(File.join(rb19dir, "*")).each { |h|
