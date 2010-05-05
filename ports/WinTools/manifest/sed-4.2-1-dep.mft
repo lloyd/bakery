@@ -1,0 +1,5 @@
+bin/libiconv2.dll 
+bin/libintl3.dll 
+bin/regex2.dll 
+manifest/sed-4.2-1-dep.mft
+manifest/sed-4.2-1-dep.ver 0f59c7791f3ed9fe5d1585f6ef1bf7b4
