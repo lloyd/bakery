@@ -68,6 +68,7 @@ end
       else
         ["libssl", "libcrypto"].each() do |l|
           src = File.join("lib", "#{l}.a")
+          src = File.join("lib64", "#{l}.a") if !File.exist? src
           dst = File.join(c[:output_lib_dir], "#{l}_s.a")
           puts "copying from #{src} to #{dst}"
           FileUtils.cp(src, dst, :verbose => true)
