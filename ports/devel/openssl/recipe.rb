@@ -34,11 +34,14 @@ end
         ENV['LDFLAGS'] = ENV['LDFLAGS'].to_s + c[:os_link_flags]
       end
 
+      # XXX: would this hurt on all unicies?
+      fPICFlag = (c[:platform] == :Linux) ? "-fPIC" : ""
+
       # - Disable assembler routines (requires a different assembler on doze)
       # - Disable crypto hardware support
       # - Disable the gost engine, which is apparently fairly new to openssl, 
       #   since it causes link errors.  We don't need it, so flush it.
-      system("#{configureCmd} no-hw no-asm no-shared no-gost --prefix=#{c[:build_dir]}")
+      system("#{configureCmd} no-hw no-asm no-shared no-gost --prefix=#{c[:build_dir]} #{fPICFlag}")
     }
   },
 
