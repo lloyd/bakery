@@ -1,6 +1,6 @@
 {
-  :url => 'http://download.github.com/lloyd-node-lloyd_v1-0-gcc06459.tar.gz',
-  :md5 => 'e1b133fe1d06e8a417d39fc3dc846d4c',
+  :url => 'http://github.com/downloads/lloyd/bakery/nodejs-lloyd_v1.tar.bz2',
+  :md5 => '3b471b6431a45ed2c5bad1af8a8bb148',
   :configure => {
     :Windows => lambda { |c|
       raise "not yet ported to windows"
