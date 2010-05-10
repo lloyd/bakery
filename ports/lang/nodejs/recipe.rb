@@ -24,9 +24,10 @@
       raise "not yet ported to windows"
     },
     [:Linux, :MacOSX] => lambda { |c|
-      # copy in static libraries
+      # copy in static libraries (appending _s to follow bakery conventions)
       Dir.glob(File.join(c[:build_dir], "**", "lib*.a")).each { |f|
-        FileUtils.cp(f, c[:output_lib_dir], :preserve => true)
+        newName = File.basename(f).sub(/.a$/, '_s.a')  
+        FileUtils.cp(f, File.join(c[:output_lib_dir], newName), :preserve => true)
       }        
 
       # only copy headers once
