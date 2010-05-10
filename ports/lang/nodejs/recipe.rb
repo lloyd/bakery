@@ -1,11 +1,16 @@
 {
   :url => 'http://github.com/downloads/lloyd/bakery/nodejs-lloyd_v1.tar.bz2',
   :md5 => '3b471b6431a45ed2c5bad1af8a8bb148',
+  :deps => [ 'openssl', 'zlib' ],
   :configure => {
     :Windows => lambda { |c|
       raise "not yet ported to windows"
     },
     [:Linux, :MacOSX] => lambda { |c|
+      # make sure that the build can find the correct openssl libs 
+      # (not system libs)
+      ENV['BAKERY_LIBPATH'] = c[:output_lib_dir]
+
       # pkg doesn't support out of source builds, make a local copy 
       Dir.glob(File.join(c[:src_dir], "*")).each { |f|
         FileUtils.cp_r(f, c[:build_dir], :preserve => true)
