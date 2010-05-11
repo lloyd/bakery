@@ -35,6 +35,10 @@
         FileUtils.cp(f, File.join(c[:output_lib_dir], newName), :preserve => true)
       }        
 
+      # copy in binary (appending build type to name)
+      newName = "node_#{c[:build_type].to_s}"
+      FileUtils.cp("node", File.join(c[:output_bin_dir], newName))      
+
       # only copy headers once
       if c[:build_type] == :release
         # copy in node headers
