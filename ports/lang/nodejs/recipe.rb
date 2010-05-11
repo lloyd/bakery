@@ -1,6 +1,6 @@
 {
-  :url => 'http://github.com/downloads/lloyd/bakery/nodejs-lloyd_v1.tar.bz2',
-  :md5 => '3b471b6431a45ed2c5bad1af8a8bb148',
+  :url => 'http://github.com/downloads/lloyd/bakery/nodejs-lloyd_v2.tar.bz2',
+  :md5 => 'a4238e3c64cd3f3b2285296c0fa86755',
   :deps => [ 'openssl', 'zlib' ],
   :configure => {
     :Windows => lambda { |c|
