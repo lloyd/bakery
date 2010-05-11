@@ -57,10 +57,16 @@
           FileUtils.cp(f, c[:output_inc_dir], :preserve => true)
         }
 
+        # and eio.h and ev.h ...  data_hiding--
+        FileUtils.cp(File.join(c[:build_dir], "deps", "libev", "ev.h"),
+                     c[:output_inc_dir], :preserve => true)
+        FileUtils.cp(File.join(c[:build_dir], "deps", "libeio", "eio.h"),
+                     c[:output_inc_dir], :preserve => true)
+
         # rewrite inclusion paths so that clients will include as "nodejs/v8.h"
         Dir.glob(File.join(c[:output_inc_dir], "*.h")).each { |f|
           contents = File.read(f)
-          contents.gsub!(/^#include\s+<((?:v8|node)[a-zA-Z_]*\.h)>/, '#include <nodejs/\1>')
+          contents.gsub!(/^#include\s+<((?:ev|eio|v8|node)[a-zA-Z_]*\.h)>/, '#include <nodejs/\1>')
           File.open("#{f}", "w+") { |nf| nf.write contents }
         }
       end
