@@ -24,7 +24,7 @@ diff -ur nodejs-lloyd_v1.orig/wscript nodejs-lloyd_v1/wscript
 -      conf.env.append_value("CXXFLAGS", "-DHAVE_OPENSSL=1")
 +  conf.env['HAVE_OPENSSL'] = True
 +  conf.env['USE_OPENSSL'] = True
-+  conf.env['LIB_OPENSSL'] = ['ssl_s', 'crypto_s', 'z_s']
++  conf.env['LIB_OPENSSL'] = ['ssl_s', 'crypto_s', 'zlib_s']
 +  conf.env['LIBPATH_OPENSSL'] = os.environ['BAKERY_LIBPATH']
  
    conf.check(lib='rt', uselib_store='RT')
