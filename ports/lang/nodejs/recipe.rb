@@ -45,7 +45,13 @@
         Dir.glob(File.join(c[:build_dir], "src", "node*.h")).each { |f|
           FileUtils.cp(f, c[:output_inc_dir], :preserve => true)
         }
-      
+
+        # and generated headers (like node_version.h)
+        Dir.glob(File.join(c[:build_dir], "build",
+                           "default", "src", "node*.h")).each { |f|
+          FileUtils.cp(f, c[:output_inc_dir], :preserve => true)
+        }
+
         # copy in v8 headers
         Dir.glob(File.join(c[:build_dir], "deps", "v8", "include", "v8*.h")).each { |f|
           FileUtils.cp(f, c[:output_inc_dir], :preserve => true)
