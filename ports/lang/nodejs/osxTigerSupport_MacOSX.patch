@@ -1,0 +1,106 @@
+diff -ur nodejs-lloyd_v2.orig/deps/v8/src/platform-macos.cc nodejs-lloyd_v2/deps/v8/src/platform-macos.cc
+--- nodejs-lloyd_v2.orig/deps/v8/src/platform-macos.cc	2010-05-11 21:18:16.000000000 -0600
++++ nodejs-lloyd_v2/deps/v8/src/platform-macos.cc	2010-05-11 21:21:12.000000000 -0600
+@@ -57,17 +57,6 @@
+ 
+ #include "platform.h"
+ 
+-// Manually define these here as weak imports, rather than including execinfo.h.
+-// This lets us launch on 10.4 which does not have these calls.
+-extern "C" {
+-  extern int backtrace(void**, int) __attribute__((weak_import));
+-  extern char** backtrace_symbols(void* const*, int)
+-      __attribute__((weak_import));
+-  extern void backtrace_symbols_fd(void* const*, int, int)
+-      __attribute__((weak_import));
+-}
+-
+-
+ namespace v8 {
+ namespace internal {
+ 
+@@ -278,35 +267,7 @@
+ 
+ 
+ int OS::StackWalk(Vector<StackFrame> frames) {
+-  // If weak link to execinfo lib has failed, ie because we are on 10.4, abort.
+-  if (backtrace == NULL)
+     return 0;
+-
+-  int frames_size = frames.length();
+-  ScopedVector<void*> addresses(frames_size);
+-
+-  int frames_count = backtrace(addresses.start(), frames_size);
+-
+-  char** symbols = backtrace_symbols(addresses.start(), frames_count);
+-  if (symbols == NULL) {
+-    return kStackWalkError;
+-  }
+-
+-  for (int i = 0; i < frames_count; i++) {
+-    frames[i].address = addresses[i];
+-    // Format a text representation of the frame based on the information
+-    // available.
+-    SNPrintF(MutableCStrVector(frames[i].text,
+-                               kStackWalkMaxTextLen),
+-             "%s",
+-             symbols[i]);
+-    // Make sure line termination is in place.
+-    frames[i].text[kStackWalkMaxTextLen - 1] = '\0';
+-  }
+-
+-  free(symbols);
+-
+-  return frames_count;
+ }
+ 
+ 
+diff -ur nodejs-lloyd_v2.orig/src/node.cc nodejs-lloyd_v2/src/node.cc
+--- nodejs-lloyd_v2.orig/src/node.cc	2010-05-11 21:18:17.000000000 -0600
++++ nodejs-lloyd_v2/src/node.cc	2010-05-11 21:21:44.000000000 -0600
+@@ -1271,33 +1271,6 @@
+ #endif  // __FreeBSD__
+ 
+ 
+-#ifdef __APPLE__
+-#define HAVE_GETMEM 1
+-/* Researched by Tim Becker and Michael Knight
+- * http://blog.kuriositaet.de/?p=257
+- */
+-
+-#include <mach/task.h>
+-#include <mach/mach_init.h>
+-
+-int getmem(size_t *rss, size_t *vsize) {
+-  struct task_basic_info t_info;
+-  mach_msg_type_number_t t_info_count = TASK_BASIC_INFO_COUNT;
+-
+-  int r = task_info(mach_task_self(),
+-                    TASK_BASIC_INFO,
+-                    (task_info_t)&t_info,
+-                    &t_info_count);
+-
+-  if (r != KERN_SUCCESS) return -1;
+-
+-  *rss = t_info.resident_size;
+-  *vsize  = t_info.virtual_size;
+-
+-  return 0;
+-}
+-#endif  // __APPLE__
+-
+ #ifdef __linux__
+ # define HAVE_GETMEM 1
+ # include <sys/param.h> /* for MAXPATHLEN */
+Only in nodejs-lloyd_v2/src: node.cc~
+diff -ur nodejs-lloyd_v2.orig/src/node_http_parser.cc nodejs-lloyd_v2/src/node_http_parser.cc
+--- nodejs-lloyd_v2.orig/src/node_http_parser.cc	2010-05-11 21:18:17.000000000 -0600
++++ nodejs-lloyd_v2/src/node_http_parser.cc	2010-05-11 21:21:12.000000000 -0600
+@@ -19,7 +19,6 @@
+ // No copying is performed when slicing the buffer, only small reference
+ // allocations.
+ 
+- #include <execinfo.h>
+  #include <stdio.h>
+  #include <stdlib.h>
+  

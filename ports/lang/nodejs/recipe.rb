@@ -7,6 +7,12 @@
       raise "not yet ported to windows"
     },
     [:Linux, :MacOSX] => lambda { |c|
+      ENV['CFLAGS'] = "#{c[:os_compile_flags]} #{ENV['CFLAGS']}"
+      ENV['CXXFLAGS'] = "#{c[:os_compile_flags]} #{ENV['CXXFLAGS']}"
+      ENV['CFLAGS'] += ' -g -O0 ' if c[:build_type] == :debug
+      ENV['CXXFLAGS'] += ' -g -O0 ' if c[:build_type] == :debug
+      ENV['LDFLAGS'] = "#{c[:os_link_flags]} #{ENV['LDFLAGS']}"
+
       # make sure that the build can find the correct openssl libs 
       # (not system libs)
       ENV['BAKERY_LIBPATH'] = c[:output_lib_dir]
