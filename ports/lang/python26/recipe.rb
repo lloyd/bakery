@@ -26,7 +26,8 @@
 	ENV['OLD_PATH'] = "#{ENV['PATH']}"
         ENV['PATH'] = "#{ENV['PATH']};#{c[:wintools_dir].gsub('/', '\\')}\\nasmw"
         devenvOut = File.join(c[:log_dir], "devenv_#{c[:build_type]}.txt")
-        system("devenv PCbuild\\pcbuild.sln /Build #{configStr} > #{devenvOut}")
+        #system("devenv PCbuild\\pcbuild.sln /Build #{configStr} > #{devenvOut}")
+        system("vcbuild /M1 PCbuild\\pcbuild.sln \"#{configStr}|Win32\" > #{devenvOut}")
         ENV['PATH'] = "#{ENV['OLD_PATH']}"
       end
     }
