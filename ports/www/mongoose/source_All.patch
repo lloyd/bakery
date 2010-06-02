@@ -1,0 +1,243 @@
+--- mongoose.orig/mongoose.c	2010-06-02 10:54:32.000000000 -0700
++++ mongoose/mongoose.c	2010-06-02 11:00:07.000000000 -0700
+@@ -207,7 +207,13 @@
+ #define	UNKNOWN_CONTENT_LENGTH	((uint64_t) ~0)
+ #define	DEBUG_MGS_PREFIX	"*** Mongoose debug *** "
+ 
+-#if defined(DEBUG)
++// BROWSERPLUS PATCH - 2010jan22
++// We don't want this debug console logging - bad during unit tests.
++// If desired, we could route this logging (even in release) through
++// mongoose cry(), which uses a flexible log callback.
++//#if defined(DEBUG)
++#if defined(MONGOOSE_DEBUG)
++// END BROWSERPLUS PATCH
+ #define	DEBUG_TRACE(x) do {printf x; putchar('\n'); fflush(stdout);} while (0)
+ #else
+ #define DEBUG_TRACE(x)
+@@ -1714,13 +1720,21 @@
+ 	/* MacOS needs that. If we do not zero it, bind() will fail. */
+ 	(void) memset(usa, 0, sizeof(*usa));
+ 
+-	if (sscanf(str, "%d.%d.%d.%d:%d", &a, &b, &c, &d, &port) == 5) {
+-		/* IP address to bind to is specified */
+-		usa->u.sin.sin_addr.s_addr =
+-		    htonl((a << 24) | (b << 16) | (c << 8) | d);
++    if (sscanf(str, "%d.%d.%d.%d:%d", &a, &b, &c, &d, &port) == 5) {
++// BROWSERPLUS PATCH - 2009oct27
++// For security, disable this mode.
++//		/* IP address to bind to is specified */
++//		usa->u.sin.sin_addr.s_addr =
++//		    htonl((a << 24) | (b << 16) | (c << 8) | d);
++        return (INVALID_SOCKET);
++// END BROWSERPLUS PATCH
+ 	} else if (sscanf(str, "%d", &port) == 1) {
+-		/* Only port number is specified. Bind to all addresses */
+-		usa->u.sin.sin_addr.s_addr = htonl(INADDR_ANY);
++// BROWSERPLUS PATCH - 2009oct27
++// For security, only use loopback.
++//      /* Only port number is specified. Bind to all addresses */
++//      usa->u.sin.sin_addr.s_addr = htonl(INADDR_ANY);
++        usa->u.sin.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
++// END BROWSERPLUS PATCH
+ 	} else {
+ 		return (INVALID_SOCKET);
+ 	}
+@@ -3715,14 +3729,26 @@
+ 	ctx->num_listeners = 0;
+ }
+ 
+-static bool_t
++// BROWSERPLUS PATCH - 2009oct27
++// Return bound port number, or 0 on failure.
++// Note: Since this code now returns a single port number, the "list"
++// argument should only specify a single port, not a comma-delimited list.
++// This limitation is fine for current browserplus usage.
++//static bool_t
++static int
++// END BROWSERPLUS PATCH
+ set_ports_option(struct mg_context *ctx, const char *list)
+ {
+-	SOCKET		sock;
++// BROWSERPLUS PATCH - 2009oct29
++//	SOCKET		sock;
++    SOCKET		sock = INVALID_SOCKET;
++    struct usa sa;
++// END BROWSERPLUS PATCH
+ 	int		is_ssl;
+ 	struct vec	vec;
+ 	struct socket	*listener;
+ 
++    
+ 	close_all_listening_sockets(ctx);
+ 	assert(ctx->num_listeners == 0);
+ 
+@@ -3751,7 +3777,15 @@
+ 		}
+ 	}
+ 
+-	return (TRUE);
++// BROWSERPLUS PATCH - 2009oct27
++//  return (TRUE);
++    memset((void *) &sa, 0, sizeof(sa));
++    sa.len = sizeof(sa.u.sin);    
++    if (getsockname(sock, &sa.u.sa, &sa.len) != 0) {
++        return 0;
++    }
++    return ntohs((uint16_t) sa.u.sin.sin_port);
++// END BROWSERPLUS PATCH
+ }
+ 
+ static void
+@@ -4521,13 +4555,18 @@
+ 		close_connection(&conn);
+ 	}
+ 
+-	/* Signal master that we're done with connection and exiting */
+-	pthread_mutex_lock(&conn.ctx->thr_mutex);
+-	conn.ctx->num_threads--;
+-	conn.ctx->num_idle--;
+-	pthread_cond_signal(&conn.ctx->thr_cond);
+-	assert(conn.ctx->num_threads >= 0);
+-	pthread_mutex_unlock(&conn.ctx->thr_mutex);
++    // BROWSERPLUS PATCH - 2010jun02
++    // It's possible to have a connection for which get_socket()
++    // immediately returns false, resulting in a null ctx
++    if (conn.ctx != NULL) {
++        /* Signal master that we're done with connection and exiting */
++        pthread_mutex_lock(&conn.ctx->thr_mutex);
++        conn.ctx->num_threads--;
++        conn.ctx->num_idle--;
++        pthread_cond_signal(&conn.ctx->thr_cond);
++        assert(conn.ctx->num_threads >= 0);
++        pthread_mutex_unlock(&conn.ctx->thr_mutex);
++    }
+ 
+ 	DEBUG_TRACE((DEBUG_MGS_PREFIX "%s: thread %p exiting",
+ 	    __func__, (void *) pthread_self()));
+@@ -4647,16 +4686,35 @@
+ 	while (ctx->stop_flag != 2)
+ 		(void) sleep(1);
+ 
+-	assert(ctx->num_threads == 0);
+-	free(ctx);
++    assert(ctx->num_threads == 0);
++    
++// BROWSERPLUS PATCH - 2009oct27
++// Move this to new mg_destroy().
++//	free(ctx);
++//
++//#if defined(_WIN32)
++//	(void) WSACleanup();
++//#endif /* _WIN32 */
++}
++
++// BROWSERPLUS PATCH - 2009oct27
++void
++mg_destroy( struct mg_context *ctx)
++{
++    free(ctx);
+ 
+ #if defined(_WIN32)
+-	(void) WSACleanup();
++    (void) WSACleanup();
+ #endif /* _WIN32 */
+ }
++// END BROWSERPLUS PATCH
+ 
++// BROWSERPLUS PATCH - 2009oct27
++//struct mg_context *
++//mg_start(void)
+ struct mg_context *
+-mg_start(void)
++mg_create(void)
++// END BROWSERPLUS PATCH
+ {
+ 	struct mg_context	*ctx;
+ 	const struct mg_option	*option;
+@@ -4722,8 +4780,19 @@
+ 	(void) pthread_cond_init(&ctx->empty_cond, NULL);
+ 	(void) pthread_cond_init(&ctx->full_cond, NULL);
+ 
+-	/* Start master (listening) thread */
+-	start_thread(ctx, (mg_thread_func_t) master_thread, ctx);
++// BROWSERPLUS PATCH - 2009oct27
++// Move this to new mg_start().    
++//	/* Start master (listening) thread */
++//	start_thread(ctx, (mg_thread_func_t) master_thread, ctx);
+ 
+ 	return (ctx);
+ }
++
++// BROWSERPLUS PATCH - 2009oct27
++int
++mg_start(struct mg_context *ctx)
++{   
++	/* Start master (listening) thread */
++	return start_thread(ctx, (mg_thread_func_t) master_thread, ctx) == 0;
++}
++// END BROWSERPLUS PATCH
+diff -PNaur mongoose.orig/mongoose.h mongoose/mongoose.h
+--- mongoose.orig/mongoose.h	2009-05-30 10:57:30.000000000 -0700
++++ mongoose/mongoose.h	2010-01-22 08:49:47.437500000 -0800
+@@ -65,23 +65,55 @@
+ 		const struct mg_request_info *info, void *user_data);
+ 
+ 
++// BROWSERPLUS PATCH - 2009oct28
++// We replace the "start/stop" model with a "create/start/stop/destroy"
++// model, which allows clients to make an ephemeral bind call between create
++// and start.
++//
++///*
++// * Start the web server.
++// * This must be the first function called by the application.
++// * It creates a serving thread, and returns a context structure that
++// * can be used to alter the configuration, and stop the server.
++// */
++//struct mg_context *mg_start(void);
++//
++///*
++// * Stop the web server.
++// * Must be called last, when an application wants to stop the web server and
++// * release all associated resources. This function blocks until all Mongoose
++// * threads are stopped. Context pointer becomes invalid.
++// */
++//void mg_stop(struct mg_context *);
++
+ /*
+- * Start the web server.
++ * Create the web server.
+  * This must be the first function called by the application.
+  * It creates a serving thread, and returns a context structure that
+  * can be used to alter the configuration, and stop the server.
+  */
+-struct mg_context *mg_start(void);
++struct mg_context *mg_create(void);
+ 
++/*
++ * Start the web server.
++ * Return 1 on success, 0 on error 
++ */
++int mg_start(struct mg_context *ctx);
+ 
+ /*
+  * Stop the web server.
+- * Must be called last, when an application wants to stop the web server and
+- * release all associated resources. This function blocks until all Mongoose
+- * threads are stopped. Context pointer becomes invalid.
++ * This function blocks until all Mongoose threads are stopped.
++ * Context pointer becomes invalid.
+  */
+ void mg_stop(struct mg_context *);
+ 
++/*
++ * Must be called last, when an application wants to release all associated
++ * resources.  Context pointer becomes invalid.
++ */
++void mg_destroy(struct mg_context *);
++// END BROWSERPLUS PATCH
++
+ 
+ /*
+  * Return current value of a particular option.
