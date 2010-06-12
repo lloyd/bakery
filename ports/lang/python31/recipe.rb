@@ -54,8 +54,6 @@
         py31DstFile = File.join(c[:output_bin_dir], i.to_s)
         if c[:build_type] == :debug
           py31SrcFile = py31SrcFile.sub(".exe", "_d.exe")
-        end
-        if c[:build_type] == :debug
           py31DstFile = py31DstFile.sub(".exe", "_d.exe")
         end
         FileUtils.cp(py31SrcFile, py31DstFile, :verbose => true)
@@ -69,6 +67,7 @@
           py31DstFile = File.join(c[:output_lib_dir], i.to_s + "." + j.to_s)
           if c[:build_type] == :debug
             py31SrcFile = py31SrcFile.sub("." + j.to_s, "_d." + j.to_s)
+            py31DstFile = py31DstFile.sub("." + j.to_s, "_d." + j.to_s)
           end
           FileUtils.cp(py31SrcFile, py31DstFile, :verbose => true)
 	}
@@ -82,6 +81,7 @@
           py31DstFile = File.join(c[:output_lib_dir], i.to_s + "." + j.to_s)
           if c[:build_type] == :debug
             py31SrcFile = py31SrcFile.sub("." + j.to_s, "_d." + j.to_s)
+            py31DstFile = py31DstFile.sub("." + j.to_s, "_d." + j.to_s)
           end
           FileUtils.cp(py31SrcFile, py31DstFile, :verbose => true)
 	}
