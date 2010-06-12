@@ -54,8 +54,6 @@
         py26DstFile = File.join(c[:output_bin_dir], i.to_s)
         if c[:build_type] == :debug
           py26SrcFile = py26SrcFile.sub(".exe", "_d.exe")
-        end
-        if c[:build_type] == :debug
           py26DstFile = py26DstFile.sub(".exe", "_d.exe")
         end
         FileUtils.cp(py26SrcFile, py26DstFile, :verbose => true)
@@ -69,6 +67,7 @@
           py26DstFile = File.join(c[:output_lib_dir], i.to_s + "." + j.to_s)
           if c[:build_type] == :debug
             py26SrcFile = py26SrcFile.sub("." + j.to_s, "_d." + j.to_s)
+            py26DstFile = py26DstFile.sub("." + j.to_s, "_d." + j.to_s)
           end
           FileUtils.cp(py26SrcFile, py26DstFile, :verbose => true)
 	}
@@ -82,6 +81,7 @@
           py26DstFile = File.join(c[:output_lib_dir], i.to_s + "." + j.to_s)
           if c[:build_type] == :debug
             py26SrcFile = py26SrcFile.sub("." + j.to_s, "_d." + j.to_s)
+            py26DstFile = py26DstFile.sub("." + j.to_s, "_d." + j.to_s)
           end
           FileUtils.cp(py26SrcFile, py26DstFile, :verbose => true)
 	}
