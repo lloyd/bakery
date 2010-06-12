@@ -1,6 +1,7 @@
 {
   :url => "http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.1-p376.tar.bz2",
   :md5 => "e019ae9c643c5efe91be49e29781fb94",
+  :deps => [ 'zlib', 'openssl' ],
   :configure => {
     [ :Linux, :MacOSX ] => lambda { |c|
       if $platform == :MacOSX
