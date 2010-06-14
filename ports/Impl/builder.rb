@@ -87,12 +87,6 @@ class Builder
 
     # lib dir will be updated at _pre_build_ time (once per build type)
 
-    @tarball = nil
-    if @recipe.has_key?(:url) && @recipe[:url]
-      tarball = File.basename(URI.parse(@recipe[:url]).path)
-      @tarball = File.expand_path(File.join(@distfiles_path, tarball))
-    end
-
     # initialize OS specific compile/link flags to the empty string
     @os_compile_flags = ""
     @os_link_flags = ""
@@ -138,6 +132,25 @@ class Builder
       @platlookup = [ @platform, :Unix, :All ]
       @os_compile_flags = " -fPIC "
     end
+
+    # determine the URL for this platform
+    @url = nil
+    if @recipe.has_key?(:url)
+      if @recipe[:url].kind_of?(Hash) 
+        @url = @recipe[:url][@platform] if @recipe[:url].has_key?(@platform) 
+      elsif @recipe[:url].kind_of?(String)
+        @url = @recipe[:url]
+      else
+        throw "invalid url: #{@recipe[:url].inspect}"
+      end
+    end
+
+    @tarball = nil
+    if @url != nil
+      tarball = File.basename(URI.parse(@url).path)
+      @tarball = File.expand_path(File.join(@distfiles_path, tarball))
+    end
+
 
     @cmake_generator = cmake_gen if cmake_gen
     
@@ -278,32 +291,20 @@ class Builder
   end
 
   def fetch
-    url = nil
-
-    if @recipe.has_key?(:url)
-      if @recipe[:url].kind_of?(Hash) 
-        url = @recipe[:url][@platform] if @recipe[:url].has_key?(@platform) 
-      elsif @recipe[:url].kind_of?(String)
-        url = @recipe[:url]
-      else
-        throw "invalid url: #{@recipe[:url].inspect}"
-      end
-    end
-    
-    if url == nil
+    if @url == nil
       log_with_time "      nothing to fetch for this port"
       return
     end
 
     if !checkMD5
-      log_with_time "      #{url}"
+      log_with_time "      #{@url}"
       perms = @platform == :Windows ? "wb" : "w"
       totalSize = 0
       lastPercent = 0
       interval = 5
       f = File.new(@tarball, perms)
       f.write(open(
-          url,
+          @url,
           :content_length_proc => lambda {|t|
               if (t && t > 0)
                 totalSize = t
@@ -332,9 +333,9 @@ class Builder
             s = File.size(@tarball)
             if (s == 0 || (totalSize > 0 && s != totalSize))
               FileUtils.rm_f(@tarball)
-              throw "download failed (#{url})"
+              throw "download failed (#{@url})"
             end
-      throw "md5 mismatch on #{@tarball} downloaded from #{url}" if !checkMD5
+      throw "md5 mismatch on #{@tarball} downloaded from #{@url}" if !checkMD5
     else
       log_with_time "      #{File.basename(@tarball)} already in distfiles/ no download required"
     end
