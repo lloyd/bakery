@@ -264,18 +264,36 @@ class Builder
     if File.readable? @tarball
       # now let's check the md5 sum
       calculated_md5 = __fastMD5 @tarball
-      match = (calculated_md5 == @recipe[:md5])
+
+      want_md5 = nil
+      if @recipe[:md5].kind_of?(Hash) 
+        want_md5 = @recipe[:md5][@platform]
+      elsif @recipe[:md5].kind_of?(String)
+        want_md5 = @recipe[:md5]
+      end
+      throw "unintelligible md5 in recipe" if !want_md5
+      match = (calculated_md5 == want_md5)
     end
     match
   end
 
   def fetch
-    if !@recipe.has_key?(:url) || !@recipe[:url]
+    url = nil
+
+    if @recipe.has_key?(:url)
+      if @recipe[:url].kind_of?(Hash) 
+        url = @recipe[:url][@platform] if @recipe[:url].has_key?(@platform) 
+      elsif @recipe[:url].kind_of?(String)
+        url = @recipe[:url]
+      else
+        throw "invalid url: #{@recipe[:url].inspect}"
+      end
+    end
+    
+    if url == nil
       log_with_time "      nothing to fetch for this port"
       return
     end
-
-    url = @recipe[:url]
 
     if !checkMD5
       log_with_time "      #{url}"
