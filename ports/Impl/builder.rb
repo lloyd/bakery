@@ -145,12 +145,22 @@ class Builder
       end
     end
 
-    @tarball = nil
-    if @url != nil
-      tarball = File.basename(URI.parse(@url).path)
-      @tarball = File.expand_path(File.join(@distfiles_path, tarball))
+    # 'github' urls are handled specially. 
+    if @url != nil 
+      @orig_url = @url
+      uri = URI.parse(@url) 
+      require 'pp'
+      if uri.scheme == "github"
+        x,project,sha256  = uri.path.split('/')
+        user = uri.host
+        # it's time to build a url
+        @url = "http://github.com/#{user}/#{project}/tarball/#{sha256}"
+        @tarball = File.expand_path(File.join(@distfiles_path, "#{user}-#{project}-#{sha256}.tgz"))
+      else 
+        tarball = File.basename(uri.path)
+        @tarball = File.expand_path(File.join(@distfiles_path, tarball))
+      end
     end
-
 
     @cmake_generator = cmake_gen if cmake_gen
     
@@ -275,16 +285,19 @@ class Builder
   def checkMD5 
     match = false
     if File.readable? @tarball
-      # now let's check the md5 sum
-      calculated_md5 = __fastMD5 @tarball
-
       want_md5 = nil
       if @recipe[:md5].kind_of?(Hash) 
         want_md5 = @recipe[:md5][@platform]
       elsif @recipe[:md5].kind_of?(String)
         want_md5 = @recipe[:md5]
       end
-      throw "unintelligible md5 in recipe" if !want_md5
+      if (!want_md5)
+        return true if (URI.parse(@orig_url).scheme  == "github")
+        throw "unintelligible md5 in recipe"
+      end
+
+      # now let's check the md5 sum
+      calculated_md5 = __fastMD5 @tarball
       match = (calculated_md5 == want_md5)
     end
     match
