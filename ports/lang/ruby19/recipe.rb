@@ -13,7 +13,8 @@
       end
       configScript = File.join(c[:src_dir], "configure")
       configstr = "#{configScript} --enable-shared --prefix=#{c[:output_dir]} "
-      configstr = configstr + "--disable-install-doc"
+      configstr = configstr + "--disable-install-doc "
+      configstr = configstr + "--without-openssl --disable-openssl --without-zlib --disable-zlib"
       puts "running configure: #{configstr}"
       system(configstr)
     }, 
