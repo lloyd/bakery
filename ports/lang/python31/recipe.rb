@@ -23,7 +23,11 @@
         # this sequence is stolen from Tools\buildbot.bat
         configStr = "#{c[:build_type].to_s.capitalize}"
         system("Tools\\buildbot\\external.bat")
-	ENV['OLD_PATH'] = "#{ENV['PATH']}"
+        # Python pulls down the source of its own deps from their svn repo
+        # as part of the build process.  So it's too late for the normal
+        # patching mechanism we would use.  Instead we do poor-man's version.
+        FileUtils.copy(File.join(c[:recipe_dir], "bzip2-1.0.5", "makefile.msc"), File.join(c[:src_dir], "..\\bzip2-1.0.5"))
+        ENV['OLD_PATH'] = "#{ENV['PATH']}"
         ENV['PATH'] = "#{ENV['PATH']};#{c[:wintools_dir].gsub('/', '\\')}\\nasmw"
         devenvOut = File.join(c[:log_dir], "devenv_#{c[:build_type]}.txt")
         system("vcbuild /M1 PCbuild\\pcbuild.sln \"#{configStr}|Win32\" > #{devenvOut}")
@@ -70,7 +74,7 @@
             py31DstFile = py31DstFile.sub("." + j.to_s, "_d." + j.to_s)
           end
           FileUtils.cp(py31SrcFile, py31DstFile, :verbose => true)
-	}
+        }
       }
       # install python support libs
       binfiles = %w[_ctypes _ctypes_test _elementtree _hashlib _msi _multiprocessing _socket _sqlite3 _ssl _testcapi _tkinter bz2 pyexpat select unicodedata winsound]
@@ -84,7 +88,7 @@
             py31DstFile = py31DstFile.sub("." + j.to_s, "_d." + j.to_s)
           end
           FileUtils.cp(py31SrcFile, py31DstFile, :verbose => true)
-	}
+        }
       }
       # Not sure if we need this for embedding?
       # install msvcrt9 for sxs, including manifest
