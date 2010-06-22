@@ -7,7 +7,7 @@
 +IF(WIN32)
 +    SET(win32Defs "/DWINDOWS /D_WINDOWS /DWIN32 /D_WIN32 /DXP_WIN32 /DWIN32_LEAN_AND_MEAN /DNOSOUND /DNOCOMM /DNOMCX /DNOSERVICE /DNOIME /DNORPC")
 +    SET(CMAKE_C_FLAGS
-+        "${win32Defs} /EHsc /Gy /MT /W4 /Zi /Z7"
++        "${win32Defs} /EHsc /Gy /MT /W4 /Z7"
 +        CACHE STRING "BrowserPlus CXX flags" FORCE)
 +    SET(CMAKE_C_FLAGS_DEBUG "/MTd /DDEBUG /D_DEBUG /Od /RTC1 /RTCc"
 +        CACHE STRING "BrowserPlus debug CXX flags" FORCE)
