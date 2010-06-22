@@ -62,7 +62,7 @@
         end
         FileUtils.cp(py26SrcFile, py26DstFile, :verbose => true)
       }
-      # install python main libs
+      # install python interpreter and support libs
       binfiles = %w[python26 sqlite3]
       binfiles.each { |i|
         exts = %w[dll lib]
@@ -76,8 +76,8 @@
           FileUtils.cp(py26SrcFile, py26DstFile, :verbose => true)
         }
       }
-      # install python support libs
-      binfiles = %w[_ctypes _ctypes_test _elementtree _hashlib _msi _multiprocessing _socket _sqlite3 _ssl _testcapi _tkinter bz2 pyexpat select unicodedata winsound]
+      # install python C libs
+      binfiles = %w[_bsddb _ctypes _ctypes_test _elementtree _hashlib _msi _multiprocessing _socket _sqlite3 _ssl _testcapi _tkinter bz2 pyexpat select unicodedata winsound]
       binfiles.each { |i|
         exts = %w[pyd lib]
         exts.each { |j|
@@ -90,11 +90,25 @@
           FileUtils.cp(py26SrcFile, py26DstFile, :verbose => true)
         }
       }
-      # Not sure if we need this for embedding?
-      # install msvcrt9 for sxs, including manifest
-      #Dir.glob(File.join(ENV['VCINSTALLDIR'], "redist", "x86", "Microsoft.VC90.CRT")).each { |l|
-      #  FileUtils.cp(l, c[:output_lib_dir], :verbose => true)
-      #}
+      # install python stdlib libs
+      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "Lib"))
+      Dir.glob(File.join(c[:src_dir], "Lib", "*.*")).each { |l|
+        tgtBasename = File.basename(l)
+        tgt = File.join(c[:output_lib_dir], "Lib", tgtBasename)
+        FileUtils.cp(l, tgt, :verbose => true)
+      }
+      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "Lib", "lib-tk"))
+      Dir.glob(File.join(c[:src_dir], "Lib", "lib-tk", "*.*")).each { |l|
+        tgtBasename = File.basename(l)
+        tgt = File.join(c[:output_lib_dir], "Lib", "lib-tk", tgtBasename)
+        FileUtils.cp(l, tgt, :verbose => true)
+      }
+      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "Lib", "site-packages"))
+      Dir.glob(File.join(c[:src_dir], "Lib", "site-packages", "*.*")).each { |l|
+        tgtBasename = File.basename(l)
+        tgt = File.join(c[:output_lib_dir], "Lib", "site-packages", tgtBasename)
+        FileUtils.cp(l, tgt, :verbose => true)
+      }
     }
   },
   :post_install_common => {
