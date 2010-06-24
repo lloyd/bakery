@@ -38,54 +38,6 @@
   :install => {
     [ :Linux, :MacOSX ] => lambda { |c|
       system("make install")
-      # now move output in lib dir into build config dir
-      Dir.glob(File.join(c[:output_dir], "lib", "*python*")).each { |l|
-        tgtBasename = File.basename(l)
-        tgt = File.join(c[:output_lib_dir], tgtBasename)
-        FileUtils.mv(l, tgt, :verbose => true)
-      }
-      Dir.glob(File.join(c[:output_dir], "lib", "pkgconfig")).each { |l|
-        tgtBasename = File.basename(l)
-        tgt = File.join(c[:output_lib_dir], tgtBasename)
-        FileUtils.mv(l, tgt, :verbose => true)
-      }
-      # install python stdlib libs
-      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib", "python2.6"))
-      Dir.glob(File.join(c[:src_dir], "Lib", "*.*")).each { |l|
-        tgtBasename = File.basename(l)
-        tgt = File.join(c[:output_lib_dir], "lib", "python2.6", tgtBasename)
-        FileUtils.cp(l, tgt, :verbose => true)
-      }
-      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib", "python2.6", "lib-old"))
-      Dir.glob(File.join(c[:src_dir], "Lib", "lib-old", "*.*")).each { |l|
-        tgtBasename = File.basename(l)
-        tgt = File.join(c[:output_lib_dir], "lib", "python2.6", "lib-old", tgtBasename)
-        FileUtils.cp(l, tgt, :verbose => true)
-      }
-      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib", "python2.6", "lib-tk"))
-      Dir.glob(File.join(c[:src_dir], "Lib", "lib-tk", "*.*")).each { |l|
-        tgtBasename = File.basename(l)
-        tgt = File.join(c[:output_lib_dir], "lib", "python2.6", "lib-tk", tgtBasename)
-        FileUtils.cp(l, tgt, :verbose => true)
-      }
-      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib", "python2.6", "plat-darwin"))
-      Dir.glob(File.join(c[:src_dir], "Lib", "plat-darwin", "*.*")).each { |l|
-        tgtBasename = File.basename(l)
-        tgt = File.join(c[:output_lib_dir], "lib", "python2.6", "plat-darwin", tgtBasename)
-        FileUtils.cp(l, tgt, :verbose => true)
-      }
-      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib", "python2.6", "plat-mac"))
-      Dir.glob(File.join(c[:src_dir], "Lib", "plat-mac", "*.*")).each { |l|
-        tgtBasename = File.basename(l)
-        tgt = File.join(c[:output_lib_dir], "lib", "python2.6", "plat-mac", tgtBasename)
-        FileUtils.cp(l, tgt, :verbose => true)
-      }
-      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib", "python2.6", "site-packages"))
-      Dir.glob(File.join(c[:src_dir], "Lib", "site-packages", "*.*")).each { |l|
-        tgtBasename = File.basename(l)
-        tgt = File.join(c[:output_lib_dir], "lib", "python2.6", "site-packages", tgtBasename)
-        FileUtils.cp(l, tgt, :verbose => true)
-      }
     },
     [ :Windows ] => lambda { |c|
       # install binaries
