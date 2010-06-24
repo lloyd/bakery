@@ -49,6 +49,43 @@
         tgt = File.join(c[:output_lib_dir], tgtBasename)
         FileUtils.mv(l, tgt, :verbose => true)
       }
+      # install python stdlib libs
+      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib", "python2.6"))
+      Dir.glob(File.join(c[:src_dir], "Lib", "*.*")).each { |l|
+        tgtBasename = File.basename(l)
+        tgt = File.join(c[:output_lib_dir], "lib", "python2.6", tgtBasename)
+        FileUtils.cp(l, tgt, :verbose => true)
+      }
+      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib", "python2.6", "lib-old"))
+      Dir.glob(File.join(c[:src_dir], "Lib", "lib-old", "*.*")).each { |l|
+        tgtBasename = File.basename(l)
+        tgt = File.join(c[:output_lib_dir], "lib", "python2.6", "lib-old", tgtBasename)
+        FileUtils.cp(l, tgt, :verbose => true)
+      }
+      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib", "python2.6", "lib-tk"))
+      Dir.glob(File.join(c[:src_dir], "Lib", "lib-tk", "*.*")).each { |l|
+        tgtBasename = File.basename(l)
+        tgt = File.join(c[:output_lib_dir], "lib", "python2.6", "lib-tk", tgtBasename)
+        FileUtils.cp(l, tgt, :verbose => true)
+      }
+      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib", "python2.6", "plat-darwin"))
+      Dir.glob(File.join(c[:src_dir], "Lib", "plat-darwin", "*.*")).each { |l|
+        tgtBasename = File.basename(l)
+        tgt = File.join(c[:output_lib_dir], "lib", "python2.6", "plat-darwin", tgtBasename)
+        FileUtils.cp(l, tgt, :verbose => true)
+      }
+      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib", "python2.6", "plat-mac"))
+      Dir.glob(File.join(c[:src_dir], "Lib", "plat-mac", "*.*")).each { |l|
+        tgtBasename = File.basename(l)
+        tgt = File.join(c[:output_lib_dir], "lib", "python2.6", "plat-mac", tgtBasename)
+        FileUtils.cp(l, tgt, :verbose => true)
+      }
+      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib", "python2.6", "site-packages"))
+      Dir.glob(File.join(c[:src_dir], "Lib", "site-packages", "*.*")).each { |l|
+        tgtBasename = File.basename(l)
+        tgt = File.join(c[:output_lib_dir], "lib", "python2.6", "site-packages", tgtBasename)
+        FileUtils.cp(l, tgt, :verbose => true)
+      }
     },
     [ :Windows ] => lambda { |c|
       # install binaries
@@ -91,22 +128,22 @@
         }
       }
       # install python stdlib libs
-      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "Lib"))
+      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib"))
       Dir.glob(File.join(c[:src_dir], "Lib", "*.*")).each { |l|
         tgtBasename = File.basename(l)
-        tgt = File.join(c[:output_lib_dir], "Lib", tgtBasename)
+        tgt = File.join(c[:output_lib_dir], "lib", tgtBasename)
         FileUtils.cp(l, tgt, :verbose => true)
       }
-      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "Lib", "lib-tk"))
+      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib", "lib-tk"))
       Dir.glob(File.join(c[:src_dir], "Lib", "lib-tk", "*.*")).each { |l|
         tgtBasename = File.basename(l)
-        tgt = File.join(c[:output_lib_dir], "Lib", "lib-tk", tgtBasename)
+        tgt = File.join(c[:output_lib_dir], "lib", "lib-tk", tgtBasename)
         FileUtils.cp(l, tgt, :verbose => true)
       }
-      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "Lib", "site-packages"))
+      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib", "site-packages"))
       Dir.glob(File.join(c[:src_dir], "Lib", "site-packages", "*.*")).each { |l|
         tgtBasename = File.basename(l)
-        tgt = File.join(c[:output_lib_dir], "Lib", "site-packages", tgtBasename)
+        tgt = File.join(c[:output_lib_dir], "lib", "site-packages", tgtBasename)
         FileUtils.cp(l, tgt, :verbose => true)
       }
     }
