@@ -109,6 +109,14 @@
         }
         FileUtils.cp(File.join(c[:src_dir], "Magick++", "lib", "Magick++.h"),
                      c[:output_inc_dir], :verbose => true)
+
+        # finally the magic.mgk file, an xml document which enumerates
+        # supported formats
+        magicMgkHome = File.join(c[:output_share_dir], "GraphicsMagick-1.3.7",
+                                 "config")
+        FileUtils.mkdir_p(magicMgkHome) 
+        FileUtils.cp(File.join(c[:src_dir], "VisualMagick", "bin", "magic.mgk"),
+                     magicMgkHome, :verbose => true)
       end
     }
   }
