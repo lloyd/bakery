@@ -1,5 +1,5 @@
 {
-  :url => 'http://github.com/downloads/lloyd/bakery/GraphicsMagick-1.3.7.tar.bz2',
+  :url => 'http://github.com/downloads/browserplus/bakery/GraphicsMagick-1.3.7.tar.bz2',
   :md5 => '42bfd382ddcda399880721170bcbf61b',
   :deps => [ 'jpeg', 'libpng', 'zlib' ],
   
@@ -109,6 +109,14 @@
         }
         FileUtils.cp(File.join(c[:src_dir], "Magick++", "lib", "Magick++.h"),
                      c[:output_inc_dir], :verbose => true)
+
+        # finally the magic.mgk file, an xml document which enumerates
+        # supported formats
+        magicMgkHome = File.join(c[:output_share_dir], "GraphicsMagick-1.3.7",
+                                 "config")
+        FileUtils.mkdir_p(magicMgkHome) 
+        FileUtils.cp(File.join(c[:src_dir], "VisualMagick", "bin", "magic.mgk"),
+                     magicMgkHome, :verbose => true)
       end
     }
   }

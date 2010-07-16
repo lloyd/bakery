@@ -1,5 +1,5 @@
 {
-  :url => 'http://github.com/downloads/lloyd/bakery/nodejs-lloyd_v3.tar.bz2',
+  :url => 'http://github.com/downloads/browserplus/bakery/nodejs-lloyd_v3.tar.bz2',
   :md5 => '9da3810aeb2b1623951b2bea4b08b25d',
   :deps => [ 'openssl', 'zlib' ],
   :configure => {

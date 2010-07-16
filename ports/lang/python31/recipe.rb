@@ -38,17 +38,6 @@
   :install => {
     [ :Linux, :MacOSX ] => lambda { |c|
       system("make install")
-      # now move output in lib dir into build config dir
-      Dir.glob(File.join(c[:output_dir], "lib", "*python*")).each { |l|
-        tgtBasename = File.basename(l)
-        tgt = File.join(c[:output_lib_dir], tgtBasename)
-        FileUtils.mv(l, tgt, :verbose => true)
-      }
-      Dir.glob(File.join(c[:output_dir], "lib", "pkgconfig")).each { |l|
-        tgtBasename = File.basename(l)
-        tgt = File.join(c[:output_lib_dir], tgtBasename)
-        FileUtils.mv(l, tgt, :verbose => true)
-      }
     },
     [ :Windows ] => lambda { |c|
       # install binaries
@@ -62,7 +51,7 @@
         end
         FileUtils.cp(py31SrcFile, py31DstFile, :verbose => true)
       }
-      # install python main libs
+      # install python interpreter and support libs
       binfiles = %w[python31 sqlite3]
       binfiles.each { |i|
         exts = %w[dll lib]
@@ -76,8 +65,8 @@
           FileUtils.cp(py31SrcFile, py31DstFile, :verbose => true)
         }
       }
-      # install python support libs
-      binfiles = %w[_ctypes _ctypes_test _elementtree _hashlib _msi _multiprocessing _socket _sqlite3 _ssl _testcapi _tkinter bz2 pyexpat select unicodedata winsound]
+      # install python C libs
+      binfiles = %w[_bsddb _ctypes _ctypes_test _elementtree _hashlib _msi _multiprocessing _socket _sqlite3 _ssl _testcapi _tkinter bz2 pyexpat select unicodedata winsound]
       binfiles.each { |i|
         exts = %w[pyd lib]
         exts.each { |j|
@@ -90,11 +79,25 @@
           FileUtils.cp(py31SrcFile, py31DstFile, :verbose => true)
         }
       }
-      # Not sure if we need this for embedding?
-      # install msvcrt9 for sxs, including manifest
-      #Dir.glob(File.join(ENV['VCINSTALLDIR'], "redist", "x86", "Microsoft.VC90.CRT")).each { |l|
-      #  FileUtils.cp(l, c[:output_lib_dir], :verbose => true)
-      #}
+      # install python stdlib libs
+      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib"))
+      Dir.glob(File.join(c[:src_dir], "Lib", "*.*")).each { |l|
+        tgtBasename = File.basename(l)
+        tgt = File.join(c[:output_lib_dir], "lib", tgtBasename)
+        FileUtils.cp(l, tgt, :verbose => true)
+      }
+      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib", "lib-tk"))
+      Dir.glob(File.join(c[:src_dir], "Lib", "lib-tk", "*.*")).each { |l|
+        tgtBasename = File.basename(l)
+        tgt = File.join(c[:output_lib_dir], "lib", "lib-tk", tgtBasename)
+        FileUtils.cp(l, tgt, :verbose => true)
+      }
+      FileUtils.mkdir_p(File.join(c[:output_lib_dir], "lib", "site-packages"))
+      Dir.glob(File.join(c[:src_dir], "Lib", "site-packages", "*.*")).each { |l|
+        tgtBasename = File.basename(l)
+        tgt = File.join(c[:output_lib_dir], "lib", "site-packages", tgtBasename)
+        FileUtils.cp(l, tgt, :verbose => true)
+      }
     }
   },
   :post_install_common => {
