@@ -384,7 +384,7 @@ class Builder
       __redirectOutput("unpack") do
         path = @tarball
         puts "      unpacking #{path}..."
-        if path =~ /.tar./
+        if path =~ /\.tar\./
           if @platform == :Windows
             system("\"#{@sevenZCmd}\" x \"#{path}\"")
             tarPath = File.basename(path, ".*")
