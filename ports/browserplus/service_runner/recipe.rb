@@ -1,13 +1,13 @@
 {
   :url => {
-    :Windows => 'http://github.com/downloads/browserplus/platform/bpsdk_2.10.0-Win32-i386.zip',
-    :MacOSX => 'http://github.com/downloads/browserplus/platform/bpsdk_2.10.0-Darwin-i386.tgz',
-    :Linux => 'http://github.com/downloads/browserplus/platform/bpsdk_2.10.0-Linux-x86_64.tgz'
+    :Windows => 'http://github.com/downloads/browserplus/platform/bpsdk_2.10.2-Win32-i386.zip',
+    :MacOSX => 'http://github.com/downloads/browserplus/platform/bpsdk_2.10.2-Darwin-i386.tgz',
+    :Linux => 'http://github.com/downloads/browserplus/platform/bpsdk_2.10.2-Linux-x86_64.tgz'
   },
   :md5 => {
-    :Windows => '2c7a8dab73a3ba8ef4c29d4c047b687e',
-    :MacOSX => '99347978175a84ba959b7d1199f5c2d7',
-    :Linux => '5eb008563b8ea5d8c22921fb0c3a1476'
+    :Windows => 'afc10e3ca6a1e1fb41cb7d222e0c5b7e',
+    :MacOSX => '6150b35e203e3c9e0d6f3bf3c7c1a5b2',
+    :Linux => 'f51e373781c2d4fe93f9cf4bb4b9bd68'
   },
   :install => lambda { |c|
     ext = (c[:platform] == :Windows ? ".exe" : "")
