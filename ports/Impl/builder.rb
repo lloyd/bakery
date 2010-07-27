@@ -93,7 +93,7 @@ class Builder
 
     # let's determine the platform
     @patch_cmd = "patch"
-    if CONFIG['arch'] =~ /mswin/
+    if CONFIG['arch'] =~ /mswin|mingw/
       @platform = :Windows
       @platlookup = [ @platform, :All ]
       @sevenZCmd = File.expand_path(File.join(@port_dir, "WinTools", "7z.exe"))
